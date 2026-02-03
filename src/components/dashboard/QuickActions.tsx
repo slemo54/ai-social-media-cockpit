@@ -29,18 +29,18 @@ const templateIcons: Record<string, React.ReactNode> = {
 export function QuickActions() {
   return (
     <div className="mb-8">
-      <h2 className="text-lg font-semibold text-gray-900 mb-4">Template Rapidi</h2>
+      <h2 className="text-lg font-semibold text-white mb-4">Template Rapidi</h2>
       <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-3">
         {Object.entries(CONTENT_TEMPLATES).map(([key, template]) => (
           <Link
             key={key}
             href={`/?template=${key}`}
-            className="flex flex-col items-center p-4 bg-white rounded-xl shadow-sm border border-gray-100 hover:shadow-md hover:border-purple-200 transition-all group"
+            className="flex flex-col items-center p-4 bg-white/5 backdrop-blur-md border border-white/10 rounded-xl hover:bg-white/10 hover:border-purple-500/30 transition-all group"
           >
-            <div className="w-10 h-10 bg-gradient-to-br from-purple-50 to-pink-50 rounded-lg flex items-center justify-center text-purple-600 mb-2 group-hover:scale-110 transition-transform">
+            <div className="w-10 h-10 bg-gradient-to-br from-purple-500/20 to-pink-500/20 rounded-lg flex items-center justify-center text-purple-400 mb-2 group-hover:scale-110 transition-transform">
               {templateIcons[key] || <Sparkles className="w-5 h-5" />}
             </div>
-            <span className="text-xs text-center text-gray-600 group-hover:text-purple-600 transition-colors line-clamp-2">
+            <span className="text-xs text-center text-white/70 group-hover:text-purple-300 transition-colors line-clamp-2">
               {template.name}
             </span>
           </Link>
