@@ -50,17 +50,23 @@ export async function POST(request: NextRequest): Promise<NextResponse<GenerateR
       );
     }
 
-    // Log inizio generazione
-    const { data: logEntry } = await supabase
-      .from('generation_logs')
-      .insert({
-        user_id: userId,
-        started_at: new Date().toISOString(),
-        prompt_input: topic,
-        ai_model: 'gemini-2.5-flash',
-      })
-      .select()
-      .single();
+    // Log inizio generazione (best-effort, non blocca la generazione)
+    let logEntry: { id: string } | null = null;
+    try {
+      const { data } = await supabase
+        .from('generation_logs')
+        .insert({
+          user_id: userId,
+          started_at: new Date().toISOString(),
+          prompt_input: topic,
+          ai_model: 'gemini-2.5-flash',
+        })
+        .select()
+        .single();
+      logEntry = data;
+    } catch (e) {
+      console.warn('[API] generation_logs insert failed (non-blocking):', e);
+    }
 
     console.log(`[API] Generating content for ${project}: ${topic.substring(0, 50)}`);
 
@@ -71,19 +77,21 @@ export async function POST(request: NextRequest): Promise<NextResponse<GenerateR
     } catch (err) {
       console.error('[API] Text generation error:', err);
       
-      // Log errore
-      if (logEntry) {
-        await supabase
-          .from('generation_logs')
-          .update({
-            completed_at: new Date().toISOString(),
-            duration_ms: Date.now() - startTime,
-            success: false,
-            error_message: err instanceof Error ? err.message : 'Text generation failed',
-          })
-          .eq('id', logEntry.id);
-      }
-      
+      // Log errore (best-effort)
+      try {
+        if (logEntry) {
+          await supabase
+            .from('generation_logs')
+            .update({
+              completed_at: new Date().toISOString(),
+              duration_ms: Date.now() - startTime,
+              success: false,
+              error_message: err instanceof Error ? err.message : 'Text generation failed',
+            })
+            .eq('id', logEntry.id);
+        }
+      } catch (_) { /* ignore */ }
+
       return NextResponse.json(
         { success: false, error: `Text generation failed: ${err instanceof Error ? err.message : 'Unknown error'}` },
         { status: 500 }
@@ -134,18 +142,20 @@ export async function POST(request: NextRequest): Promise<NextResponse<GenerateR
       } catch (err) {
         console.error('[API] Image generation error:', err);
         
-        // Log errore ma continua senza immagine
-        if (logEntry) {
-          await supabase
-            .from('generation_logs')
-            .update({
-              completed_at: new Date().toISOString(),
-              duration_ms: Date.now() - startTime,
-              success: false,
-              error_message: err instanceof Error ? err.message : 'Image generation failed',
-            })
-            .eq('id', logEntry.id);
-        }
+        // Log errore ma continua senza immagine (best-effort)
+        try {
+          if (logEntry) {
+            await supabase
+              .from('generation_logs')
+              .update({
+                completed_at: new Date().toISOString(),
+                duration_ms: Date.now() - startTime,
+                success: false,
+                error_message: err instanceof Error ? err.message : 'Image generation failed',
+              })
+              .eq('id', logEntry.id);
+          }
+        } catch (_) { /* ignore */ }
       }
 
       if (imageResult) {
@@ -198,18 +208,20 @@ export async function POST(request: NextRequest): Promise<NextResponse<GenerateR
     } catch (err) {
       console.error('[API] Database save error:', err);
       
-      // Log errore
-      if (logEntry) {
-        await supabase
-          .from('generation_logs')
-          .update({
-            completed_at: new Date().toISOString(),
-            duration_ms: generationTime,
-            success: false,
-            error_message: err instanceof Error ? err.message : 'Database save failed',
-          })
-          .eq('id', logEntry.id);
-      }
+      // Log errore (best-effort)
+      try {
+        if (logEntry) {
+          await supabase
+            .from('generation_logs')
+            .update({
+              completed_at: new Date().toISOString(),
+              duration_ms: generationTime,
+              success: false,
+              error_message: err instanceof Error ? err.message : 'Database save failed',
+            })
+            .eq('id', logEntry.id);
+        }
+      } catch (_) { /* ignore */ }
       
       return NextResponse.json(
         { success: false, error: `Database save failed: ${err instanceof Error ? err.message : 'Unknown error'}` },
@@ -226,18 +238,20 @@ export async function POST(request: NextRequest): Promise<NextResponse<GenerateR
 
     console.log('[API] Post saved:', post.id);
 
-    // Aggiorna log con successo
-    if (logEntry) {
-      await supabase
-        .from('generation_logs')
-        .update({
-          post_id: post.id,
-          completed_at: new Date().toISOString(),
-          duration_ms: generationTime,
-          success: true,
-        })
-        .eq('id', logEntry.id);
-    }
+    // Aggiorna log con successo (best-effort)
+    try {
+      if (logEntry) {
+        await supabase
+          .from('generation_logs')
+          .update({
+            post_id: post.id,
+            completed_at: new Date().toISOString(),
+            duration_ms: generationTime,
+            success: true,
+          })
+          .eq('id', logEntry.id);
+      }
+    } catch (_) { /* ignore */ }
 
     return NextResponse.json({
       success: true,
