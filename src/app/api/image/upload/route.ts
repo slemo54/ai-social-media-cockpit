@@ -1,31 +1,9 @@
-import { createServerClient } from '@supabase/ssr';
-import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
 import { uploadImageToStorage } from '@/lib/supabase';
 
 export const maxDuration = 60;
 
 export async function POST(request: Request) {
-  const cookieStore = await cookies();
-  
-  const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: {
-        get(name: string) {
-          return cookieStore.get(name)?.value;
-        },
-      },
-    }
-  );
-  
-  // Verifica autenticazione
-  const { data: { session } } = await supabase.auth.getSession();
-  if (!session) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-  }
-
   try {
     const formData = await request.formData();
     const file = formData.get('image') as File;

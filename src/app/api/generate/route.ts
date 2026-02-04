@@ -1,39 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { generateTextContent, generateImage } from '@/lib/abacus';
-import { createPost, uploadImageToStorage } from '@/lib/supabase';
+import { createPost, uploadImageToStorage, supabase } from '@/lib/supabase';
 import { GenerateRequest, GenerateResponse } from '@/types';
-import { createServerClient } from '@supabase/ssr';
-import { cookies } from 'next/headers';
 
 export const maxDuration = 180; // Aumentato a 3 minuti per generazione con immagine
 
+const DEFAULT_USER_ID = process.env.DEFAULT_USER_ID || 'default-user';
+
 export async function POST(request: NextRequest): Promise<NextResponse<GenerateResponse>> {
   const startTime = Date.now();
-  const cookieStore = await cookies();
-  
-  const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: {
-        get(name: string) {
-          return cookieStore.get(name)?.value;
-        },
-      },
-    }
-  );
-  
+
   try {
-    // Verifica autenticazione
-    const { data: { session } } = await supabase.auth.getSession();
-    if (!session) {
-      return NextResponse.json(
-        { success: false, error: 'Unauthorized' },
-        { status: 401 }
-      );
-    }
-    
-    const userId = session.user.id;
+    const userId = DEFAULT_USER_ID;
 
     // Verifica variabili d'ambiente
     if (!process.env.ABACUS_API_KEY) {

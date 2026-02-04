@@ -1,26 +1,9 @@
-import { createServerClient } from '@supabase/ssr';
-import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
+import { supabase } from '@/lib/supabase';
+
+const DEFAULT_USER_ID = process.env.DEFAULT_USER_ID || 'default-user';
 
 export async function GET(request: Request) {
-  const cookieStore = await cookies();
-  
-  const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: {
-        get(name: string) {
-          return cookieStore.get(name)?.value;
-        },
-      },
-    }
-  );
-  
-  const { data: { session } } = await supabase.auth.getSession();
-  if (!session) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-  }
   
   const { searchParams } = new URL(request.url);
   const limit = parseInt(searchParams.get('limit') || '10');
@@ -39,7 +22,7 @@ export async function GET(request: Request) {
         image_url,
         word_count
       `)
-      .eq('user_id', session.user.id)
+      .eq('user_id', DEFAULT_USER_ID)
       .order('created_at', { ascending: false })
       .limit(limit);
     
