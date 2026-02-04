@@ -1,5 +1,36 @@
 import { AbacusTextResponse, AbacusImageResponse, Templates } from '@/types';
-import { apiClient } from './api-client';
+
+async function fetchWithRetry(
+  url: string,
+  options: RequestInit,
+  config: { retries?: number; timeout?: number } = {}
+): Promise<Response> {
+  const { retries = 2, timeout = 30000 } = config;
+  let lastError: Error;
+
+  for (let attempt = 0; attempt <= retries; attempt++) {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), timeout);
+
+    try {
+      const res = await fetch(url, { ...options, signal: controller.signal });
+      clearTimeout(timeoutId);
+      if (!res.ok) {
+        throw new Error(`HTTP ${res.status}: ${await res.text().catch(() => 'Unknown error')}`);
+      }
+      return res;
+    } catch (err) {
+      clearTimeout(timeoutId);
+      lastError = err instanceof Error ? err : new Error(String(err));
+      if (attempt < retries) {
+        const delay = 1000 * Math.pow(2, attempt);
+        console.log(`[Abacus] Retry ${attempt + 1}/${retries} after ${delay}ms`);
+        await new Promise(r => setTimeout(r, delay));
+      }
+    }
+  }
+  throw lastError!;
+}
 
 const ABACUS_API_KEY = process.env.ABACUS_API_KEY;
 const ABACUS_BASE_URL = 'https://routellm.abacus.ai/v1';
@@ -154,32 +185,23 @@ export async function generateTextContent(
 
   console.log(`[Abacus] Generating for ${projectName}: ${topic.substring(0, 50)}`);
 
-  const response = await apiClient.requestWithRetry(async () => {
-    const res = await apiClient.fetchWithTimeout(`${ABACUS_BASE_URL}/chat/completions`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${ABACUS_API_KEY}`,
-      },
-      body: JSON.stringify({
-        model: 'gemini-2.5-flash',
-        messages: [
-          { role: 'system', content: systemPrompt },
-          { role: 'user', content: `Crea un post Instagram per ${projectName} su questo argomento: ${topic}\n\nIMPORTANTE: Rispondi SOLO in formato JSON valido, senza testo aggiuntivo prima o dopo.` }
-        ],
-        temperature: 0.7,
-        max_tokens: 800,
-        response_format: { type: 'json_object' },
-      }),
-      timeout: 30000,
-    });
-    return apiClient.checkResponse(res);
-  }, {
-    retries: 3,
-    timeout: 30000,
-    retryDelay: 1000,
-    backoffMultiplier: 2,
-  });
+  const response = await fetchWithRetry(`${ABACUS_BASE_URL}/chat/completions`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${ABACUS_API_KEY}`,
+    },
+    body: JSON.stringify({
+      model: 'gemini-2.5-flash',
+      messages: [
+        { role: 'system', content: systemPrompt },
+        { role: 'user', content: `Crea un post Instagram per ${projectName} su questo argomento: ${topic}\n\nIMPORTANTE: Rispondi SOLO in formato JSON valido, senza testo aggiuntivo prima o dopo.` }
+      ],
+      temperature: 0.7,
+      max_tokens: 800,
+      response_format: { type: 'json_object' },
+    }),
+  }, { retries: 3, timeout: 30000 });
 
   const data = await response.json();
   console.log('[Abacus] Raw response:', JSON.stringify(data).substring(0, 300));
@@ -241,28 +263,19 @@ export async function generateImage(imagePrompt: string): Promise<AbacusImageRes
 
   console.log('[Abacus] Generating image...');
 
-  const response = await apiClient.requestWithRetry(async () => {
-    const res = await apiClient.fetchWithTimeout(`${ABACUS_BASE_URL}/chat/completions`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${ABACUS_API_KEY}`,
-      },
-      body: JSON.stringify({
-        model: 'nano-banana-pro',
-        messages: [{ role: 'user', content: enhancedPrompt }],
-        modalities: ['image'],
-        image_config: { num_images: 1, aspect_ratio: '1:1' },
-      }),
-      timeout: 90000, // 90 secondi per generazione immagine
-    });
-    return apiClient.checkResponse(res);
-  }, {
-    retries: 2,
-    timeout: 90000,
-    retryDelay: 2000,
-    backoffMultiplier: 2,
-  });
+  const response = await fetchWithRetry(`${ABACUS_BASE_URL}/chat/completions`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${ABACUS_API_KEY}`,
+    },
+    body: JSON.stringify({
+      model: 'nano-banana-pro',
+      messages: [{ role: 'user', content: enhancedPrompt }],
+      modalities: ['image'],
+      image_config: { num_images: 1, aspect_ratio: '1:1' },
+    }),
+  }, { retries: 2, timeout: 90000 });
 
   const data = await response.json();
   
