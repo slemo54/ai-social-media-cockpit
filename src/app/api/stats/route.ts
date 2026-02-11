@@ -10,20 +10,20 @@ export async function GET() {
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     {
       cookies: {
-        get(name: string) {
-          return cookieStore.get(name)?.value;
+        getAll() {
+          return cookieStore.getAll();
         },
       },
     }
   );
   
-  // Verifica autenticazione
-  const { data: { session } } = await supabase.auth.getSession();
-  if (!session) {
+  // Verifica autenticazione - USA getUser() NON getSession()
+  const { data: { user }, error: authError } = await supabase.auth.getUser();
+  if (authError || !user) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
   
-  const userId = session.user.id;
+  const userId = user.id;
   
   try {
     // Query 1: Stats da user_stats (cached)

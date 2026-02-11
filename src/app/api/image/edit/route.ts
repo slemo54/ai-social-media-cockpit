@@ -27,16 +27,16 @@ export async function POST(request: Request) {
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     {
       cookies: {
-        get(name: string) {
-          return cookieStore.get(name)?.value;
+        getAll() {
+          return cookieStore.getAll();
         },
       },
     }
   );
   
-  // Verifica autenticazione
-  const { data: { session } } = await supabase.auth.getSession();
-  if (!session) {
+  // Verifica autenticazione - USA getUser() NON getSession()
+  const { data: { user }, error } = await supabase.auth.getUser();
+  if (error || !user) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
