@@ -7,10 +7,20 @@ export const maxDuration = 60;
 
 export async function POST(request: Request) {
   const cookieStore = await cookies();
-  
+
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  if (!supabaseUrl || !supabaseAnonKey) {
+    console.error('[ImageUpload] Missing Supabase env vars');
+    return NextResponse.json(
+      { error: 'Server configuration error: Supabase env vars not set' },
+      { status: 500 }
+    );
+  }
+
   const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    supabaseUrl,
+    supabaseAnonKey,
     {
       cookies: {
         get(name: string) {
@@ -64,7 +74,8 @@ export async function POST(request: Request) {
     // Upload a Supabase Storage
     const publicUrl = await uploadImageToStorage(
       `data:${file.type};base64,${base64}`,
-      file.name
+      file.name,
+      supabase
     );
 
     if (!publicUrl) {

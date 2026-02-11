@@ -10,10 +10,20 @@ export const maxDuration = 180; // Aumentato a 3 minuti per generazione con imma
 export async function POST(request: NextRequest): Promise<NextResponse<GenerateResponse>> {
   const startTime = Date.now();
   const cookieStore = await cookies();
-  
+
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  if (!supabaseUrl || !supabaseAnonKey) {
+    console.error('[API] Missing Supabase env vars');
+    return NextResponse.json(
+      { success: false, error: 'Server configuration error: Supabase env vars not set' },
+      { status: 500 }
+    );
+  }
+
   const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    supabaseUrl,
+    supabaseAnonKey,
     {
       cookies: {
         get(name: string) {
@@ -24,19 +34,19 @@ export async function POST(request: NextRequest): Promise<NextResponse<GenerateR
   );
   
   try {
-    // Verifica autenticazione
-    const { data: { session } } = await supabase.auth.getSession();
-    if (!session) {
+    // Verifica autenticazione - USA getUser() NON getSession()
+    const { data: { user }, error: authError } = await supabase.auth.getUser();
+    if (authError || !user) {
       return NextResponse.json(
         { success: false, error: 'Unauthorized' },
         { status: 401 }
       );
     }
     
-    const userId = session.user.id;
+    const userId = user.id;
 
     // Verifica variabili d'ambiente
-    if (!process.env.ABACUS_API_KEY) {
+    if (!process.env.ABACUS_API_KEY && !process.env.NEXT_PUBLIC_ABACUS_API_KEY) {
       console.error('[API] Missing ABACUS_API_KEY');
       return NextResponse.json(
         { success: false, error: 'Server configuration error: ABACUS_API_KEY not set' },
@@ -133,7 +143,7 @@ export async function POST(request: NextRequest): Promise<NextResponse<GenerateR
       // Se è una data URL, uploada a Supabase
       if (userImageUrl.startsWith('data:')) {
         try {
-          permanentImageUrl = await uploadImageToStorage(userImageUrl, 'user-upload.jpg');
+          permanentImageUrl = await uploadImageToStorage(userImageUrl, 'user-upload.jpg', supabase);
         } catch (err) {
           console.error('[API] User image upload error:', err);
           // Continua con generazione AI come fallback
@@ -176,12 +186,14 @@ export async function POST(request: NextRequest): Promise<NextResponse<GenerateR
           if (imageResult.image_base64) {
             permanentImageUrl = await uploadImageToStorage(
               imageResult.image_base64,
-              'generated-image.png'
+              'generated-image.png',
+              supabase
             );
           } else if (imageResult.image_url) {
             permanentImageUrl = await uploadImageToStorage(
               imageResult.image_url,
-              'generated-image.png'
+              'generated-image.png',
+              supabase
             );
           }
         } catch (err) {
@@ -216,7 +228,7 @@ export async function POST(request: NextRequest): Promise<NextResponse<GenerateR
         ai_model: 'gemini-2.5-flash',
         prompt_length: topic.length,
         template_used: imageSource === 'uploaded' ? 'user-image' : 'ai-generated',
-      });
+      }, supabase);
     } catch (err) {
       console.error('[API] Database save error:', err);
       

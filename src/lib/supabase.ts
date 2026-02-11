@@ -1,13 +1,25 @@
-import { createClient } from '@supabase/supabase-js';
+import { createClient, SupabaseClient } from '@supabase/supabase-js';
 import { Post } from '@/types';
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
+const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
 
-export const supabase = createClient(supabaseUrl, supabaseKey);
+// Only create client if both URL and key are provided
+export const supabase = (supabaseUrl && supabaseKey)
+  ? createClient(supabaseUrl, supabaseKey)
+  : null;
 
-export async function createPost(post: Partial<Post>): Promise<Post | null> {
-  const { data, error } = await supabase
+export async function createPost(
+  post: Partial<Post>,
+  client?: SupabaseClient
+): Promise<Post | null> {
+  const sb = client ?? supabase;
+  if (!sb) {
+    console.warn('Supabase client not initialized');
+    return null;
+  }
+
+  const { data, error } = await sb
     .from('posts')
     .insert([post])
     .select()
@@ -21,8 +33,18 @@ export async function createPost(post: Partial<Post>): Promise<Post | null> {
   return data;
 }
 
-export async function updatePost(id: string, updates: Partial<Post>): Promise<Post | null> {
-  const { data, error } = await supabase
+export async function updatePost(
+  id: string,
+  updates: Partial<Post>,
+  client?: SupabaseClient
+): Promise<Post | null> {
+  const sb = client ?? supabase;
+  if (!sb) {
+    console.warn('Supabase client not initialized');
+    return null;
+  }
+
+  const { data, error } = await sb
     .from('posts')
     .update(updates)
     .eq('id', id)
@@ -37,8 +59,14 @@ export async function updatePost(id: string, updates: Partial<Post>): Promise<Po
   return data;
 }
 
-export async function getPost(id: string): Promise<Post | null> {
-  const { data, error } = await supabase
+export async function getPost(id: string, client?: SupabaseClient): Promise<Post | null> {
+  const sb = client ?? supabase;
+  if (!sb) {
+    console.warn('Supabase client not initialized');
+    return null;
+  }
+
+  const { data, error } = await sb
     .from('posts')
     .select('*')
     .eq('id', id)
@@ -52,8 +80,17 @@ export async function getPost(id: string): Promise<Post | null> {
   return data;
 }
 
-export async function getRecentPosts(limit: number = 10): Promise<Post[]> {
-  const { data, error } = await supabase
+export async function getRecentPosts(
+  limit: number = 10,
+  client?: SupabaseClient
+): Promise<Post[]> {
+  const sb = client ?? supabase;
+  if (!sb) {
+    console.warn('Supabase client not initialized');
+    return [];
+  }
+
+  const { data, error } = await sb
     .from('posts')
     .select('*')
     .order('created_at', { ascending: false })
@@ -69,8 +106,14 @@ export async function getRecentPosts(limit: number = 10): Promise<Post[]> {
 
 export async function uploadImageToStorage(
   imageData: string | Buffer,
-  filename: string
+  filename: string,
+  client?: SupabaseClient
 ): Promise<string | null> {
+  const sb = client ?? supabase;
+  if (!sb) {
+    throw new Error('Supabase client not initialized');
+  }
+
   const bucket = process.env.NEXT_PUBLIC_SUPABASE_STORAGE_BUCKET || 'social-images';
   
   // Convert base64 to buffer if needed
@@ -98,7 +141,7 @@ export async function uploadImageToStorage(
     fileBuffer = imageData;
   }
 
-  const { data, error } = await supabase.storage
+  const { data, error } = await sb.storage
     .from(bucket)
     .upload(`posts/${Date.now()}-${filename}`, fileBuffer, {
       contentType,
@@ -112,7 +155,7 @@ export async function uploadImageToStorage(
   }
 
   // Get public URL
-  const { data: { publicUrl } } = supabase.storage
+  const { data: { publicUrl } } = sb.storage
     .from(bucket)
     .getPublicUrl(data.path);
 
