@@ -1,39 +1,20 @@
-import { createServerClient } from '@supabase/ssr';
-import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
 import { uploadImageToStorage } from '@/lib/supabase';
+import { getAuthenticatedUser } from '@/lib/auth';
 
 export const maxDuration = 60;
 
 export async function POST(request: Request) {
-  const cookieStore = await cookies();
+  let supabase: any;
 
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-  if (!supabaseUrl || !supabaseAnonKey) {
-    console.error('[ImageUpload] Missing Supabase env vars');
-    return NextResponse.json(
-      { error: 'Server configuration error: Supabase env vars not set' },
-      { status: 500 }
-    );
-  }
-
-  const supabase = createServerClient(
-    supabaseUrl,
-    supabaseAnonKey,
-    {
-      cookies: {
-        get(name: string) {
-          return cookieStore.get(name)?.value;
-        },
-      },
+  try {
+    const auth = await getAuthenticatedUser();
+    supabase = auth.supabase;
+  } catch (err) {
+    if (err instanceof Error && err.message === 'Unauthorized') {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
-  );
-  
-  // Verifica autenticazione
-  const { data: { session } } = await supabase.auth.getSession();
-  if (!session) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    return NextResponse.json({ error: 'Server configuration error' }, { status: 500 });
   }
 
   try {
@@ -41,13 +22,9 @@ export async function POST(request: Request) {
     const file = formData.get('image') as File;
 
     if (!file) {
-      return NextResponse.json(
-        { error: 'Image file is required' },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: 'Image file is required' }, { status: 400 });
     }
 
-    // Validazione tipo file
     const allowedTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/jpg'];
     if (!allowedTypes.includes(file.type)) {
       return NextResponse.json(
@@ -56,22 +33,16 @@ export async function POST(request: Request) {
       );
     }
 
-    // Validazione dimensione (max 10MB)
     const maxSize = 10 * 1024 * 1024;
     if (file.size > maxSize) {
-      return NextResponse.json(
-        { error: 'File too large. Maximum size is 10MB.' },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: 'File too large. Maximum size is 10MB.' }, { status: 400 });
     }
 
     console.log(`[ImageUpload] Processing upload: ${file.name} (${file.size} bytes)`);
 
-    // Converti file in base64
     const bytes = await file.arrayBuffer();
     const base64 = Buffer.from(bytes).toString('base64');
 
-    // Upload a Supabase Storage
     const publicUrl = await uploadImageToStorage(
       `data:${file.type};base64,${base64}`,
       file.name,
@@ -83,21 +54,12 @@ export async function POST(request: Request) {
     }
 
     console.log(`[ImageUpload] Success: ${publicUrl}`);
-
-    return NextResponse.json({
-      success: true,
-      url: publicUrl,
-      filename: file.name,
-      size: file.size,
-    });
+    return NextResponse.json({ success: true, url: publicUrl, filename: file.name, size: file.size });
 
   } catch (error) {
     console.error('[ImageUpload] Error:', error);
     return NextResponse.json(
-      { 
-        error: 'Image upload failed',
-        details: error instanceof Error ? error.message : 'Unknown error'
-      },
+      { error: 'Image upload failed', details: error instanceof Error ? error.message : 'Unknown error' },
       { status: 500 }
     );
   }

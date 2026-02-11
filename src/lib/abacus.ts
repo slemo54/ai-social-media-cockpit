@@ -1,4 +1,5 @@
 import { AbacusTextResponse, AbacusImageResponse, Templates } from '@/types';
+import { getContentIntelligence, buildPromptEnhancement, buildImagePromptEnhancement } from './content-intelligence';
 
 const ABACUS_BASE_URL = 'https://routellm.abacus.ai/v1';
 
@@ -222,13 +223,25 @@ export const CONTENT_TEMPLATES: Templates = {
 };
 
 export async function generateTextContent(
-  topic: string, 
+  topic: string,
   project: 'IWP' | 'IWA' = 'IWP'
 ): Promise<AbacusTextResponse | null> {
   const apiKey = getAbacusApiKey();
 
-  const systemPrompt = project === 'IWP' ? SYSTEM_PROMPT_IWP : SYSTEM_PROMPT_IWA;
+  let systemPrompt = project === 'IWP' ? SYSTEM_PROMPT_IWP : SYSTEM_PROMPT_IWA;
   const projectName = project === 'IWP' ? 'Italian Wine Podcast' : 'Italian Wine Academy';
+
+  // Enrich with Content Intelligence
+  try {
+    const intelligence = await getContentIntelligence(project);
+    const enhancement = buildPromptEnhancement(intelligence);
+    if (enhancement) {
+      systemPrompt += `\n\n--- CONTENT INTELLIGENCE (basata su analisi di post reali ad alto engagement) ---\n${enhancement}`;
+      console.log(`[Abacus] Prompt enriched with ${intelligence.voiceRules.length} rules`);
+    }
+  } catch (err) {
+    console.warn('[Abacus] Content intelligence unavailable, using base prompt');
+  }
 
   console.log(`[Abacus] Generating for ${projectName}: ${topic.substring(0, 50)}`);
 
@@ -309,14 +322,31 @@ export async function generateTextContent(
   return content;
 }
 
-export async function generateImage(imagePrompt: string): Promise<AbacusImageResponse | null> {
+export async function generateImage(
+  imagePrompt: string,
+  options?: { brand?: 'IWP' | 'IWA'; platform?: string }
+): Promise<AbacusImageResponse | null> {
   const googleApiKey = process.env.GOOGLE_AI_API_KEY;
   if (!googleApiKey) {
     console.warn('[Image] GOOGLE_AI_API_KEY not set, skipping image generation');
     return null;
   }
 
-  const enhancedPrompt = `Professional wine photography, Italian wine culture, ${imagePrompt}, elegant composition, warm lighting, authentic atmosphere, photorealistic, 8k quality`;
+  let enhancedPrompt = `Professional wine photography, Italian wine culture, ${imagePrompt}, elegant composition, warm lighting, authentic atmosphere, photorealistic, 8k quality`;
+
+  // Enrich with visual intelligence
+  if (options?.brand) {
+    try {
+      const intelligence = await getContentIntelligence(options.brand);
+      const visualEnhancement = buildImagePromptEnhancement(intelligence);
+      if (visualEnhancement) {
+        enhancedPrompt += `, ${visualEnhancement}`;
+        console.log('[Image] Prompt enriched with visual intelligence');
+      }
+    } catch {
+      // Graceful degradation
+    }
+  }
 
   console.log('[Image] Generating image with Google Gemini...');
 
