@@ -2,49 +2,28 @@ import { NextRequest, NextResponse } from 'next/server';
 import { generateTextContent, generateImage } from '@/lib/abacus';
 import { createPost, uploadImageToStorage } from '@/lib/supabase';
 import { GenerateRequest, GenerateResponse } from '@/types';
-import { createServerClient } from '@supabase/ssr';
-import { cookies } from 'next/headers';
+import { getAuthenticatedUser } from '@/lib/auth';
 
-export const maxDuration = 180; // Aumentato a 3 minuti per generazione con immagine
+export const maxDuration = 180;
 
 export async function POST(request: NextRequest): Promise<NextResponse<GenerateResponse>> {
   const startTime = Date.now();
-  const cookieStore = await cookies();
 
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-  if (!supabaseUrl || !supabaseAnonKey) {
-    console.error('[API] Missing Supabase env vars');
-    return NextResponse.json(
-      { success: false, error: 'Server configuration error: Supabase env vars not set' },
-      { status: 500 }
-    );
+  let userId: string;
+  let supabase: any;
+
+  try {
+    const auth = await getAuthenticatedUser();
+    userId = auth.userId;
+    supabase = auth.supabase;
+  } catch (err) {
+    if (err instanceof Error && err.message === 'Unauthorized') {
+      return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
+    }
+    return NextResponse.json({ success: false, error: 'Server configuration error' }, { status: 500 });
   }
 
-  const supabase = createServerClient(
-    supabaseUrl,
-    supabaseAnonKey,
-    {
-      cookies: {
-        get(name: string) {
-          return cookieStore.get(name)?.value;
-        },
-      },
-    }
-  );
-  
   try {
-    // Verifica autenticazione - USA getUser() NON getSession()
-    const { data: { user }, error: authError } = await supabase.auth.getUser();
-    if (authError || !user) {
-      return NextResponse.json(
-        { success: false, error: 'Unauthorized' },
-        { status: 401 }
-      );
-    }
-    
-    const userId = user.id;
-
     // Verifica variabili d'ambiente
     if (!process.env.ABACUS_API_KEY && !process.env.NEXT_PUBLIC_ABACUS_API_KEY) {
       console.error('[API] Missing ABACUS_API_KEY');
@@ -74,7 +53,6 @@ export async function POST(request: NextRequest): Promise<NextResponse<GenerateR
       );
     }
 
-    // Validazione progetto
     if (project !== 'IWP' && project !== 'IWA') {
       return NextResponse.json(
         { success: false, error: 'Project must be IWP or IWA' },
@@ -102,8 +80,6 @@ export async function POST(request: NextRequest): Promise<NextResponse<GenerateR
       textContent = await generateTextContent(topic, project);
     } catch (err) {
       console.error('[API] Text generation error:', err);
-      
-      // Log errore
       if (logEntry) {
         await supabase
           .from('generation_logs')
@@ -115,7 +91,6 @@ export async function POST(request: NextRequest): Promise<NextResponse<GenerateR
           })
           .eq('id', logEntry.id);
       }
-      
       return NextResponse.json(
         { success: false, error: `Text generation failed: ${err instanceof Error ? err.message : 'Unknown error'}` },
         { status: 500 }
@@ -136,37 +111,28 @@ export async function POST(request: NextRequest): Promise<NextResponse<GenerateR
     let imageSource: 'generated' | 'uploaded' = 'generated';
 
     if (userImageUrl) {
-      // L'utente ha caricato un'immagine
       console.log('[API] Using user uploaded image');
       imageSource = 'uploaded';
-      
-      // Se è una data URL, uploada a Supabase
       if (userImageUrl.startsWith('data:')) {
         try {
           permanentImageUrl = await uploadImageToStorage(userImageUrl, 'user-upload.jpg', supabase);
         } catch (err) {
           console.error('[API] User image upload error:', err);
-          // Continua con generazione AI come fallback
           permanentImageUrl = null;
         }
       } else {
-        // Già un URL remoto
         permanentImageUrl = userImageUrl;
       }
     }
 
-    // Se non c'è immagine uploadata o l'upload è fallito, genera con AI
     if (!permanentImageUrl) {
       console.log('[API] Generating image with AI...');
       imageSource = 'generated';
-      
       let imageResult;
       try {
         imageResult = await generateImage(textContent.image_prompt);
       } catch (err) {
         console.error('[API] Image generation error:', err);
-        
-        // Log errore ma continua senza immagine
         if (logEntry) {
           await supabase
             .from('generation_logs')
@@ -181,31 +147,20 @@ export async function POST(request: NextRequest): Promise<NextResponse<GenerateR
       }
 
       if (imageResult) {
-        // Step 3: Upload image to storage
         try {
           if (imageResult.image_base64) {
-            permanentImageUrl = await uploadImageToStorage(
-              imageResult.image_base64,
-              'generated-image.png',
-              supabase
-            );
+            permanentImageUrl = await uploadImageToStorage(imageResult.image_base64, 'generated-image.png', supabase);
           } else if (imageResult.image_url) {
-            permanentImageUrl = await uploadImageToStorage(
-              imageResult.image_url,
-              'generated-image.png',
-              supabase
-            );
+            permanentImageUrl = await uploadImageToStorage(imageResult.image_url, 'generated-image.png', supabase);
           }
         } catch (err) {
           console.error('[API] Image upload error:', err);
-          // Continua senza immagine
         }
       }
     }
 
     console.log('[API] Image ready:', permanentImageUrl || 'No image');
 
-    // Calcola metriche
     const generationTime = Date.now() - startTime;
     const wordCount = textContent.body_copy?.split(/\s+/).length || 0;
 
@@ -231,8 +186,6 @@ export async function POST(request: NextRequest): Promise<NextResponse<GenerateR
       }, supabase);
     } catch (err) {
       console.error('[API] Database save error:', err);
-      
-      // Log errore
       if (logEntry) {
         await supabase
           .from('generation_logs')
@@ -244,7 +197,6 @@ export async function POST(request: NextRequest): Promise<NextResponse<GenerateR
           })
           .eq('id', logEntry.id);
       }
-      
       return NextResponse.json(
         { success: false, error: `Database save failed: ${err instanceof Error ? err.message : 'Unknown error'}` },
         { status: 500 }
@@ -260,7 +212,6 @@ export async function POST(request: NextRequest): Promise<NextResponse<GenerateR
 
     console.log('[API] Post saved:', post.id);
 
-    // Aggiorna log con successo
     if (logEntry) {
       await supabase
         .from('generation_logs')
@@ -273,18 +224,12 @@ export async function POST(request: NextRequest): Promise<NextResponse<GenerateR
         .eq('id', logEntry.id);
     }
 
-    return NextResponse.json({
-      success: true,
-      data: post,
-    });
+    return NextResponse.json({ success: true, data: post });
 
   } catch (error) {
     console.error('[API] Unexpected error:', error);
     return NextResponse.json(
-      { 
-        success: false, 
-        error: `Internal server error: ${error instanceof Error ? error.message : 'Unknown error'}` 
-      },
+      { success: false, error: `Internal server error: ${error instanceof Error ? error.message : 'Unknown error'}` },
       { status: 500 }
     );
   }

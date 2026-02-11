@@ -1,6 +1,5 @@
-import { createServerClient } from '@supabase/ssr';
-import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
+import { getAuthenticatedUser } from '@/lib/auth';
 
 const ABACUS_API_KEY = process.env.ABACUS_API_KEY;
 const ABACUS_BASE_URL = 'https://routellm.abacus.ai/v1';
@@ -20,31 +19,17 @@ interface EditRequest {
 }
 
 export async function POST(request: Request) {
-  const cookieStore = await cookies();
-  
-  const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: {
-        getAll() {
-          return cookieStore.getAll();
-        },
-      },
+  try {
+    await getAuthenticatedUser();
+  } catch (err) {
+    if (err instanceof Error && err.message === 'Unauthorized') {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
-  );
-  
-  // Verifica autenticazione - USA getUser() NON getSession()
-  const { data: { user }, error } = await supabase.auth.getUser();
-  if (error || !user) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    return NextResponse.json({ error: 'Server configuration error' }, { status: 500 });
   }
 
   if (!ABACUS_API_KEY) {
-    return NextResponse.json(
-      { error: 'ABACUS_API_KEY not configured' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'ABACUS_API_KEY not configured' }, { status: 500 });
   }
 
   try {
@@ -52,13 +37,9 @@ export async function POST(request: Request) {
     const { imageBase64, operation, params } = body;
 
     if (!imageBase64) {
-      return NextResponse.json(
-        { error: 'Image is required' },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: 'Image is required' }, { status: 400 });
     }
 
-    // Costruisci il prompt in base all'operazione
     let editPrompt = '';
     switch (operation) {
       case 'add_text':
@@ -74,15 +55,11 @@ export async function POST(request: Request) {
         editPrompt = `Enhance this wine image: improve lighting, make colors more vibrant, professional photography quality, 8k resolution look.`;
         break;
       default:
-        return NextResponse.json(
-          { error: 'Invalid operation' },
-          { status: 400 }
-        );
+        return NextResponse.json({ error: 'Invalid operation' }, { status: 400 });
     }
 
     console.log(`[ImageEdit] Starting ${operation} operation`);
 
-    // Chiamata all'API Abacus per editing immagine
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 90000);
 
@@ -94,23 +71,13 @@ export async function POST(request: Request) {
       },
       body: JSON.stringify({
         model: 'nano-banana-pro',
-        messages: [
-          {
-            role: 'user',
-            content: [
-              {
-                type: 'text',
-                text: editPrompt,
-              },
-              {
-                type: 'image_url',
-                image_url: {
-                  url: `data:image/jpeg;base64,${imageBase64}`,
-                },
-              },
-            ],
-          },
-        ],
+        messages: [{
+          role: 'user',
+          content: [
+            { type: 'text', text: editPrompt },
+            { type: 'image_url', image_url: { url: `data:image/jpeg;base64,${imageBase64}` } },
+          ],
+        }],
         modalities: ['image'],
         image_config: { num_images: 1, aspect_ratio: '1:1' },
       }),
@@ -126,14 +93,11 @@ export async function POST(request: Request) {
     }
 
     const data = await response.json();
-    
-    // Estrai l'immagine modificata
     let editedImageBase64: string | undefined;
     let editedImageUrl: string | undefined;
 
     if (data.choices?.[0]?.message) {
       const message = data.choices[0].message;
-      
       if (message.images?.[0]) {
         if (message.images[0].b64_json) {
           editedImageBase64 = message.images[0].b64_json;
@@ -141,7 +105,6 @@ export async function POST(request: Request) {
           editedImageUrl = message.images[0].image_url.url;
         }
       }
-      
       if (!editedImageBase64 && !editedImageUrl && message.content?.startsWith('data:image')) {
         editedImageBase64 = message.content.split(',')[1];
       }
@@ -152,21 +115,12 @@ export async function POST(request: Request) {
     }
 
     console.log('[ImageEdit] Operation completed successfully');
-
-    return NextResponse.json({
-      success: true,
-      imageBase64: editedImageBase64,
-      imageUrl: editedImageUrl,
-      operation,
-    });
+    return NextResponse.json({ success: true, imageBase64: editedImageBase64, imageUrl: editedImageUrl, operation });
 
   } catch (error) {
     console.error('[ImageEdit] Error:', error);
     return NextResponse.json(
-      { 
-        error: 'Image editing failed',
-        details: error instanceof Error ? error.message : 'Unknown error'
-      },
+      { error: 'Image editing failed', details: error instanceof Error ? error.message : 'Unknown error' },
       { status: 500 }
     );
   }

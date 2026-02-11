@@ -1,52 +1,35 @@
-import { createServerClient } from '@supabase/ssr';
-import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
+import { getAuthenticatedUser } from '@/lib/auth';
 
 export async function GET(request: Request) {
-  const cookieStore = await cookies();
-  
-  const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: {
-        get(name: string) {
-          return cookieStore.get(name)?.value;
-        },
-      },
+  let userId: string;
+  let supabase: any;
+
+  try {
+    const auth = await getAuthenticatedUser();
+    userId = auth.userId;
+    supabase = auth.supabase;
+  } catch (err) {
+    if (err instanceof Error && err.message === 'Unauthorized') {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
-  );
-  
-  const { data: { user }, error: authError } = await supabase.auth.getUser();
-  if (authError || !user) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    return NextResponse.json({ error: 'Server configuration error' }, { status: 500 });
   }
-  
+
   const { searchParams } = new URL(request.url);
   const limit = parseInt(searchParams.get('limit') || '10');
-  
+
   try {
     const { data: posts, error } = await supabase
       .from('posts')
-      .select(`
-        id,
-        title,
-        body_copy,
-        status,
-        platform,
-        template_used,
-        created_at,
-        image_url,
-        word_count
-      `)
-      .eq('user_id', user.id)
+      .select(`id, title, body_copy, status, platform, template_used, created_at, image_url, word_count`)
+      .eq('user_id', userId)
       .order('created_at', { ascending: false })
       .limit(limit);
-    
+
     if (error) throw error;
-    
-    // Formatta per la UI
-    const formatted = posts?.map(post => ({
+
+    const formatted = posts?.map((post: any) => ({
       id: post.id,
       title: post.title,
       preview: post.body_copy?.substring(0, 120) + '...' || 'No preview',
@@ -57,7 +40,7 @@ export async function GET(request: Request) {
       hasImage: !!post.image_url,
       wordCount: post.word_count,
     })) || [];
-    
+
     return NextResponse.json({ posts: formatted });
   } catch (error) {
     console.error('Recent posts error:', error);
