@@ -22,6 +22,9 @@ npm-debug.log*
 # vercel
 .vercel
 
+# misc
+wine2digital-pm/
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts

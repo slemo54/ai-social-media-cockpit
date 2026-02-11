@@ -1,8 +1,88 @@
 import { AbacusTextResponse, AbacusImageResponse, Templates } from '@/types';
-import { apiClient } from './api-client';
 
-const ABACUS_API_KEY = process.env.ABACUS_API_KEY;
 const ABACUS_BASE_URL = 'https://routellm.abacus.ai/v1';
+
+interface RetryOptions {
+  retries?: number;
+  retryDelay?: number;
+  backoffMultiplier?: number;
+}
+
+const DEFAULT_RETRIES = 3;
+const DEFAULT_RETRY_DELAY = 1000;
+const DEFAULT_BACKOFF = 2;
+
+function getAbacusApiKey(): string {
+  const key = process.env.ABACUS_API_KEY || process.env.NEXT_PUBLIC_ABACUS_API_KEY;
+  if (!key) {
+    throw new Error('ABACUS_API_KEY not configured');
+  }
+  if (!process.env.ABACUS_API_KEY && process.env.NEXT_PUBLIC_ABACUS_API_KEY) {
+    console.warn('[Abacus] Using NEXT_PUBLIC_ABACUS_API_KEY on server. Consider setting ABACUS_API_KEY.');
+  }
+  return key;
+}
+
+async function fetchWithTimeout(
+  url: string,
+  options: RequestInit & { timeout?: number }
+): Promise<Response> {
+  const { timeout = 60000, ...fetchOptions } = options;
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), timeout);
+
+  try {
+    return await fetch(url, {
+      ...fetchOptions,
+      signal: controller.signal,
+    });
+  } finally {
+    clearTimeout(timeoutId);
+  }
+}
+
+async function checkResponse(response: Response): Promise<Response> {
+  if (!response.ok) {
+    const text = await response.text().catch(() => 'Unknown error');
+    throw new Error(`HTTP ${response.status}: ${text}`);
+  }
+  return response;
+}
+
+async function requestWithRetry<T>(
+  operation: () => Promise<T>,
+  options: RetryOptions = {}
+): Promise<T> {
+  const retries = options.retries ?? DEFAULT_RETRIES;
+  const retryDelay = options.retryDelay ?? DEFAULT_RETRY_DELAY;
+  const backoffMultiplier = options.backoffMultiplier ?? DEFAULT_BACKOFF;
+
+  let lastError: Error;
+
+  for (let attempt = 0; attempt <= retries; attempt++) {
+    try {
+      return await operation();
+    } catch (error) {
+      lastError = error instanceof Error ? error : new Error(String(error));
+
+      if (
+        lastError.message.includes('401') ||
+        lastError.message.includes('403') ||
+        lastError.message.includes('404')
+      ) {
+        throw lastError;
+      }
+
+      if (attempt < retries) {
+        const delay = retryDelay * Math.pow(backoffMultiplier, attempt);
+        console.log(`[Abacus] Retry ${attempt + 1}/${retries} after ${delay}ms`);
+        await new Promise(resolve => setTimeout(resolve, delay));
+      }
+    }
+  }
+
+  throw lastError!;
+}
 
 // Brand Voice Italian Wine Podcast - Stile Stevie Kim (conversazionale, storytelling)
 const SYSTEM_PROMPT_IWP = `Sei Stevie Kim, Managing Director di Vinitaly International e voce di Italian Wine Podcast.
@@ -145,21 +225,19 @@ export async function generateTextContent(
   topic: string, 
   project: 'IWP' | 'IWA' = 'IWP'
 ): Promise<AbacusTextResponse | null> {
-  if (!ABACUS_API_KEY) {
-    throw new Error('ABACUS_API_KEY not configured');
-  }
+  const apiKey = getAbacusApiKey();
 
   const systemPrompt = project === 'IWP' ? SYSTEM_PROMPT_IWP : SYSTEM_PROMPT_IWA;
   const projectName = project === 'IWP' ? 'Italian Wine Podcast' : 'Italian Wine Academy';
 
   console.log(`[Abacus] Generating for ${projectName}: ${topic.substring(0, 50)}`);
 
-  const response = await apiClient.requestWithRetry(async () => {
-    const res = await apiClient.fetchWithTimeout(`${ABACUS_BASE_URL}/chat/completions`, {
+  const response = await requestWithRetry(async () => {
+    const res = await fetchWithTimeout(`${ABACUS_BASE_URL}/chat/completions`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${ABACUS_API_KEY}`,
+        'Authorization': `Bearer ${apiKey}`,
       },
       body: JSON.stringify({
         model: 'gemini-2.5-flash',
@@ -173,10 +251,9 @@ export async function generateTextContent(
       }),
       timeout: 30000,
     });
-    return apiClient.checkResponse(res);
+    return checkResponse(res);
   }, {
     retries: 3,
-    timeout: 30000,
     retryDelay: 1000,
     backoffMultiplier: 2,
   });
@@ -233,61 +310,59 @@ export async function generateTextContent(
 }
 
 export async function generateImage(imagePrompt: string): Promise<AbacusImageResponse | null> {
-  if (!ABACUS_API_KEY) {
-    throw new Error('ABACUS_API_KEY not configured');
+  const googleApiKey = process.env.GOOGLE_AI_API_KEY;
+  if (!googleApiKey) {
+    console.warn('[Image] GOOGLE_AI_API_KEY not set, skipping image generation');
+    return null;
   }
 
   const enhancedPrompt = `Professional wine photography, Italian wine culture, ${imagePrompt}, elegant composition, warm lighting, authentic atmosphere, photorealistic, 8k quality`;
 
-  console.log('[Abacus] Generating image...');
+  console.log('[Image] Generating image with Google Gemini...');
 
-  const response = await apiClient.requestWithRetry(async () => {
-    const res = await apiClient.fetchWithTimeout(`${ABACUS_BASE_URL}/chat/completions`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${ABACUS_API_KEY}`,
-      },
-      body: JSON.stringify({
-        model: 'nano-banana-pro',
-        messages: [{ role: 'user', content: enhancedPrompt }],
-        modalities: ['image'],
-        image_config: { num_images: 1, aspect_ratio: '1:1' },
-      }),
-      timeout: 90000, // 90 secondi per generazione immagine
-    });
-    return apiClient.checkResponse(res);
+  const response = await requestWithRetry(async () => {
+    const res = await fetchWithTimeout(
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp:generateContent?key=${googleApiKey}`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          contents: [{
+            parts: [{ text: `Generate a high-quality image: ${enhancedPrompt}` }],
+          }],
+          generationConfig: {
+            responseModalities: ['IMAGE', 'TEXT'],
+          },
+        }),
+        timeout: 90000,
+      }
+    );
+    return checkResponse(res);
   }, {
     retries: 2,
-    timeout: 90000,
     retryDelay: 2000,
     backoffMultiplier: 2,
   });
 
   const data = await response.json();
-  
-  let imageUrl: string | undefined;
+  console.log('[Image] Gemini response keys:', Object.keys(data));
+
   let imageBase64: string | undefined;
 
-  if (data.choices?.[0]?.message) {
-    const message = data.choices[0].message;
-    
-    if (message.images?.[0]) {
-      if (message.images[0].image_url) {
-        imageUrl = message.images[0].image_url.url;
-      } else if (message.images[0].b64_json) {
-        imageBase64 = message.images[0].b64_json;
+  if (data.candidates?.[0]?.content?.parts) {
+    for (const part of data.candidates[0].content.parts) {
+      if (part.inlineData) {
+        imageBase64 = `data:${part.inlineData.mimeType};base64,${part.inlineData.data}`;
+        break;
       }
     }
-    
-    if (!imageUrl && !imageBase64 && message.content?.startsWith('data:image')) {
-      imageBase64 = message.content.split(',')[1];
-    }
   }
 
-  if (!imageUrl && !imageBase64) {
-    throw new Error('No image data received from API');
+  if (!imageBase64) {
+    console.error('[Image] No image in response:', JSON.stringify(data).substring(0, 500));
+    throw new Error('No image data received from Gemini API');
   }
 
-  return { image_url: imageUrl || '', image_base64: imageBase64 };
+  console.log('[Image] Image generated successfully');
+  return { image_url: '', image_base64: imageBase64 };
 }

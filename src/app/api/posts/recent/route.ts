@@ -17,8 +17,8 @@ export async function GET(request: Request) {
     }
   );
   
-  const { data: { session } } = await supabase.auth.getSession();
-  if (!session) {
+  const { data: { user }, error: authError } = await supabase.auth.getUser();
+  if (authError || !user) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
   
@@ -39,7 +39,7 @@ export async function GET(request: Request) {
         image_url,
         word_count
       `)
-      .eq('user_id', session.user.id)
+      .eq('user_id', user.id)
       .order('created_at', { ascending: false })
       .limit(limit);
     
