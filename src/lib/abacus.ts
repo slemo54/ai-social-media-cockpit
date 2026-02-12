@@ -353,7 +353,7 @@ export async function generateImage(
 
   const response = await requestWithRetry(async () => {
     const res = await fetchWithTimeout(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp:generateContent?key=${googleApiKey}`,
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-image:generateContent?key=${googleApiKey}`,
       {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
