@@ -239,7 +239,7 @@ export async function POST(request: NextRequest): Promise<NextResponse<GenerateR
         .eq('id', logEntry.id);
     }
 
-    return NextResponse.json({ success: true, data: post, ...(imageDebugError && { _imageDebug: imageDebugError }) });
+    return NextResponse.json({ success: true, data: post, _v: 'debug-v3', _imageDebug: imageDebugError || 'no-error-captured' });
 
   } catch (error) {
     console.error('[API] Unexpected error:', error);
