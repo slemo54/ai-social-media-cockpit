@@ -150,8 +150,8 @@ export async function uploadImageToStorage(
     });
 
   if (error) {
-    console.error('Error uploading image:', error);
-    return null;
+    console.error('Error uploading image:', error.message, 'statusCode:', (error as any).statusCode);
+    throw new Error(`Storage upload failed: ${error.message}`);
   }
 
   // Get public URL
