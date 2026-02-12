@@ -1,4 +1,4 @@
-import { createServerClient, type CookieOptions } from '@supabase/ssr';
+import { createServerClient } from '@supabase/ssr';
 import { cookies } from 'next/headers';
 import { SupabaseClient } from '@supabase/supabase-js';
 
@@ -25,8 +25,10 @@ export async function getAuthenticatedUser(): Promise<AuthResult> {
       getAll() {
         return cookieStore.getAll();
       },
-      get(name: string) {
-        return cookieStore.get(name)?.value;
+      setAll(cookiesToSet) {
+        cookiesToSet.forEach(({ name, value, options }) => {
+          try { cookieStore.set(name, value, options); } catch { /* read-only in Server Components */ }
+        });
       },
     },
   });
