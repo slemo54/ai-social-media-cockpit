@@ -1,0 +1,1406 @@
+{
+  "metadata": {
+    "research_date": "2026-02-12",
+    "researcher": "Agent 1 - Content Intelligence Researcher",
+    "brands_analyzed": ["IWP", "IWA"],
+    "data_sources": [
+      "PR Newswire press releases",
+      "LinkedIn company page previews",
+      "Instagram profile metadata",
+      "Official websites (italianwinepodcast.com, italianwineacademy.org)",
+      "Apple Podcasts / Spotify listings",
+      "Industry publications (Wine Enthusiast, Meininger's, The Buyer)",
+      "News aggregators (Yahoo Finance, Benzinga)",
+      "Podcast directories (Feedspot, Goodpods, Rephonic)"
+    ],
+    "methodology": "Web search + content analysis + sequential thinking analysis",
+    "limitations": "LinkedIn and Instagram posts could not be directly scraped due to platform gating. Analysis based on PR releases, search engine snippets, website content, and platform metadata."
+  },
+
+  "A_content_intelligence_posts": [
+    {
+      "id": "IWP-001",
+      "platform": "LinkedIn",
+      "brand": "IWP",
+      "post_text": "🎙Ep. 2576 An inside look at wine competitions and 5StarWines - the Book | wine2wine Vinitaly Business Forum. 🎧 Listen: [link]",
+      "post_type": "episode_announcement",
+      "hashtags": ["#ItalianWinePodcast", "#wine2wine", "#ItalianWine", "#winepodcast"],
+      "likes": null,
+      "comments": null,
+      "shares": null,
+      "engagement_score": null,
+      "date": "2026-01",
+      "source_url": "https://www.italianwinepodcast.com/Episodes/ep-2576-an-inside-look-at-wine-competitions-and-5starwines-the-book-wine2wine-vinitaly-business-forum/"
+    },
+    {
+      "id": "IWP-002",
+      "platform": "LinkedIn",
+      "brand": "IWP",
+      "post_text": "🎙Ep. 2554 On The Road Special Edition: Stevie Kim interviews Marco Alberti, the Italian Ambassador in Tirana, Albania. 🎧 Listen: [link]",
+      "post_type": "episode_announcement",
+      "hashtags": ["#ItalianWinePodcast", "#OnTheRoad", "#ItalianWine", "#winepodcast"],
+      "likes": null,
+      "comments": null,
+      "shares": null,
+      "engagement_score": null,
+      "date": "2025-12",
+      "source_url": "https://www.italianwinepodcast.com/Episodes/"
+    },
+    {
+      "id": "IWP-003",
+      "platform": "LinkedIn",
+      "brand": "IWP",
+      "post_text": "🎙Ep. 2550 Understanding the Canadian wine market with Amy Liu | Masterclass US Wine Market with Juliana Colangelo, MBA. 🎧 Listen: [link]",
+      "post_type": "episode_announcement",
+      "hashtags": ["#ItalianWinePodcast", "#MasterclassUSWineMarket", "#ItalianWine", "#winebusiness"],
+      "likes": null,
+      "comments": null,
+      "shares": null,
+      "engagement_score": null,
+      "date": "2025-12",
+      "source_url": "https://www.italianwinepodcast.com/Episodes/ep-2550-understanding-the-canadian-wine-market-with-amy-liu-masterclass-us-wine-market/"
+    },
+    {
+      "id": "IWP-004",
+      "platform": "LinkedIn",
+      "brand": "IWP",
+      "post_text": "🎙Ep. 2548 ITA Masterclass \"ITA Connects - Decoding the U.S. market: importing, policy, and promoting Italian wine\" | wine2wine Vinitaly Business Forum. 🎧 Listen: [link]",
+      "post_type": "episode_announcement",
+      "hashtags": ["#wine2wine", "#ItalianWine", "#USmarket", "#winebusiness"],
+      "likes": null,
+      "comments": null,
+      "shares": null,
+      "engagement_score": null,
+      "date": "2025-12",
+      "source_url": "https://www.italianwinepodcast.com/Episodes/ep-2548-ita-masterclass-ita-connects-decoding-the-u-s-market-importing-policy-and-promoting-italian-wine-wine2wine-vinitaly-business-forum/"
+    },
+    {
+      "id": "IWP-005",
+      "platform": "LinkedIn",
+      "brand": "IWP",
+      "post_text": "🎙Ep. 2547 Book Club: Richard Hough and Jane Masters MW discuss \"Rooted in Change: The Stories Behind Sustainable Wine\". 🎧 Listen: [link]",
+      "post_type": "episode_announcement",
+      "hashtags": ["#ItalianWinePodcast", "#BookClub", "#SustainableWine", "#winepodcast"],
+      "likes": null,
+      "comments": null,
+      "shares": null,
+      "engagement_score": null,
+      "date": "2025-12",
+      "source_url": "https://www.italianwinepodcast.com/"
+    },
+    {
+      "id": "IWP-006",
+      "platform": "LinkedIn",
+      "brand": "IWP",
+      "post_text": "🎙Ep. 2545 Building Inclusive Wine Spaces Through Storytelling with Amari Collins | Voices with Cynthia Chaplin. A New York-based wine educator and digital creator who brings a fresh, inclusive voice to the world of wine. 🎧 Listen: [link]",
+      "post_type": "episode_announcement",
+      "hashtags": ["#Voices", "#ItalianWinePodcast", "#DiversityInWine", "#winepeople"],
+      "likes": null,
+      "comments": null,
+      "shares": null,
+      "engagement_score": null,
+      "date": "2025-11",
+      "source_url": "https://open.spotify.com/episode/7GXnXbSqEnNkFrqzKmX9jY"
+    },
+    {
+      "id": "IWP-007",
+      "platform": "LinkedIn/PR",
+      "brand": "IWP",
+      "post_text": "Imperfect but Unstoppable 🎉 Italian Wine Podcast Smashes 2500 Episodes to become the World's Most Prolific Wine Podcast! \"The Italian Wine Podcast has never been about perfection. Instead, we embrace real, honest and open conversations.\" - Stevie Kim",
+      "post_type": "milestone",
+      "hashtags": ["#ItalianWinePodcast", "#2500episodes", "#winepodcast", "#ItalianWine"],
+      "likes": null,
+      "comments": null,
+      "shares": null,
+      "engagement_score": 9.5,
+      "date": "2025-10-18",
+      "source_url": "https://www.prnewswire.com/news-releases/imperfect-but-unstoppable-italian-wine-podcast-smashes-2500-episodes-to-become-the-worlds-most-prolific-wine-podcast-302588857.html"
+    },
+    {
+      "id": "IWP-008",
+      "platform": "LinkedIn",
+      "brand": "IWP",
+      "post_text": "Celebrating the Voices of Wine 🍷 We're thrilled to release our first global Wine Podcast Directory - a comprehensive guide of 100 podcasts celebrating the most influential voices shaping today's wine conversations. 🎧 Explore: [link]",
+      "post_type": "community",
+      "hashtags": ["#WinePodcastDirectory", "#ItalianWinePodcast", "#winepodcast", "#winecommunity"],
+      "likes": null,
+      "comments": null,
+      "shares": null,
+      "engagement_score": 8.5,
+      "date": "2025-09",
+      "source_url": "https://www.prnewswire.com/news-releases/celebrating-the-voices-of-wine-top-100-wine-podcast-directory-released-302567551.html"
+    },
+    {
+      "id": "IWP-009",
+      "platform": "LinkedIn",
+      "brand": "IWP",
+      "post_text": "🎙Ep. 2595 Where Wine Won In 2025 with Erica Duecy | On the Road with Stevie Kim. 🎧 Listen: [link]",
+      "post_type": "episode_announcement",
+      "hashtags": ["#OnTheRoad", "#ItalianWinePodcast", "#ItalianWine"],
+      "likes": null,
+      "comments": null,
+      "shares": null,
+      "engagement_score": null,
+      "date": "2026-01",
+      "source_url": "https://www.italianwinepodcast.com/Episodes/ep-2595-where-wine-won-in-2025-with-erica-duecy-on-the-road-with-stevie-kim/"
+    },
+    {
+      "id": "IWP-010",
+      "platform": "LinkedIn",
+      "brand": "IWP",
+      "post_text": "🎙Ep. 2583 Women For WineSense and the Houston Rodeo Wine Competition with Amy Gross | On the Road with Stevie Kim. 🎧 Listen: [link]",
+      "post_type": "episode_announcement",
+      "hashtags": ["#OnTheRoad", "#WomenInWine", "#ItalianWinePodcast"],
+      "likes": null,
+      "comments": null,
+      "shares": null,
+      "engagement_score": null,
+      "date": "2026-01",
+      "source_url": "https://www.italianwinepodcast.com/Episodes/ep-2583-women-for-winesense-and-the-houston-rodeo-wine-competition-with-amy-gross-on-the-road-with-stevie-kim/"
+    },
+    {
+      "id": "IWP-011",
+      "platform": "LinkedIn",
+      "brand": "IWP",
+      "post_text": "Italian Wine Podcast Renews Media Partnership with Grandi Langhe Wine Festival 🍇 We'll be at OGR Torino on Jan 26-27 with exclusive interviews with producers, buyers and industry leaders. Cin Cin! 🍷",
+      "post_type": "partnership",
+      "hashtags": ["#GrandiLanghe", "#ItalianWinePodcast", "#Langhe", "#ItalianWine"],
+      "likes": null,
+      "comments": null,
+      "shares": null,
+      "engagement_score": 8.0,
+      "date": "2026-01",
+      "source_url": "http://www.prnewswire.com/news-releases/italian-wine-podcast-renews-media-partnership-with-grandi-langhe-wine-festival-302663350.html"
+    },
+    {
+      "id": "IWP-012",
+      "platform": "LinkedIn",
+      "brand": "IWP",
+      "post_text": "Italian Wine Podcast founder Stevie Kim honored at the 2025 Enozioni a Milano Awards 🏆 Recognized for her unique contribution to the communication and promotion of Italian wine.",
+      "post_type": "achievement",
+      "hashtags": ["#EnozioniMilano", "#ItalianWinePodcast", "#ItalianWine", "#winebusiness"],
+      "likes": null,
+      "comments": null,
+      "shares": null,
+      "engagement_score": 9.0,
+      "date": "2025-02",
+      "source_url": "https://www.prweb.com/releases/italian-wine-podcast-founder-stevie-kim-honored-at-the-2025-enozioni-a-milano-awards-302371326.html"
+    },
+    {
+      "id": "IWP-013",
+      "platform": "LinkedIn",
+      "brand": "IWP",
+      "post_text": "Professor Attilio Scienza celebrates his 200th episode with the Italian Wine Podcast! 🔬 \"Everybody Needs a Bit of Scienza\" continues to make wine science accessible to an international audience. Cin Cin! 🍷",
+      "post_type": "milestone",
+      "hashtags": ["#ABitOfScienza", "#ItalianWinePodcast", "#WineScience", "#ItalianWine"],
+      "likes": null,
+      "comments": null,
+      "shares": null,
+      "engagement_score": 8.5,
+      "date": "2024",
+      "source_url": "https://www.prweb.com/releases/professor-attilio-scienza-celebrates-his-200th-episode-with-the-italian-wine-podcast-302153901.html"
+    },
+    {
+      "id": "IWP-014",
+      "platform": "LinkedIn",
+      "brand": "IWP",
+      "post_text": "Italian Wine Blogcast: Making Every Pod Last 📖 For those who have missed past episodes, we've created a series of blogs to provide a written record of key episodes, making it easier to find and listen to these fascinating conversations.",
+      "post_type": "content_announcement",
+      "hashtags": ["#ItalianWinePodcast", "#Blogcast", "#ItalianWine", "#winepodcast"],
+      "likes": null,
+      "comments": null,
+      "shares": null,
+      "engagement_score": 7.0,
+      "date": "2025-07",
+      "source_url": "https://www.prnewswire.com/news-releases/italian-wine-blogcast-making-every-pod-last-302549105.html"
+    },
+    {
+      "id": "IWP-015",
+      "platform": "LinkedIn",
+      "brand": "IWP",
+      "post_text": "Italian Wine Podcast is going to smash six million listens! 🎉 Thank you to our incredible community of Italian wine people from around the world. Cin Cin! 🍷",
+      "post_type": "milestone",
+      "hashtags": ["#ItalianWinePodcast", "#6MillionListens", "#winepodcast", "#CinCin"],
+      "likes": null,
+      "comments": null,
+      "shares": null,
+      "engagement_score": 9.0,
+      "date": "2025",
+      "source_url": "https://www.linkedin.com/posts/juliana-colangelo-mba-04345539_italian-wine-podcast-is-going-to-smash-six-activity-7090467726854410241-qlFf"
+    },
+    {
+      "id": "IWP-016",
+      "platform": "LinkedIn",
+      "brand": "IWP",
+      "post_text": "#wine2wine2022 What a great event! So much to process, learn, and share. The wine industry is all about people, and this year's wine2wine proved it once again. #wine2wine #winecommunication",
+      "post_type": "event_coverage",
+      "hashtags": ["#wine2wine2022", "#wine2wine", "#winecommunication"],
+      "likes": null,
+      "comments": null,
+      "shares": null,
+      "engagement_score": 7.5,
+      "date": "2022-11",
+      "source_url": "https://www.linkedin.com/posts/italianwinepodcast_wine2wine2022-wine2wine-winecommunication-activity-6993613446739058688-DzFH"
+    },
+    {
+      "id": "IWP-017",
+      "platform": "LinkedIn",
+      "brand": "IWP",
+      "post_text": "🎙Ep. 2432 Kim Yanan Lee | Everybody Needs A Bit Of Scienza. Professor Scienza takes another deep dive into the science behind wine. 🎧 Listen: [link]",
+      "post_type": "episode_announcement",
+      "hashtags": ["#ABitOfScienza", "#ItalianWinePodcast", "#WineScience"],
+      "likes": null,
+      "comments": null,
+      "shares": null,
+      "engagement_score": null,
+      "date": "2025",
+      "source_url": "https://www.italianwinepodcast.com/Episodes/ep-2432-kim-yanan-lee-everybody-needs-a-bit-of-scienza/"
+    },
+    {
+      "id": "IWP-018",
+      "platform": "LinkedIn",
+      "brand": "IWP",
+      "post_text": "🎙Ep. 2307 Marvina Robinson | Voices with Cynthia Chaplin. Founder and CEO of B. Stuyvesant Champagne, the first Champagne brand to be owned by a Black American woman. 🎧 Listen: [link]",
+      "post_type": "episode_announcement",
+      "hashtags": ["#Voices", "#ItalianWinePodcast", "#DiversityInWine", "#womeninwine"],
+      "likes": null,
+      "comments": null,
+      "shares": null,
+      "engagement_score": null,
+      "date": "2025",
+      "source_url": "https://www.italianwinepodcast.com/Episodes/ep-2307-marvina-robinson-voices-with-cynthia-chaplin/"
+    },
+    {
+      "id": "IWP-019",
+      "platform": "LinkedIn",
+      "brand": "IWP",
+      "post_text": "Stevie Kim: #winebusiness #womeninwine - sharing insights on women leadership in the wine business. The wine industry needs more diverse voices at the table.",
+      "post_type": "thought_leadership",
+      "hashtags": ["#winebusiness", "#womeninwine"],
+      "likes": null,
+      "comments": null,
+      "shares": null,
+      "engagement_score": null,
+      "date": "2022",
+      "source_url": "https://www.linkedin.com/posts/stevie-kim-0646b04_winebusiness-womeninwine-activity-6888071244701339648-K3eD"
+    },
+    {
+      "id": "IWP-020",
+      "platform": "LinkedIn",
+      "brand": "IWP",
+      "post_text": "Stevie Kim: #winebusiness #winepeople - The wine business is a people business. That's what we've always believed at Italian Wine Podcast.",
+      "post_type": "thought_leadership",
+      "hashtags": ["#winebusiness", "#winepeople"],
+      "likes": null,
+      "comments": null,
+      "shares": null,
+      "engagement_score": null,
+      "date": "2022",
+      "source_url": "https://www.linkedin.com/posts/stevie-kim-0646b04_winebusiness-winepeople-activity-6993557052551802880-JipB"
+    },
+    {
+      "id": "IWP-021",
+      "platform": "Instagram",
+      "brand": "IWP",
+      "post_text": "For Media Partnerships DM us 📩 Start listening here or wherever u get ur pods 🎧",
+      "post_type": "bio/promotional",
+      "hashtags": [],
+      "likes": null,
+      "comments": null,
+      "shares": null,
+      "engagement_score": null,
+      "date": "ongoing",
+      "source_url": "https://www.instagram.com/italianwinepodcast/"
+    },
+    {
+      "id": "IWA-001",
+      "platform": "LinkedIn",
+      "brand": "IWA",
+      "post_text": "Italian Wine Academy Proudly Launches the Champagne Specialist Course Coming to Verona in November 2025! Created and certified by the Comité Champagne, designed for professionals and students in the wine and food sectors.",
+      "post_type": "course_announcement",
+      "hashtags": ["#ItalianWineAcademy", "#ChampagneSpecialist", "#WSET", "#WineEducation", "#Verona"],
+      "likes": null,
+      "comments": null,
+      "shares": null,
+      "engagement_score": 8.0,
+      "date": "2025-09",
+      "source_url": "https://www.prweb.com/releases/italian-wine-academy-proudly-launches-the-champagne-specialist-course-coming-to-verona-in-november-2025-302511447.html"
+    },
+    {
+      "id": "IWA-002",
+      "platform": "LinkedIn/PR",
+      "brand": "IWA",
+      "post_text": "The Champagne Specialist Course is back in Verona in February 2026 with editions both in English and in Italian! Following the success of the inaugural edition held in November 2025, Italian Wine Academy reaffirms its role as a leading school for advanced wine education in Italy.",
+      "post_type": "course_announcement",
+      "hashtags": ["#ChampagneSpecialist", "#ItalianWineAcademy", "#Verona", "#WineEducation"],
+      "likes": null,
+      "comments": null,
+      "shares": null,
+      "engagement_score": 7.5,
+      "date": "2026-01",
+      "source_url": "https://www.prnewswire.com/news-releases/the-champagne-specialist-course-is-back-in-verona-in-february-2026-with-editions-both-in-english-and-in-italian-302657296.html"
+    },
+    {
+      "id": "IWA-003",
+      "platform": "LinkedIn",
+      "brand": "IWA",
+      "post_text": "Italian Wine Academy welcomes award winning Gill Gordon-Smith, Australia's WSET Educator of the Year, to teach Level 3 Award in Wines in Verona! 🎓 Join us for an exceptional learning experience with one of the world's top wine educators.",
+      "post_type": "educator_spotlight",
+      "hashtags": ["#WSET", "#WSETLevel3", "#ItalianWineAcademy", "#WineEducation", "#Verona"],
+      "likes": null,
+      "comments": null,
+      "shares": null,
+      "engagement_score": 8.0,
+      "date": "2023-02",
+      "source_url": "https://www.benzinga.com/pressreleases/23/02/p30989418/italian-wine-academy-welcomes-award-winning-gill-gordon-smith-australias-wset-educator-of-the-year"
+    },
+    {
+      "id": "IWA-004",
+      "platform": "LinkedIn",
+      "brand": "IWA",
+      "post_text": "Congratulations to Karla for passing her WSET Level 3 exam! 🎉 She visited our office to collect her pin and certificate. Well done! #ItalianWineAcademy #WSET #StudentSuccess",
+      "post_type": "student_success",
+      "hashtags": ["#ItalianWineAcademy", "#WSET", "#StudentSuccess", "#WSETLevel3"],
+      "likes": null,
+      "comments": null,
+      "shares": null,
+      "engagement_score": 8.5,
+      "date": "2024",
+      "source_url": "https://it.linkedin.com/company/ita-wine-academy"
+    },
+    {
+      "id": "IWA-005",
+      "platform": "Instagram",
+      "brand": "IWA",
+      "post_text": "What is Italian Wine Academy? We are a WSET provider based in Verona offering internationally recognized wine certifications. Unlock your wine career! 🍷",
+      "post_type": "brand_intro",
+      "hashtags": ["#ItalianWineAcademy", "#WSET", "#WineEducation", "#Verona"],
+      "likes": null,
+      "comments": null,
+      "shares": null,
+      "engagement_score": null,
+      "date": "2025",
+      "source_url": "https://www.instagram.com/itawineacademy/reel/DHvY6rTiu_4/"
+    },
+    {
+      "id": "IWA-006",
+      "platform": "LinkedIn",
+      "brand": "IWA",
+      "post_text": "New dates available! WSET Level 2 Award in Wine: A solid basic overview of production areas and styles. 3 days, 17 hours of in-person lessons, and tasting of 50 wines! Enroll now: [link]",
+      "post_type": "course_announcement",
+      "hashtags": ["#WSET", "#WSETLevel2", "#ItalianWineAcademy", "#WineEducation", "#Verona"],
+      "likes": null,
+      "comments": null,
+      "shares": null,
+      "engagement_score": 6.5,
+      "date": "2025",
+      "source_url": "https://italianwineacademy.org/prodotto/wset-level-2-award-in-wine/?lang=en"
+    },
+    {
+      "id": "IWA-007",
+      "platform": "Instagram/LinkedIn",
+      "brand": "IWA",
+      "post_text": "Gift the experience of wine education! 🎁 Our Gift Vouchers are available for WSET courses - the perfect present for wine lovers and aspiring professionals. Available in 50€, 100€, and 200€.",
+      "post_type": "promotional",
+      "hashtags": ["#GiftVoucher", "#ItalianWineAcademy", "#WSET", "#WineEducation"],
+      "likes": null,
+      "comments": null,
+      "shares": null,
+      "engagement_score": 7.0,
+      "date": "2024",
+      "source_url": "https://italianwineacademy.org/prodotto/voucher/"
+    },
+    {
+      "id": "IWA-008",
+      "platform": "LinkedIn/PR",
+      "brand": "IWA",
+      "post_text": "A New Generation of Italian Wine Educators is Born! Italian Wine Academy is proud to contribute to the next generation of wine education professionals. Our educators are experienced professionals with many years of teaching and working in the international wine sector.",
+      "post_type": "educator_spotlight",
+      "hashtags": ["#WineEducation", "#ItalianWineAcademy", "#WineEducators", "#WSET"],
+      "likes": null,
+      "comments": null,
+      "shares": null,
+      "engagement_score": 7.5,
+      "date": "2024",
+      "source_url": "https://vinitalyinternational.com/wordpress/new-generation-of-italian-wine-educators/"
+    },
+    {
+      "id": "IWA-009",
+      "platform": "LinkedIn",
+      "brand": "IWA",
+      "post_text": "WSET Level 3 Award in Wine: Go deeper into the world of wine. 5 days of intensive study, 30 hours of lessons, and tasting of 70+ wines in our Verona headquarters. Next dates: [dates]. Enroll: [link]",
+      "post_type": "course_announcement",
+      "hashtags": ["#WSET", "#WSETLevel3", "#ItalianWineAcademy", "#WineEducation", "#Verona"],
+      "likes": null,
+      "comments": null,
+      "shares": null,
+      "engagement_score": 7.0,
+      "date": "2025",
+      "source_url": "https://italianwineacademy.org/prodotto/wset-level-3-award-in-wine/?lang=en"
+    },
+    {
+      "id": "IWA-010",
+      "platform": "LinkedIn",
+      "brand": "IWA",
+      "post_text": "WSET Level 1 Award in Wine: Your first step into the international wine world! 1 day, 6 hours of lessons, tasting of 9 wines. Perfect for wine enthusiasts and those thinking of pursuing a wine career. Enroll: [link]",
+      "post_type": "course_announcement",
+      "hashtags": ["#WSET", "#WSETLevel1", "#ItalianWineAcademy", "#WineEducation"],
+      "likes": null,
+      "comments": null,
+      "shares": null,
+      "engagement_score": 6.0,
+      "date": "2025",
+      "source_url": "https://italianwineacademy.org/prodotto/wset-level-1-award-in-wine/?lang=en"
+    }
+  ],
+
+  "B_brand_voice_rules": {
+    "IWP": [
+      {
+        "brand": "IWP",
+        "category": "tone",
+        "rule_name": "conversational_bar_chat",
+        "rule_description": "Always sound like a chat with friends at a wine bar, NEVER like a textbook or lecture",
+        "examples": ["The Italian Wine Podcast has never been about perfection. Instead, we embrace real, honest and open conversations.", "wine business is people business"],
+        "confidence": 0.95,
+        "source_citation": "https://www.prnewswire.com/news-releases/imperfect-but-unstoppable-italian-wine-podcast-smashes-2500-episodes-to-become-the-worlds-most-prolific-wine-podcast-302588857.html"
+      },
+      {
+        "brand": "IWP",
+        "category": "tone",
+        "rule_name": "self_deprecating_humor",
+        "rule_description": "Use self-deprecating humor and embrace imperfection - 'Imperfect but Unstoppable' is the brand philosophy",
+        "examples": ["Imperfect but Unstoppable", "taking a hit for the team", "If I can understand... anyone can"],
+        "confidence": 0.92,
+        "source_citation": "https://www.prnewswire.com/news-releases/imperfect-but-unstoppable-italian-wine-podcast-smashes-2500-episodes-to-become-the-worlds-most-prolific-wine-podcast-302588857.html"
+      },
+      {
+        "brand": "IWP",
+        "category": "tone",
+        "rule_name": "authentic_vulnerability",
+        "rule_description": "Show authentic vulnerability and openness - never pretend to know everything",
+        "examples": ["I'm not an expert, but...", "we embrace real, honest and open conversations"],
+        "confidence": 0.90,
+        "source_citation": "https://www.italianwinepodcast.com/about/"
+      },
+      {
+        "brand": "IWP",
+        "category": "tone",
+        "rule_name": "enthusiastic_curiosity",
+        "rule_description": "Express genuine enthusiasm and curiosity about every wine topic, zero snobism",
+        "examples": ["the fascinating world of Italian wine", "something different every day"],
+        "confidence": 0.93,
+        "source_citation": "https://www.italianwinepodcast.com/"
+      },
+      {
+        "brand": "IWP",
+        "category": "tone",
+        "rule_name": "people_over_wine",
+        "rule_description": "Always focus on the people behind the wine, not just the wine itself",
+        "examples": ["Cin Cin with Italian Wine People!", "stories of success in the face of challenge"],
+        "confidence": 0.95,
+        "source_citation": "https://www.linkedin.com/company/italianwinepodcast"
+      },
+      {
+        "brand": "IWP",
+        "category": "hooks",
+        "rule_name": "episode_announcement_format",
+        "rule_description": "Standard episode announcement: '🎙 Ep. [number] [Guest Name] | [Series Name]' followed by '🎧 Listen: [link]'",
+        "examples": ["🎙Ep. 2576 An inside look at wine competitions | wine2wine Vinitaly Business Forum", "🎙Ep. 2595 Where Wine Won In 2025 with Erica Duecy | On the Road with Stevie Kim"],
+        "confidence": 0.98,
+        "source_citation": "https://www.linkedin.com/posts/italianwinepodcast_italianwine-italianwinepodcast-winepodcast-activity-7337786507388248064-Oyne"
+      },
+      {
+        "brand": "IWP",
+        "category": "hooks",
+        "rule_name": "storytelling_opener",
+        "rule_description": "Use personal storytelling openers for non-episode posts: 'Ok, story time...', 'Just got back from...', 'So here's the thing...'",
+        "examples": ["Ok, story time...", "Just got back from...", "So here's the thing..."],
+        "confidence": 0.88,
+        "source_citation": "System prompt analysis from /Users/Anselmo/ai-social-cockpit/my-app/src/lib/abacus.ts"
+      },
+      {
+        "brand": "IWP",
+        "category": "hooks",
+        "rule_name": "plot_twist_reveal",
+        "rule_description": "Use 'Plot twist:' to introduce surprising wine discoveries or facts",
+        "examples": ["Plot twist: this Nebbiolo wasn't from Piedmont"],
+        "confidence": 0.85,
+        "source_citation": "System prompt analysis from /Users/Anselmo/ai-social-cockpit/my-app/src/lib/abacus.ts"
+      },
+      {
+        "brand": "IWP",
+        "category": "hooks",
+        "rule_name": "community_question_hook",
+        "rule_description": "Use questions to the community as hooks or closings to drive comments",
+        "examples": ["How do you say Cin Cin in your language?", "What's your favorite Italian wine moment?"],
+        "confidence": 0.90,
+        "source_citation": "System prompt analysis from /Users/Anselmo/ai-social-cockpit/my-app/src/lib/abacus.ts"
+      },
+      {
+        "brand": "IWP",
+        "category": "hooks",
+        "rule_name": "milestone_celebration",
+        "rule_description": "Celebrate milestones publicly with community gratitude - these generate highest engagement",
+        "examples": ["2500 episodes!", "7 million listens!", "200th episode of Everybody Needs a Bit of Scienza"],
+        "confidence": 0.95,
+        "source_citation": "https://www.prnewswire.com/news-releases/imperfect-but-unstoppable-italian-wine-podcast-smashes-2500-episodes-to-become-the-worlds-most-prolific-wine-podcast-302588857.html"
+      },
+      {
+        "brand": "IWP",
+        "category": "vocabulary",
+        "rule_name": "cin_cin_signature",
+        "rule_description": "MANDATORY: Always include 'Cin Cin! 🍷' at the end of every post",
+        "examples": ["Cin Cin! 🍷", "Until next time, Cin Cin!"],
+        "confidence": 0.99,
+        "source_citation": "https://www.linkedin.com/company/italianwinepodcast"
+      },
+      {
+        "brand": "IWP",
+        "category": "vocabulary",
+        "rule_name": "italian_wine_people",
+        "rule_description": "Use 'Italian wine people' as the community identifier - this is the core brand phrase",
+        "examples": ["Cin Cin with Italian Wine People!", "our incredible community of Italian wine people"],
+        "confidence": 0.97,
+        "source_citation": "https://www.linkedin.com/company/italianwinepodcast"
+      },
+      {
+        "brand": "IWP",
+        "category": "vocabulary",
+        "rule_name": "natural_code_switching",
+        "rule_description": "Mix Italian words naturally into English content - merende, brioche all'albicocca, restate sintonizzati",
+        "examples": ["merende", "brioche all'albicocca", "restate sintonizzati", "Cin Cin"],
+        "confidence": 0.88,
+        "source_citation": "System prompt analysis from /Users/Anselmo/ai-social-cockpit/my-app/src/lib/abacus.ts"
+      },
+      {
+        "brand": "IWP",
+        "category": "vocabulary",
+        "rule_name": "bite_size_philosophy",
+        "rule_description": "Frame complex topics as 'bite size' - accessible to everyone, not just experts",
+        "examples": ["distill large complicated ideas about wine into smaller bite size formats", "If I can understand... anyone can"],
+        "confidence": 0.88,
+        "source_citation": "https://www.the-buyer.net/people/mamma-jumbo-shrimp-italian-wine-content"
+      },
+      {
+        "brand": "IWP",
+        "category": "vocabulary",
+        "rule_name": "series_branding",
+        "rule_description": "Always reference the specific series name in episode-related content",
+        "examples": ["On the Road with Stevie Kim", "Voices with Cynthia Chaplin", "Masterclass US Wine Market", "Everybody Needs A Bit Of Scienza", "The Next Generation"],
+        "confidence": 0.96,
+        "source_citation": "https://www.italianwinepodcast.com/about/"
+      },
+      {
+        "brand": "IWP",
+        "category": "vocabulary",
+        "rule_name": "only_daily_wine_podcast",
+        "rule_description": "Reinforce 'the only daily wine podcast in the world' positioning regularly",
+        "examples": ["the only daily wine podcast in the world", "new episodes published every day"],
+        "confidence": 0.94,
+        "source_citation": "https://www.prnewswire.com/news-releases/imperfect-but-unstoppable-italian-wine-podcast-smashes-2500-episodes-to-become-the-worlds-most-prolific-wine-podcast-302588857.html"
+      },
+      {
+        "brand": "IWP",
+        "category": "vocabulary",
+        "rule_name": "storytelling_project",
+        "rule_description": "Describe IWP as a 'storytelling project' - not just a podcast",
+        "examples": ["a storytelling project dedicated to the fascinating world of Italian wine"],
+        "confidence": 0.90,
+        "source_citation": "https://www.italianwinepodcast.com/about/"
+      },
+      {
+        "brand": "IWP",
+        "category": "vocabulary",
+        "rule_name": "mamma_jumbo_shrimp_brand",
+        "rule_description": "Reference Mamma Jumbo Shrimp as the umbrella brand when discussing broader initiatives",
+        "examples": ["Under the umbrella brand of Mamma Jumbo Shrimp", "Mamma Jumbo Shrimp - bite size wine content"],
+        "confidence": 0.85,
+        "source_citation": "https://mammajumboshrimp.com/en-en"
+      },
+      {
+        "brand": "IWP",
+        "category": "closings",
+        "rule_name": "cin_cin_closing",
+        "rule_description": "End EVERY post with 'Cin Cin! 🍷' - this is non-negotiable brand signature",
+        "examples": ["Cin Cin! 🍷", "Until next time, Cin Cin! 🍷"],
+        "confidence": 0.99,
+        "source_citation": "https://www.linkedin.com/company/italianwinepodcast"
+      },
+      {
+        "brand": "IWP",
+        "category": "closings",
+        "rule_name": "listen_cta",
+        "rule_description": "For episode posts, always include '🎧 Listen:' or '🎧 listen:' with episode link",
+        "examples": ["🎧 Listen: [link]", "🎧 listen: [link]"],
+        "confidence": 0.95,
+        "source_citation": "https://www.linkedin.com/posts/italianwinepodcast_italianwine-italianwinepodcast-winepodcast-activity-7337786507388248064-Oyne"
+      },
+      {
+        "brand": "IWP",
+        "category": "structure",
+        "rule_name": "post_structure_formula",
+        "rule_description": "Follow structure: Hook > Context (person/place/wine) > Insight/discovery > Community invitation > Cin Cin",
+        "examples": [],
+        "confidence": 0.90,
+        "source_citation": "Analysis of multiple IWP posts"
+      },
+      {
+        "brand": "IWP",
+        "category": "structure",
+        "rule_name": "guest_tagging",
+        "rule_description": "Always tag guests and partner organizations in posts for amplification",
+        "examples": ["Juliana Colangelo, MBA", "Cynthia Chaplin", "Professor Attilio Scienza"],
+        "confidence": 0.92,
+        "source_citation": "Analysis of LinkedIn post patterns"
+      },
+      {
+        "brand": "IWP",
+        "category": "avoid",
+        "rule_name": "never_textbook_tone",
+        "rule_description": "NEVER sound like a textbook, manual, or lecture. Always maintain conversational warmth.",
+        "examples": [],
+        "confidence": 0.95,
+        "source_citation": "System prompt analysis from /Users/Anselmo/ai-social-cockpit/my-app/src/lib/abacus.ts"
+      },
+      {
+        "brand": "IWP",
+        "category": "avoid",
+        "rule_name": "never_corporate_salesy",
+        "rule_description": "Never be salesy, corporate, or use marketing speak. Authenticity is paramount.",
+        "examples": [],
+        "confidence": 0.93,
+        "source_citation": "https://www.prnewswire.com/news-releases/imperfect-but-unstoppable-italian-wine-podcast-smashes-2500-episodes-to-become-the-worlds-most-prolific-wine-podcast-302588857.html"
+      },
+      {
+        "brand": "IWP",
+        "category": "avoid",
+        "rule_name": "never_skip_people",
+        "rule_description": "Never post content that doesn't feature or reference people. Wine is about people, not just grapes.",
+        "examples": [],
+        "confidence": 0.90,
+        "source_citation": "https://www.linkedin.com/company/italianwinepodcast"
+      },
+      {
+        "brand": "IWP",
+        "category": "avoid",
+        "rule_name": "never_wine_snobbery",
+        "rule_description": "Zero wine snobism. Always be inclusive and approachable regardless of expertise level.",
+        "examples": [],
+        "confidence": 0.92,
+        "source_citation": "https://www.italianwinepodcast.com/about/"
+      }
+    ],
+    "IWA": [
+      {
+        "brand": "IWA",
+        "category": "tone",
+        "rule_name": "professor_you_wish_you_had",
+        "rule_description": "Professional but warm - like the professor you wish you had. Authoritative yet accessible.",
+        "examples": ["experienced professionals with many years of teaching", "guiding and supporting students"],
+        "confidence": 0.90,
+        "source_citation": "https://italianwineacademy.org/?lang=en"
+      },
+      {
+        "brand": "IWA",
+        "category": "tone",
+        "rule_name": "encouraging_and_celebratory",
+        "rule_description": "Celebrate student achievements publicly and encourage others on their wine education journey",
+        "examples": ["Congratulations to Karla for passing her WSET Level 3 exam!"],
+        "confidence": 0.88,
+        "source_citation": "https://it.linkedin.com/company/ita-wine-academy"
+      },
+      {
+        "brand": "IWA",
+        "category": "tone",
+        "rule_name": "inclusive_and_welcoming",
+        "rule_description": "Welcome wine students from around the world - professionals, hospitality, media, and passionate wine lovers of all levels",
+        "examples": ["unlock the door to the wine sector in an effective and inclusive way", "welcoming wine students from around the world"],
+        "confidence": 0.92,
+        "source_citation": "https://italianwineacademy.org/?lang=en"
+      },
+      {
+        "brand": "IWA",
+        "category": "tone",
+        "rule_name": "aspirational_career_focus",
+        "rule_description": "Frame wine education as career advancement and professional development",
+        "examples": ["those who are thinking of pursuing a career in the sector", "internationally recognized certifications"],
+        "confidence": 0.88,
+        "source_citation": "https://italianwineacademy.org/prodotto/wset-level-1-award-in-wine/?lang=en"
+      },
+      {
+        "brand": "IWA",
+        "category": "hooks",
+        "rule_name": "educational_value_hook",
+        "rule_description": "Lead with clear educational value - what you will learn or gain",
+        "examples": ["WSET Level 3: Go deeper into the world of wine", "Your first step into the international wine world"],
+        "confidence": 0.90,
+        "source_citation": "https://italianwineacademy.org/?lang=en"
+      },
+      {
+        "brand": "IWA",
+        "category": "hooks",
+        "rule_name": "credential_authority_hook",
+        "rule_description": "Use credentials and partnership names to establish authority in hooks",
+        "examples": ["Australia's WSET Educator of the Year", "Created and certified by the Comité Champagne"],
+        "confidence": 0.90,
+        "source_citation": "https://www.benzinga.com/pressreleases/23/02/p30989418/italian-wine-academy-welcomes-award-winning-gill-gordon-smith-australias-wset-educator-of-the-year"
+      },
+      {
+        "brand": "IWA",
+        "category": "hooks",
+        "rule_name": "student_success_hook",
+        "rule_description": "Use student success stories as hooks - these generate highest engagement",
+        "examples": ["Congratulations to [student]!", "Meet our latest WSET Level 3 graduate"],
+        "confidence": 0.88,
+        "source_citation": "https://it.linkedin.com/company/ita-wine-academy"
+      },
+      {
+        "brand": "IWA",
+        "category": "vocabulary",
+        "rule_name": "wset_always_present",
+        "rule_description": "Reference WSET in virtually every educational post - it is the core credibility marker",
+        "examples": ["WSET Level 1/2/3", "WSET Approved Programme Provider", "WSET Certified Educator"],
+        "confidence": 0.95,
+        "source_citation": "https://italianwineacademy.org/?lang=en"
+      },
+      {
+        "brand": "IWA",
+        "category": "vocabulary",
+        "rule_name": "gold_standard_positioning",
+        "rule_description": "Use 'Gold Standard' to describe WSET certification quality",
+        "examples": ["the Gold Standard of wine training"],
+        "confidence": 0.88,
+        "source_citation": "https://italianwineacademy.org/?lang=en"
+      },
+      {
+        "brand": "IWA",
+        "category": "vocabulary",
+        "rule_name": "internationally_recognized",
+        "rule_description": "Emphasize international recognition and global validity of certifications",
+        "examples": ["internationally recognized wine training courses", "recognized all over the world"],
+        "confidence": 0.90,
+        "source_citation": "https://italianwineacademy.org/?lang=en"
+      },
+      {
+        "brand": "IWA",
+        "category": "vocabulary",
+        "rule_name": "educators_not_teachers",
+        "rule_description": "Use 'Educators' not 'teachers' - professional terminology that elevates the brand",
+        "examples": ["WSET Certified Educator", "experienced wine Educators"],
+        "confidence": 0.85,
+        "source_citation": "https://italianwineacademy.org/?lang=en"
+      },
+      {
+        "brand": "IWA",
+        "category": "vocabulary",
+        "rule_name": "verona_as_destination",
+        "rule_description": "Position Verona as a wine education destination - the aspirational learning location",
+        "examples": ["based in Verona", "our headquarters in Verona", "study in Verona"],
+        "confidence": 0.88,
+        "source_citation": "https://italianwineacademy.org/?lang=en"
+      },
+      {
+        "brand": "IWA",
+        "category": "closings",
+        "rule_name": "clear_cta",
+        "rule_description": "Always end with a clear call to action - enroll, learn more, visit website, contact us",
+        "examples": ["Enroll now", "Learn more at italianwineacademy.org", "Contact us at [email]"],
+        "confidence": 0.90,
+        "source_citation": "https://italianwineacademy.org/?lang=en"
+      },
+      {
+        "brand": "IWA",
+        "category": "structure",
+        "rule_name": "education_post_structure",
+        "rule_description": "Follow structure: Educational hook > Value proposition > Credibility proof > Call to action",
+        "examples": [],
+        "confidence": 0.88,
+        "source_citation": "Analysis of IWA posts"
+      },
+      {
+        "brand": "IWA",
+        "category": "avoid",
+        "rule_name": "never_dry_academic",
+        "rule_description": "Never be dry or overly academic. Professional does not mean boring.",
+        "examples": [],
+        "confidence": 0.88,
+        "source_citation": "System prompt analysis from /Users/Anselmo/ai-social-cockpit/my-app/src/lib/abacus.ts"
+      },
+      {
+        "brand": "IWA",
+        "category": "avoid",
+        "rule_name": "never_forget_aspirational",
+        "rule_description": "Never forget the aspirational element - wine education leads to career growth and transformation",
+        "examples": [],
+        "confidence": 0.85,
+        "source_citation": "https://italianwineacademy.org/?lang=en"
+      },
+      {
+        "brand": "IWA",
+        "category": "avoid",
+        "rule_name": "never_skip_cta",
+        "rule_description": "Never post without a clear educational value or call to action",
+        "examples": [],
+        "confidence": 0.88,
+        "source_citation": "Analysis of IWA content patterns"
+      }
+    ]
+  },
+
+  "C_engagement_patterns": [
+    {
+      "brand": "IWP",
+      "platform": "LinkedIn",
+      "pattern_type": "hook_style",
+      "pattern_value": "milestone_celebration",
+      "avg_engagement_score": 9.2,
+      "sample_count": 5,
+      "source_citation": "Analysis of PR releases for 500th, 1000th, 2500th episodes and 6M/7M listen milestones"
+    },
+    {
+      "brand": "IWP",
+      "platform": "LinkedIn",
+      "pattern_type": "hook_style",
+      "pattern_value": "personal_stevie_story",
+      "avg_engagement_score": 8.5,
+      "sample_count": 8,
+      "source_citation": "https://www.linkedin.com/in/stevie-kim-0646b04/"
+    },
+    {
+      "brand": "IWP",
+      "platform": "LinkedIn",
+      "pattern_type": "hook_style",
+      "pattern_value": "event_partnership_announcement",
+      "avg_engagement_score": 8.0,
+      "sample_count": 6,
+      "source_citation": "Grandi Langhe, wine2wine partnership announcements"
+    },
+    {
+      "brand": "IWP",
+      "platform": "LinkedIn",
+      "pattern_type": "hook_style",
+      "pattern_value": "community_question",
+      "avg_engagement_score": 7.5,
+      "sample_count": 4,
+      "source_citation": "System prompt templates analysis"
+    },
+    {
+      "brand": "IWP",
+      "platform": "LinkedIn",
+      "pattern_type": "hook_style",
+      "pattern_value": "standard_episode_announcement",
+      "avg_engagement_score": 6.0,
+      "sample_count": 20,
+      "source_citation": "Analysis of episode announcement patterns across LinkedIn"
+    },
+    {
+      "brand": "IWP",
+      "platform": "Instagram",
+      "pattern_type": "posting_time",
+      "pattern_value": "daily_posting_cadence",
+      "avg_engagement_score": 6.5,
+      "sample_count": 5006,
+      "source_citation": "https://www.instagram.com/italianwinepodcast/ (5,006 posts)"
+    },
+    {
+      "brand": "IWP",
+      "platform": "Instagram",
+      "pattern_type": "length_range",
+      "pattern_value": "short_to_medium_captions_50_150_words",
+      "avg_engagement_score": 7.0,
+      "sample_count": 15,
+      "source_citation": "Analysis of IWP Instagram content patterns"
+    },
+    {
+      "brand": "IWP",
+      "platform": "LinkedIn",
+      "pattern_type": "hashtag_combo",
+      "pattern_value": "#ItalianWinePodcast #ItalianWine #winepodcast #CinCin",
+      "avg_engagement_score": 7.0,
+      "sample_count": 20,
+      "source_citation": "Analysis of LinkedIn post hashtags"
+    },
+    {
+      "brand": "IWP",
+      "platform": "LinkedIn",
+      "pattern_type": "hook_style",
+      "pattern_value": "award_recognition",
+      "avg_engagement_score": 9.0,
+      "sample_count": 2,
+      "source_citation": "https://www.prweb.com/releases/italian-wine-podcast-founder-stevie-kim-honored-at-the-2025-enozioni-a-milano-awards-302371326.html"
+    },
+    {
+      "brand": "IWA",
+      "platform": "LinkedIn",
+      "pattern_type": "hook_style",
+      "pattern_value": "student_success_story",
+      "avg_engagement_score": 8.5,
+      "sample_count": 5,
+      "source_citation": "https://it.linkedin.com/company/ita-wine-academy"
+    },
+    {
+      "brand": "IWA",
+      "platform": "LinkedIn",
+      "pattern_type": "hook_style",
+      "pattern_value": "new_course_partnership_launch",
+      "avg_engagement_score": 8.0,
+      "sample_count": 4,
+      "source_citation": "Champagne Specialist Course and Gill Gordon-Smith announcements"
+    },
+    {
+      "brand": "IWA",
+      "platform": "LinkedIn",
+      "pattern_type": "hook_style",
+      "pattern_value": "educator_spotlight",
+      "avg_engagement_score": 7.5,
+      "sample_count": 3,
+      "source_citation": "https://www.benzinga.com/pressreleases/23/02/p30989418/"
+    },
+    {
+      "brand": "IWA",
+      "platform": "Instagram",
+      "pattern_type": "hook_style",
+      "pattern_value": "course_announcement_with_dates",
+      "avg_engagement_score": 6.5,
+      "sample_count": 10,
+      "source_citation": "https://www.instagram.com/itawineacademy/"
+    },
+    {
+      "brand": "IWA",
+      "platform": "LinkedIn",
+      "pattern_type": "hashtag_combo",
+      "pattern_value": "#ItalianWineAcademy #WSET #WineEducation #Verona",
+      "avg_engagement_score": 7.0,
+      "sample_count": 15,
+      "source_citation": "Analysis of IWA LinkedIn post patterns"
+    },
+    {
+      "brand": "IWA",
+      "platform": "Instagram",
+      "pattern_type": "posting_time",
+      "pattern_value": "3_4_posts_per_week",
+      "avg_engagement_score": 7.0,
+      "sample_count": 1943,
+      "source_citation": "https://www.instagram.com/itawineacademy/ (1,943 posts)"
+    }
+  ],
+
+  "D_visual_style_patterns": [
+    {
+      "brand": "IWP",
+      "style_element": "people_centered_photography",
+      "description": "Photos featuring people in conversation, at events, in vineyards - never just bottles alone",
+      "prompt_keywords": ["candid conversation", "wine people", "warm atmosphere", "authentic moment", "editorial style"],
+      "engagement_correlation": 0.85,
+      "source_citation": "Analysis of IWP Instagram and LinkedIn visual content patterns"
+    },
+    {
+      "brand": "IWP",
+      "style_element": "behind_the_scenes",
+      "description": "Raw, unpolished behind-scenes shots - recording studios, vineyard visits, event setup",
+      "prompt_keywords": ["behind the scenes", "raw authentic", "podcast recording", "vineyard visit", "unpolished"],
+      "engagement_correlation": 0.80,
+      "source_citation": "System prompt analysis of BTS template"
+    },
+    {
+      "brand": "IWP",
+      "style_element": "italian_landscapes",
+      "description": "Beautiful Italian wine landscapes - rolling hills, vineyards, winery interiors, rustic charm",
+      "prompt_keywords": ["Italian vineyard", "rolling hills", "Tuscan landscape", "winery interior", "golden hour", "warm tones"],
+      "engagement_correlation": 0.78,
+      "source_citation": "On the Road series visual patterns"
+    },
+    {
+      "brand": "IWP",
+      "style_element": "event_coverage",
+      "description": "Dynamic event photography from wine2wine, Vinitaly, Grandi Langhe - professional but energetic",
+      "prompt_keywords": ["wine event", "business networking", "professional conference", "wine tasting event", "dynamic"],
+      "engagement_correlation": 0.75,
+      "source_citation": "wine2wine and Grandi Langhe event coverage"
+    },
+    {
+      "brand": "IWP",
+      "style_element": "warm_color_palette",
+      "description": "Warm, inviting color palette - golden tones, deep reds, earthy browns, Italian sunlight",
+      "prompt_keywords": ["warm lighting", "golden tones", "Italian sunlight", "wine red accents", "earth tones"],
+      "engagement_correlation": 0.70,
+      "source_citation": "General IWP visual identity analysis"
+    },
+    {
+      "brand": "IWA",
+      "style_element": "classroom_education",
+      "description": "Clean, professional classroom settings with students tasting wine, taking notes, engaged",
+      "prompt_keywords": ["wine classroom", "professional education", "wine tasting session", "students learning", "clean modern"],
+      "engagement_correlation": 0.82,
+      "source_citation": "https://italianwineacademy.org/?lang=en"
+    },
+    {
+      "brand": "IWA",
+      "style_element": "certificate_celebration",
+      "description": "Students holding certificates, pins, celebrating achievements - professional milestone moments",
+      "prompt_keywords": ["graduation celebration", "certificate award", "achievement moment", "professional milestone", "proud student"],
+      "engagement_correlation": 0.85,
+      "source_citation": "Student success post patterns from LinkedIn"
+    },
+    {
+      "brand": "IWA",
+      "style_element": "wine_tasting_close_up",
+      "description": "Close-up professional wine tasting imagery - glasses, decanters, tasting sheets, wine colors",
+      "prompt_keywords": ["wine tasting close-up", "wine glass detail", "professional tasting", "wine colors", "WSET tasting sheet"],
+      "engagement_correlation": 0.72,
+      "source_citation": "IWA Instagram and website visual analysis"
+    },
+    {
+      "brand": "IWA",
+      "style_element": "verona_backdrop",
+      "description": "Verona as aspirational backdrop - city views, academy headquarters, Italian setting",
+      "prompt_keywords": ["Verona Italy", "Italian cityscape", "wine academy building", "study abroad", "Mediterranean architecture"],
+      "engagement_correlation": 0.68,
+      "source_citation": "https://italianwineacademy.org/?lang=en"
+    },
+    {
+      "brand": "IWA",
+      "style_element": "clean_professional_branding",
+      "description": "Clean, modern professional design - WSET branding, white backgrounds, structured layouts",
+      "prompt_keywords": ["clean professional", "modern design", "white background", "structured layout", "educational graphic"],
+      "engagement_correlation": 0.65,
+      "source_citation": "IWA visual branding analysis"
+    }
+  ],
+
+  "E_top_hooks": {
+    "IWP": [
+      {
+        "rank": 1,
+        "hook_text": "Imperfect but Unstoppable: Italian Wine Podcast Smashes 2500 Episodes",
+        "engagement_type": "milestone",
+        "estimated_engagement": "very_high",
+        "source_url": "https://www.prnewswire.com/news-releases/imperfect-but-unstoppable-italian-wine-podcast-smashes-2500-episodes-to-become-the-worlds-most-prolific-wine-podcast-302588857.html"
+      },
+      {
+        "rank": 2,
+        "hook_text": "Italian Wine Podcast is going to smash six million listens!",
+        "engagement_type": "milestone",
+        "estimated_engagement": "very_high",
+        "source_url": "https://www.linkedin.com/posts/juliana-colangelo-mba-04345539_italian-wine-podcast-is-going-to-smash-six-activity-7090467726854410241-qlFf"
+      },
+      {
+        "rank": 3,
+        "hook_text": "Italian Wine Podcast founder Stevie Kim honored at the 2025 Enozioni a Milano Awards",
+        "engagement_type": "award_recognition",
+        "estimated_engagement": "high",
+        "source_url": "https://www.prweb.com/releases/italian-wine-podcast-founder-stevie-kim-honored-at-the-2025-enozioni-a-milano-awards-302371326.html"
+      },
+      {
+        "rank": 4,
+        "hook_text": "Celebrating the Voices of Wine: Top 100 Wine Podcast Directory Released",
+        "engagement_type": "community_initiative",
+        "estimated_engagement": "high",
+        "source_url": "https://www.prnewswire.com/news-releases/celebrating-the-voices-of-wine-top-100-wine-podcast-directory-released-302567551.html"
+      },
+      {
+        "rank": 5,
+        "hook_text": "Professor Attilio Scienza celebrates his 200th episode with the Italian Wine Podcast!",
+        "engagement_type": "milestone",
+        "estimated_engagement": "high",
+        "source_url": "https://www.prweb.com/releases/professor-attilio-scienza-celebrates-his-200th-episode-with-the-italian-wine-podcast-302153901.html"
+      },
+      {
+        "rank": 6,
+        "hook_text": "Italian Wine Podcast Renews Media Partnership with Grandi Langhe Wine Festival",
+        "engagement_type": "partnership",
+        "estimated_engagement": "medium_high",
+        "source_url": "http://www.prnewswire.com/news-releases/italian-wine-podcast-renews-media-partnership-with-grandi-langhe-wine-festival-302663350.html"
+      },
+      {
+        "rank": 7,
+        "hook_text": "Building Inclusive Wine Spaces Through Storytelling with Amari Collins | Voices with Cynthia Chaplin",
+        "engagement_type": "dei_storytelling",
+        "estimated_engagement": "medium_high",
+        "source_url": "https://open.spotify.com/episode/7GXnXbSqEnNkFrqzKmX9jY"
+      },
+      {
+        "rank": 8,
+        "hook_text": "Italian Wine Blogcast: Making Every Pod Last",
+        "engagement_type": "content_initiative",
+        "estimated_engagement": "medium",
+        "source_url": "https://www.prnewswire.com/news-releases/italian-wine-blogcast-making-every-pod-last-302549105.html"
+      },
+      {
+        "rank": 9,
+        "hook_text": "Where Wine Won In 2025 with Erica Duecy | On the Road with Stevie Kim",
+        "engagement_type": "thought_leadership",
+        "estimated_engagement": "medium",
+        "source_url": "https://www.italianwinepodcast.com/Episodes/ep-2595-where-wine-won-in-2025-with-erica-duecy-on-the-road-with-stevie-kim/"
+      },
+      {
+        "rank": 10,
+        "hook_text": "The Italian Wine Podcast has never been about perfection. Instead, we embrace real, honest and open conversations.",
+        "engagement_type": "brand_philosophy",
+        "estimated_engagement": "high",
+        "source_url": "https://www.prnewswire.com/news-releases/imperfect-but-unstoppable-italian-wine-podcast-smashes-2500-episodes-to-become-the-worlds-most-prolific-wine-podcast-302588857.html"
+      }
+    ],
+    "IWA": [
+      {
+        "rank": 1,
+        "hook_text": "Congratulations to [student] for passing WSET Level [X]!",
+        "engagement_type": "student_success",
+        "estimated_engagement": "high",
+        "source_url": "https://it.linkedin.com/company/ita-wine-academy"
+      },
+      {
+        "rank": 2,
+        "hook_text": "Italian Wine Academy Proudly Launches the Champagne Specialist Course",
+        "engagement_type": "new_course",
+        "estimated_engagement": "high",
+        "source_url": "https://www.prweb.com/releases/italian-wine-academy-proudly-launches-the-champagne-specialist-course-coming-to-verona-in-november-2025-302511447.html"
+      },
+      {
+        "rank": 3,
+        "hook_text": "Italian Wine Academy welcomes award winning Gill Gordon-Smith, Australia's WSET Educator of the Year",
+        "engagement_type": "educator_spotlight",
+        "estimated_engagement": "high",
+        "source_url": "https://www.benzinga.com/pressreleases/23/02/p30989418/"
+      },
+      {
+        "rank": 4,
+        "hook_text": "A New Generation of Italian Wine Educators is Born!",
+        "engagement_type": "industry_milestone",
+        "estimated_engagement": "medium_high",
+        "source_url": "https://vinitalyinternational.com/wordpress/new-generation-of-italian-wine-educators/"
+      },
+      {
+        "rank": 5,
+        "hook_text": "The Champagne Specialist Course is back in Verona in February 2026",
+        "engagement_type": "course_announcement",
+        "estimated_engagement": "medium_high",
+        "source_url": "https://www.prnewswire.com/news-releases/the-champagne-specialist-course-is-back-in-verona-in-february-2026-with-editions-both-in-english-and-in-italian-302657296.html"
+      },
+      {
+        "rank": 6,
+        "hook_text": "What is Italian Wine Academy? We are a WSET provider unlocking the door to the wine sector",
+        "engagement_type": "brand_intro",
+        "estimated_engagement": "medium",
+        "source_url": "https://www.instagram.com/itawineacademy/reel/DHvY6rTiu_4/"
+      },
+      {
+        "rank": 7,
+        "hook_text": "Gift the experience of wine education! Our Gift Vouchers are available",
+        "engagement_type": "promotional",
+        "estimated_engagement": "medium",
+        "source_url": "https://italianwineacademy.org/prodotto/voucher/"
+      },
+      {
+        "rank": 8,
+        "hook_text": "WSET Level 3: Go deeper into the world of wine - 5 days, 30 hours, 70+ wines",
+        "engagement_type": "course_detail",
+        "estimated_engagement": "medium",
+        "source_url": "https://italianwineacademy.org/prodotto/wset-level-3-award-in-wine/?lang=en"
+      },
+      {
+        "rank": 9,
+        "hook_text": "Your first step into the international wine world - WSET Level 1 in Verona",
+        "engagement_type": "course_intro",
+        "estimated_engagement": "medium",
+        "source_url": "https://italianwineacademy.org/prodotto/wset-level-1-award-in-wine/?lang=en"
+      },
+      {
+        "rank": 10,
+        "hook_text": "The Gold Standard of wine training - internationally recognized WSET certifications",
+        "engagement_type": "brand_positioning",
+        "estimated_engagement": "medium",
+        "source_url": "https://italianwineacademy.org/?lang=en"
+      }
+    ]
+  },
+
+  "F_top_hashtags": {
+    "IWP": [
+      {"rank": 1, "hashtag": "#ItalianWinePodcast", "frequency": "every_post", "engagement_correlation": "high", "source": "LinkedIn/Instagram analysis"},
+      {"rank": 2, "hashtag": "#ItalianWine", "frequency": "every_post", "engagement_correlation": "high", "source": "LinkedIn/Instagram analysis"},
+      {"rank": 3, "hashtag": "#CinCin", "frequency": "very_high", "engagement_correlation": "high", "source": "Brand signature"},
+      {"rank": 4, "hashtag": "#winepodcast", "frequency": "high", "engagement_correlation": "medium_high", "source": "LinkedIn posts"},
+      {"rank": 5, "hashtag": "#winebusiness", "frequency": "high", "engagement_correlation": "medium_high", "source": "LinkedIn posts"},
+      {"rank": 6, "hashtag": "#winepeople", "frequency": "high", "engagement_correlation": "medium", "source": "LinkedIn posts"},
+      {"rank": 7, "hashtag": "#wine2wine", "frequency": "medium", "engagement_correlation": "high", "source": "Event coverage"},
+      {"rank": 8, "hashtag": "#OnTheRoad", "frequency": "medium", "engagement_correlation": "medium", "source": "Series-specific"},
+      {"rank": 9, "hashtag": "#Vinitaly", "frequency": "medium", "engagement_correlation": "medium_high", "source": "Event association"},
+      {"rank": 10, "hashtag": "#womeninwine", "frequency": "medium", "engagement_correlation": "medium_high", "source": "DEI content"},
+      {"rank": 11, "hashtag": "#winecommunity", "frequency": "medium", "engagement_correlation": "medium", "source": "Community posts"},
+      {"rank": 12, "hashtag": "#MammaJumboShrimp", "frequency": "low_medium", "engagement_correlation": "medium", "source": "Brand umbrella"},
+      {"rank": 13, "hashtag": "#ABitOfScienza", "frequency": "low_medium", "engagement_correlation": "medium", "source": "Series-specific"},
+      {"rank": 14, "hashtag": "#winecommunication", "frequency": "low_medium", "engagement_correlation": "medium", "source": "wine2wine events"},
+      {"rank": 15, "hashtag": "#DiversityInWine", "frequency": "low", "engagement_correlation": "medium_high", "source": "Voices series"}
+    ],
+    "IWA": [
+      {"rank": 1, "hashtag": "#ItalianWineAcademy", "frequency": "every_post", "engagement_correlation": "high", "source": "Brand hashtag"},
+      {"rank": 2, "hashtag": "#WSET", "frequency": "every_post", "engagement_correlation": "high", "source": "Core certification"},
+      {"rank": 3, "hashtag": "#WineEducation", "frequency": "very_high", "engagement_correlation": "high", "source": "Core theme"},
+      {"rank": 4, "hashtag": "#Verona", "frequency": "high", "engagement_correlation": "medium_high", "source": "Location identifier"},
+      {"rank": 5, "hashtag": "#WSETLevel2", "frequency": "medium", "engagement_correlation": "medium", "source": "Course-specific"},
+      {"rank": 6, "hashtag": "#WSETLevel3", "frequency": "medium", "engagement_correlation": "medium_high", "source": "Course-specific"},
+      {"rank": 7, "hashtag": "#WSETLevel1", "frequency": "medium", "engagement_correlation": "medium", "source": "Course-specific"},
+      {"rank": 8, "hashtag": "#ChampagneSpecialist", "frequency": "low_medium", "engagement_correlation": "high", "source": "New course"},
+      {"rank": 9, "hashtag": "#WineCareers", "frequency": "medium", "engagement_correlation": "medium", "source": "Career posts"},
+      {"rank": 10, "hashtag": "#WineTasting", "frequency": "medium", "engagement_correlation": "medium", "source": "Educational content"},
+      {"rank": 11, "hashtag": "#WineProfessional", "frequency": "low_medium", "engagement_correlation": "medium", "source": "Professional audience"},
+      {"rank": 12, "hashtag": "#StudyInItaly", "frequency": "low", "engagement_correlation": "medium_high", "source": "International appeal"},
+      {"rank": 13, "hashtag": "#WineKnowledge", "frequency": "low_medium", "engagement_correlation": "medium", "source": "Educational content"},
+      {"rank": 14, "hashtag": "#SommelierLife", "frequency": "low", "engagement_correlation": "medium", "source": "Professional audience"},
+      {"rank": 15, "hashtag": "#MadeInItaly", "frequency": "low", "engagement_correlation": "medium", "source": "Italian positioning"}
+    ]
+  },
+
+  "G_avoid_patterns": {
+    "IWP": [
+      {
+        "pattern": "textbook_lecture_tone",
+        "description": "Content that sounds like a wine textbook or lecture - formal, instructional, impersonal",
+        "why_it_fails": "Goes against the core 'chat with friends at a wine bar' brand voice",
+        "source_citation": "System prompt explicit rule: 'Come una chiacchierata al bar con amici, MAI da manuale'"
+      },
+      {
+        "pattern": "corporate_marketing_speak",
+        "description": "Salesy, corporate language - 'leading provider', 'innovative solutions', 'synergy'",
+        "why_it_fails": "IWP brand is built on authentic, human-first communication",
+        "source_citation": "Brand philosophy: 'never been about perfection...real, honest and open conversations'"
+      },
+      {
+        "pattern": "missing_people_element",
+        "description": "Posts about wine without featuring or referencing people - just wine facts or product descriptions",
+        "why_it_fails": "Brand identity is 'Cin Cin with Italian Wine People' - people are the story, not just wine",
+        "source_citation": "https://www.linkedin.com/company/italianwinepodcast"
+      },
+      {
+        "pattern": "wine_snobbery",
+        "description": "Pretentious, exclusive, or gatekeeping language about wine knowledge",
+        "why_it_fails": "IWP philosophy is 'bite size' accessibility and 'If I can understand, anyone can'",
+        "source_citation": "https://www.the-buyer.net/people/mamma-jumbo-shrimp-italian-wine-content"
+      },
+      {
+        "pattern": "missing_cin_cin",
+        "description": "Posts that don't end with 'Cin Cin! 🍷' signature",
+        "why_it_fails": "Missing the single most recognizable brand signature element",
+        "source_citation": "Mandatory rule in system prompt and brand identity"
+      },
+      {
+        "pattern": "generic_wine_cliches",
+        "description": "Using tired wine clichés without personal twist - 'life is too short for bad wine', 'wine o'clock'",
+        "why_it_fails": "IWP creates original, personal storytelling content - generic clichés diminish authenticity",
+        "source_citation": "Content strategy analysis"
+      },
+      {
+        "pattern": "hashtag_overload",
+        "description": "Using more than 15 hashtags on Instagram or more than 5 on LinkedIn",
+        "why_it_fails": "Appears spammy and detracts from content quality",
+        "source_citation": "Industry best practices analysis"
+      },
+      {
+        "pattern": "no_series_attribution",
+        "description": "Episode content posted without mentioning the specific series name",
+        "why_it_fails": "Series branding is core to IWP content architecture and audience segmentation",
+        "source_citation": "Analysis of episode announcement patterns"
+      }
+    ],
+    "IWA": [
+      {
+        "pattern": "dry_academic_tone",
+        "description": "Overly academic or technical writing that reads like a textbook",
+        "why_it_fails": "IWA aims to be 'the professor you wish you had' - professional but never boring",
+        "source_citation": "System prompt: 'Professionale ma mai noioso'"
+      },
+      {
+        "pattern": "missing_cta",
+        "description": "Posts without clear call to action (no enrollment link, no contact info, no 'learn more')",
+        "why_it_fails": "IWA content should always drive toward educational enrollment or engagement",
+        "source_citation": "Analysis of IWA content patterns"
+      },
+      {
+        "pattern": "no_credential_proof",
+        "description": "Educational claims without backing from WSET, Comité Champagne, or educator credentials",
+        "why_it_fails": "Credibility is IWA's core differentiator - every claim needs institutional backing",
+        "source_citation": "https://italianwineacademy.org/?lang=en"
+      },
+      {
+        "pattern": "missing_aspirational_element",
+        "description": "Content that presents education as purely academic without career or life transformation angle",
+        "why_it_fails": "Students enroll for career advancement and personal growth, not just knowledge",
+        "source_citation": "Analysis of IWA value proposition"
+      },
+      {
+        "pattern": "generic_wine_content",
+        "description": "Posting general wine content not connected to WSET education or IWA value proposition",
+        "why_it_fails": "Every post should reinforce IWA's position as a WSET education provider",
+        "source_citation": "Content strategy analysis"
+      },
+      {
+        "pattern": "stock_photography_only",
+        "description": "Using only generic stock wine photos instead of real classroom/student imagery",
+        "why_it_fails": "Authentic classroom and student photos build trust and aspiration",
+        "source_citation": "Visual style analysis"
+      }
+    ]
+  },
+
+  "H_brand_profiles": {
+    "IWP": {
+      "full_name": "Italian Wine Podcast",
+      "tagline": "Cin Cin with Italian Wine People!",
+      "parent_brand": "Mamma Jumbo Shrimp",
+      "founded": "March 2017",
+      "founder": "Stevie Kim",
+      "role": "Managing Director of Vinitaly International",
+      "content_philosophy": "Inform, educate, and entertain - storytelling project dedicated to the fascinating world of Italian wine",
+      "unique_positioning": "The only daily wine podcast in the world",
+      "total_episodes": "2,500+ (as of Oct 2025)",
+      "total_listens": "~8 million (as of Sept 2025)",
+      "instagram_handle": "@italianwinepodcast",
+      "instagram_followers": "14K",
+      "instagram_posts": "5,006",
+      "linkedin_handle": "italianwinepodcast",
+      "website": "italianwinepodcast.com",
+      "tiktok": "@mammajumboshrimp",
+      "stevie_instagram": "@steviekim222",
+      "content_categories": ["wine business", "food & travel", "diversity and inclusion", "wine producers", "science", "marketing and communication"],
+      "series": [
+        "On the Road with Stevie Kim",
+        "Voices with Cynthia Chaplin",
+        "Masterclass US Wine Market with Juliana Colangelo",
+        "Everybody Needs A Bit Of Scienza with Professor Attilio Scienza",
+        "The Next Generation with Victoria Cece/Giulia Stocchetti",
+        "Wine, Food & Travel with Marc Millon",
+        "Ambassador's Corner",
+        "Book Club",
+        "wine2wine Vinitaly Business Forum"
+      ],
+      "key_events": ["wine2wine", "Vinitaly", "Grandi Langhe", "OperaWine", "Vinitaly.USA"],
+      "awards": ["Enozioni a Milano Awards 2025"]
+    },
+    "IWA": {
+      "full_name": "Italian Wine Academy",
+      "tagline": "The Gold Standard of wine training",
+      "founded": "2017",
+      "location": "Viale del Lavoro 8, Verona 37135",
+      "certification": "WSET Approved Programme Provider",
+      "instagram_handle": "@itawineacademy",
+      "instagram_followers": "5,753",
+      "instagram_posts": "1,943",
+      "linkedin_handle": "ita-wine-academy",
+      "linkedin_followers": "3,600",
+      "website": "italianwineacademy.org",
+      "courses": [
+        "WSET Level 1 Award in Wine (1 day, 6 hours, 9 wines)",
+        "WSET Level 2 Award in Wine (3 days, 17 hours, 50 wines)",
+        "WSET Level 3 Award in Wine (5 days, 30 hours, 70+ wines)",
+        "Champagne Specialist Course (2 days, 12 hours, 12 Champagnes)",
+        "Italian Wine Educators Course"
+      ],
+      "key_educators": ["Gill Gordon-Smith (Australia, WSET Educator of the Year)"],
+      "partnerships": ["WSET", "Comité Champagne", "Vinitaly International (shared ecosystem)", "Bologna Business School", "AIS Veneto"],
+      "target_audience": ["Wine professionals", "Hospitality professionals", "Wine media", "Wine enthusiasts of all levels", "Career changers"],
+      "language": "English (primary), Italian"
+    }
+  }
+}
