@@ -34,7 +34,8 @@ export async function getAuthenticatedUser(): Promise<AuthResult> {
   });
 
   // Auth bypass: when DISABLE_AUTH=true, skip authentication
-  if (process.env.DISABLE_AUTH === 'true') {
+  const disableAuth = (process.env.DISABLE_AUTH || process.env.NEXT_PUBLIC_DISABLE_AUTH || '').trim();
+  if (disableAuth === 'true') {
     return { userId: ANONYMOUS_USER_ID, supabase, isAnonymous: true };
   }
 

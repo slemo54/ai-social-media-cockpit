@@ -3,7 +3,8 @@ import { NextResponse, type NextRequest } from 'next/server'
 
 export async function middleware(request: NextRequest) {
   // When auth is disabled, just pass through
-  if (process.env.DISABLE_AUTH === 'true') {
+  const disableAuth = (process.env.DISABLE_AUTH || process.env.NEXT_PUBLIC_DISABLE_AUTH || '').trim();
+  if (disableAuth === 'true') {
     return NextResponse.next({ request });
   }
 
