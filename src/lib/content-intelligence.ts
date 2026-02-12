@@ -1,30 +1,8 @@
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
+import type { VoiceRule, EngagementInsight, ContentIntelligence } from '@/types';
 
-interface VoiceRule {
-  category: string;
-  rule_name: string;
-  rule_description: string;
-  examples: string[];
-  confidence: number;
-}
-
-interface EngagementInsight {
-  pattern_type: string;
-  pattern_value: any;
-  avg_engagement_score: number;
-}
-
-interface ContentIntelligence {
-  voiceRules: VoiceRule[];
-  topHooks: string[];
-  topHashtags: string[];
-  engagementInsights: EngagementInsight[];
-  visualStyleKeywords: string[];
-  avoidPatterns: string[];
-}
-
-// In-memory cache (5 minutes)
-let cache: { data: ContentIntelligence; brand: string; timestamp: number } | null = null;
+// In-memory cache (5 minutes), keyed by brand+platform
+let cache: { data: ContentIntelligence; key: string; timestamp: number } | null = null;
 const CACHE_TTL = 5 * 60 * 1000;
 
 function getSupabaseClient(): SupabaseClient {
@@ -38,8 +16,9 @@ export async function getContentIntelligence(
   brand: 'IWP' | 'IWA',
   platform: string = 'instagram'
 ): Promise<ContentIntelligence> {
-  // Check cache
-  if (cache && cache.brand === brand && Date.now() - cache.timestamp < CACHE_TTL) {
+  // Check cache (keyed by brand+platform)
+  const cacheKey = `${brand}:${platform}`;
+  if (cache && cache.key === cacheKey && Date.now() - cache.timestamp < CACHE_TTL) {
     return cache.data;
   }
 
@@ -70,12 +49,14 @@ export async function getContentIntelligence(
     .order('engagement_correlation', { ascending: false })
     .limit(10);
 
-  // Fetch top posts for hooks and hashtags
+  // Fetch top posts for hooks and hashtags (fallback to published_at if engagement_score is NULL)
   const { data: topPosts } = await supabase
     .from('content_intelligence_posts')
     .select('post_text, hashtags')
     .eq('brand', brand)
-    .order('engagement_score', { ascending: false })
+    .eq('platform', platform)
+    .order('engagement_score', { ascending: false, nullsFirst: false })
+    .order('published_at', { ascending: false })
     .limit(10);
 
   const voiceRules = (rules || []) as VoiceRule[];
@@ -92,7 +73,7 @@ export async function getContentIntelligence(
   };
 
   // Update cache
-  cache = { data: intelligence, brand, timestamp: Date.now() };
+  cache = { data: intelligence, key: cacheKey, timestamp: Date.now() };
 
   return intelligence;
 }
