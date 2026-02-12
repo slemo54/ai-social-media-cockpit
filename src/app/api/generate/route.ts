@@ -133,6 +133,7 @@ export async function POST(request: NextRequest): Promise<NextResponse<GenerateR
       }
     }
 
+    let imageDebugError: string | undefined;
     if (!permanentImageUrl) {
       console.log('[API] Generating image with AI...');
       imageSource = 'generated';
@@ -140,7 +141,8 @@ export async function POST(request: NextRequest): Promise<NextResponse<GenerateR
       try {
         imageResult = await generateImage(textContent.image_prompt, { brand: project, platform });
       } catch (err) {
-        console.error('[API] Image generation error:', err);
+        imageDebugError = `generateImage: ${err instanceof Error ? err.message : String(err)}`;
+        console.error('[API] Image generation error:', imageDebugError);
         if (logEntry) {
           await supabase
             .from('generation_logs')
@@ -162,7 +164,8 @@ export async function POST(request: NextRequest): Promise<NextResponse<GenerateR
             permanentImageUrl = await uploadImageToStorage(imageResult.image_url, 'generated-image.png', supabase);
           }
         } catch (err) {
-          console.error('[API] Image upload error:', err);
+          imageDebugError = `uploadImage: ${err instanceof Error ? err.message : String(err)}`;
+          console.error('[API] Image upload error:', imageDebugError);
         }
       }
     }
@@ -232,7 +235,7 @@ export async function POST(request: NextRequest): Promise<NextResponse<GenerateR
         .eq('id', logEntry.id);
     }
 
-    return NextResponse.json({ success: true, data: post });
+    return NextResponse.json({ success: true, data: post, ...(imageDebugError && { _imageDebug: imageDebugError }) });
 
   } catch (error) {
     console.error('[API] Unexpected error:', error);
