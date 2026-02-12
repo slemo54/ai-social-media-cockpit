@@ -26,6 +26,8 @@ export interface GenerateRequest {
   topic: string;
   project: 'IWP' | 'IWA';
   imageUrl?: string;
+  platform?: string;
+  template?: string;
 }
 
 export interface GenerateResponse {
@@ -57,4 +59,27 @@ export interface Template {
 
 export interface Templates {
   [key: string]: Template;
+}
+
+export interface VoiceRule {
+  category: string;
+  rule_name: string;
+  rule_description: string;
+  examples: string[];
+  confidence: number;
+}
+
+export interface EngagementInsight {
+  pattern_type: string;
+  pattern_value: any;
+  avg_engagement_score: number;
+}
+
+export interface ContentIntelligence {
+  voiceRules: VoiceRule[];
+  topHooks: string[];
+  topHashtags: string[];
+  engagementInsights: EngagementInsight[];
+  visualStyleKeywords: string[];
+  avoidPatterns: string[];
 }

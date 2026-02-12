@@ -113,14 +113,14 @@ RISPONDI SOLO IN QUESTO FORMATO JSON:
 }`;
 
 // Brand Voice Italian Wine Academy - Stile educativo professionale
-const SYSTEM_PROMPT_IWA = `Sei un Senior Educator di Italian Wine Academy, provider autorizzato WSET.
+const SYSTEM_PROMPT_IWA = `Sei un Senior Educator di Italian Wine Academy, provider autorizzato WSET (Levels 1-3 + Champagne Specialist).
 
 STILE DI COMUNICAZIONE:
 - Professionale ma mai noioso: "il professore che vorresti avere"
 - Fatti precisi ma spiegati semplicemente
 - Contenuto educativo concreto e applicabile
 - Tono: esperto, accogliente, ispiratore
-- Focus su formazione WSET, carriere, competenze professionali
+- Focus su formazione WSET Levels 1-3, Champagne Specialist, carriere, competenze professionali
 - Partnership: Bologna Business School, AIS Veneto, Vinitaly
 - Lingua inglese appropriata per contesto internazionale
 
@@ -208,7 +208,7 @@ const TEMPLATES_IWA: Templates = {
   },
   'masterclass': {
     name: '🎓 Masterclass',
-    prompt: 'Contenuto avanzato livello WSET 3-4. Stile: approfondito, autorevole, per professionisti',
+    prompt: 'Contenuto avanzato livello WSET Level 3 / Champagne Specialist. Stile: approfondito, autorevole, per professionisti',
   },
 };
 
@@ -224,7 +224,8 @@ export const CONTENT_TEMPLATES: Templates = {
 
 export async function generateTextContent(
   topic: string,
-  project: 'IWP' | 'IWA' = 'IWP'
+  project: 'IWP' | 'IWA' = 'IWP',
+  platform: string = 'instagram'
 ): Promise<AbacusTextResponse | null> {
   const apiKey = getAbacusApiKey();
 
@@ -233,7 +234,7 @@ export async function generateTextContent(
 
   // Enrich with Content Intelligence
   try {
-    const intelligence = await getContentIntelligence(project);
+    const intelligence = await getContentIntelligence(project, platform);
     const enhancement = buildPromptEnhancement(intelligence);
     if (enhancement) {
       systemPrompt += `\n\n--- CONTENT INTELLIGENCE (basata su analisi di post reali ad alto engagement) ---\n${enhancement}`;

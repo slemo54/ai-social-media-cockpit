@@ -34,7 +34,7 @@ export async function POST(request: NextRequest): Promise<NextResponse<GenerateR
     }
 
     // Parse request body
-    let body: GenerateRequest & { imageUrl?: string };
+    let body: GenerateRequest;
     try {
       body = await request.json();
     } catch (e) {
@@ -44,7 +44,7 @@ export async function POST(request: NextRequest): Promise<NextResponse<GenerateR
       );
     }
 
-    const { topic, project = 'IWP', imageUrl: userImageUrl } = body;
+    const { topic, project = 'IWP', imageUrl: userImageUrl, platform = 'instagram', template } = body;
 
     if (!topic || topic.trim().length === 0) {
       return NextResponse.json(
@@ -56,6 +56,14 @@ export async function POST(request: NextRequest): Promise<NextResponse<GenerateR
     if (project !== 'IWP' && project !== 'IWA') {
       return NextResponse.json(
         { success: false, error: 'Project must be IWP or IWA' },
+        { status: 400 }
+      );
+    }
+
+    const VALID_PLATFORMS = ['instagram', 'linkedin', 'facebook', 'twitter', 'tiktok'];
+    if (!VALID_PLATFORMS.includes(platform)) {
+      return NextResponse.json(
+        { success: false, error: `Invalid platform. Must be one of: ${VALID_PLATFORMS.join(', ')}` },
         { status: 400 }
       );
     }
@@ -77,7 +85,7 @@ export async function POST(request: NextRequest): Promise<NextResponse<GenerateR
     // Step 1: Generate text content
     let textContent;
     try {
-      textContent = await generateTextContent(topic, project);
+      textContent = await generateTextContent(topic, project, platform);
     } catch (err) {
       console.error('[API] Text generation error:', err);
       if (logEntry) {
@@ -130,7 +138,7 @@ export async function POST(request: NextRequest): Promise<NextResponse<GenerateR
       imageSource = 'generated';
       let imageResult;
       try {
-        imageResult = await generateImage(textContent.image_prompt);
+        imageResult = await generateImage(textContent.image_prompt, { brand: project, platform });
       } catch (err) {
         console.error('[API] Image generation error:', err);
         if (logEntry) {
@@ -177,12 +185,12 @@ export async function POST(request: NextRequest): Promise<NextResponse<GenerateR
         image_url: permanentImageUrl,
         status: 'draft',
         project,
-        platform: 'instagram',
+        platform,
         generation_time_ms: generationTime,
         word_count: wordCount,
         ai_model: 'gemini-2.5-flash',
         prompt_length: topic.length,
-        template_used: imageSource === 'uploaded' ? 'user-image' : 'ai-generated',
+        template_used: template || (imageSource === 'uploaded' ? 'user-image' : 'ai-generated'),
       }, supabase);
     } catch (err) {
       console.error('[API] Database save error:', err);
