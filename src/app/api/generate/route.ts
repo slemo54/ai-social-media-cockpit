@@ -133,20 +133,13 @@ export async function POST(request: NextRequest): Promise<NextResponse<GenerateR
       }
     }
 
-    let imageDebugError: string | undefined;
     if (!permanentImageUrl) {
-      console.log('[API] Generating image with AI...');
-      console.log('[API] GOOGLE_AI_API_KEY set:', !!process.env.GOOGLE_AI_API_KEY, 'length:', process.env.GOOGLE_AI_API_KEY?.length);
       imageSource = 'generated';
       let imageResult;
       try {
         imageResult = await generateImage(textContent.image_prompt, { brand: project, platform });
-        if (!imageResult) {
-          imageDebugError = 'generateImage returned null (API key missing or no image data)';
-        }
       } catch (err) {
-        imageDebugError = `generateImage: ${err instanceof Error ? err.message : String(err)}`;
-        console.error('[API] Image generation error:', imageDebugError);
+        console.error('[API] Image generation error:', err);
         if (logEntry) {
           await supabase
             .from('generation_logs')
@@ -162,20 +155,13 @@ export async function POST(request: NextRequest): Promise<NextResponse<GenerateR
 
       if (imageResult) {
         try {
-          const hasBase64 = !!imageResult.image_base64;
-          const hasUrl = !!imageResult.image_url;
-          console.log(`[API] Image result: base64=${hasBase64} (${imageResult.image_base64?.substring(0, 30)}...), url=${hasUrl}`);
           if (imageResult.image_base64) {
             permanentImageUrl = await uploadImageToStorage(imageResult.image_base64, 'generated-image.png', supabase);
           } else if (imageResult.image_url) {
             permanentImageUrl = await uploadImageToStorage(imageResult.image_url, 'generated-image.png', supabase);
           }
-          if (!permanentImageUrl) {
-            imageDebugError = `uploadImage returned null (storage upload failed silently, base64=${hasBase64}, url=${hasUrl})`;
-          }
         } catch (err) {
-          imageDebugError = `uploadImage: ${err instanceof Error ? err.message : String(err)}`;
-          console.error('[API] Image upload error:', imageDebugError);
+          console.error('[API] Image upload error:', err);
         }
       }
     }
@@ -245,7 +231,7 @@ export async function POST(request: NextRequest): Promise<NextResponse<GenerateR
         .eq('id', logEntry.id);
     }
 
-    return NextResponse.json({ success: true, data: post, _v: 'debug-v3', _imageDebug: imageDebugError || 'no-error-captured' });
+    return NextResponse.json({ success: true, data: post });
 
   } catch (error) {
     console.error('[API] Unexpected error:', error);
