@@ -136,10 +136,14 @@ export async function POST(request: NextRequest): Promise<NextResponse<GenerateR
     let imageDebugError: string | undefined;
     if (!permanentImageUrl) {
       console.log('[API] Generating image with AI...');
+      console.log('[API] GOOGLE_AI_API_KEY set:', !!process.env.GOOGLE_AI_API_KEY, 'length:', process.env.GOOGLE_AI_API_KEY?.length);
       imageSource = 'generated';
       let imageResult;
       try {
         imageResult = await generateImage(textContent.image_prompt, { brand: project, platform });
+        if (!imageResult) {
+          imageDebugError = 'generateImage returned null (API key missing or no image data)';
+        }
       } catch (err) {
         imageDebugError = `generateImage: ${err instanceof Error ? err.message : String(err)}`;
         console.error('[API] Image generation error:', imageDebugError);
