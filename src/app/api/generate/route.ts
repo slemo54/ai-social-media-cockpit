@@ -162,10 +162,16 @@ export async function POST(request: NextRequest): Promise<NextResponse<GenerateR
 
       if (imageResult) {
         try {
+          const hasBase64 = !!imageResult.image_base64;
+          const hasUrl = !!imageResult.image_url;
+          console.log(`[API] Image result: base64=${hasBase64} (${imageResult.image_base64?.substring(0, 30)}...), url=${hasUrl}`);
           if (imageResult.image_base64) {
             permanentImageUrl = await uploadImageToStorage(imageResult.image_base64, 'generated-image.png', supabase);
           } else if (imageResult.image_url) {
             permanentImageUrl = await uploadImageToStorage(imageResult.image_url, 'generated-image.png', supabase);
+          }
+          if (!permanentImageUrl) {
+            imageDebugError = `uploadImage returned null (storage upload failed silently, base64=${hasBase64}, url=${hasUrl})`;
           }
         } catch (err) {
           imageDebugError = `uploadImage: ${err instanceof Error ? err.message : String(err)}`;
