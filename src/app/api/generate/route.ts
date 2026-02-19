@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { generateTextContent, generateImage } from '@/lib/abacus';
+import { generateTextContent, generateImage, generateMultipleImages } from '@/lib/abacus';
 import { createPost, uploadImageToStorage } from '@/lib/supabase';
 import { GenerateRequest, GenerateResponse } from '@/types';
 import { getAuthenticatedUser } from '@/lib/auth';
@@ -75,7 +75,7 @@ export async function POST(request: NextRequest): Promise<NextResponse<GenerateR
         user_id: userId,
         started_at: new Date().toISOString(),
         prompt_input: topic,
-        ai_model: 'gemini-2.5-flash',
+        ai_model: 'claude-opus-4-6',
       })
       .select()
       .single();
@@ -114,8 +114,9 @@ export async function POST(request: NextRequest): Promise<NextResponse<GenerateR
 
     console.log('[API] Text generated:', textContent.title?.substring(0, 50));
 
-    // Step 2: Gestione immagine
+    // Step 2: Gestione immagine — genera 3 proposte in parallelo
     let permanentImageUrl: string | null = null;
+    let imageProposals: string[] = [];
     let imageSource: 'generated' | 'uploaded' = 'generated';
 
     if (userImageUrl) {
@@ -135,9 +136,38 @@ export async function POST(request: NextRequest): Promise<NextResponse<GenerateR
 
     if (!permanentImageUrl) {
       imageSource = 'generated';
-      let imageResult;
       try {
-        imageResult = await generateImage(textContent.image_prompt, { brand: project, platform });
+        console.log('[API] Generating 3 image proposals...');
+        const imageResults = await generateMultipleImages(
+          textContent.image_prompt,
+          3,
+          { brand: project, platform }
+        );
+
+        // Upload all successful results to storage
+        const uploadPromises = imageResults.map(async (result, idx) => {
+          try {
+            if (result.image_base64) {
+              return await uploadImageToStorage(result.image_base64, `proposal-${idx}.png`, supabase);
+            } else if (result.image_url) {
+              return await uploadImageToStorage(result.image_url, `proposal-${idx}.png`, supabase);
+            }
+            return null;
+          } catch (err) {
+            console.error(`[API] Proposal ${idx} upload error:`, err);
+            return null;
+          }
+        });
+
+        const uploadedUrls = await Promise.all(uploadPromises);
+        imageProposals = uploadedUrls.filter((url): url is string => url !== null);
+
+        // Set the first proposal as the default main image
+        if (imageProposals.length > 0) {
+          permanentImageUrl = imageProposals[0];
+        }
+
+        console.log(`[API] ${imageProposals.length} image proposals uploaded`);
       } catch (err) {
         console.error('[API] Image generation error:', err);
         if (logEntry) {
@@ -152,21 +182,9 @@ export async function POST(request: NextRequest): Promise<NextResponse<GenerateR
             .eq('id', logEntry.id);
         }
       }
-
-      if (imageResult) {
-        try {
-          if (imageResult.image_base64) {
-            permanentImageUrl = await uploadImageToStorage(imageResult.image_base64, 'generated-image.png', supabase);
-          } else if (imageResult.image_url) {
-            permanentImageUrl = await uploadImageToStorage(imageResult.image_url, 'generated-image.png', supabase);
-          }
-        } catch (err) {
-          console.error('[API] Image upload error:', err);
-        }
-      }
     }
 
-    console.log('[API] Image ready:', permanentImageUrl || 'No image');
+    console.log('[API] Image ready:', permanentImageUrl || 'No image', `(${imageProposals.length} proposals)`);
 
     const generationTime = Date.now() - startTime;
     const wordCount = textContent.body_copy?.split(/\s+/).length || 0;
@@ -194,7 +212,7 @@ export async function POST(request: NextRequest): Promise<NextResponse<GenerateR
         platform,
         generation_time_ms: generationTime,
         word_count: wordCount,
-        ai_model: 'gemini-2.5-flash',
+        ai_model: 'claude-opus-4-6',
         prompt_length: topic.length,
         template_used: template || (imageSource === 'uploaded' ? 'user-image' : 'ai-generated'),
       }, supabase);
@@ -248,7 +266,14 @@ export async function POST(request: NextRequest): Promise<NextResponse<GenerateR
         .eq('id', logEntry.id);
     }
 
-    return NextResponse.json({ success: true, data: post });
+    // Attach image proposals to the response (not saved to DB)
+    const responseData = {
+      ...post,
+      image_proposals: imageProposals.length > 1 ? imageProposals : undefined,
+      selected_image_index: imageProposals.length > 1 ? 0 : undefined,
+    };
+
+    return NextResponse.json({ success: true, data: responseData });
 
   } catch (error) {
     console.error('[API] Unexpected error:', error);
