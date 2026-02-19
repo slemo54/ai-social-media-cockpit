@@ -14,8 +14,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "AI Social — Italian Wine Content Generator",
-  description: "Generazione contenuti social per Italian Wine Podcast & Academy - Smart Frugal",
+  title: "AI Social Cockpit — IWA/IWP Content Studio",
+  description: "Generazione contenuti social per Italian Wine Podcast & Academy - Professional Dashboard",
 };
 
 export default function RootLayout({
@@ -24,11 +24,18 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="it">
+    <html lang="it" className="dark">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-[#0F0F0F] text-[#FAFAFA]`}
       >
-        <Suspense fallback={<div className="min-h-screen bg-[#FAF6F0]" />}>
+        <Suspense fallback={
+          <div className="min-h-screen bg-[#0F0F0F] flex items-center justify-center">
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 border-2 border-[#5C2D91] border-t-transparent rounded-full animate-spin" />
+              <span className="text-[#A3A3A3]">Caricamento...</span>
+            </div>
+          </div>
+        }>
           {children}
         </Suspense>
       </body>

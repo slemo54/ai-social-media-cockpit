@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import { Rocket, Sparkles, Upload, ImageIcon, X } from 'lucide-react';
+import { Rocket, Sparkles, Upload, ImageIcon, X, Wand2 } from 'lucide-react';
 import { getTemplates } from '@/lib/abacus';
 import { Project, Templates } from '@/types';
 import { compressImage, fileToBase64 } from '@/lib/api-client';
@@ -111,69 +111,69 @@ export function InputSection({
   const iwpActive = project === 'IWP';
 
   return (
-    <div className="glass-card p-6 h-full flex flex-col animate-fade-in-up">
+    <div className="dashboard-card p-6 h-full flex flex-col animate-fade-in-up">
       {/* Project Selector */}
-      <div className="flex items-center justify-center gap-2 mb-6 p-1 bg-[#F5EFE7] rounded-xl">
+      <div className="flex items-center justify-center gap-2 mb-6 p-1.5 bg-[#1A1A1A] rounded-xl border border-[#262626]">
         <button
           onClick={() => handleProjectChange('IWP')}
-          className={`flex-1 flex items-center justify-center gap-2 px-4 py-2 rounded-lg font-medium text-sm transition-all ${
+          className={`flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg font-semibold text-sm transition-all ${
             iwpActive
-              ? 'bg-[#CD212A] text-white shadow-md'
-              : 'text-[#9B8E82] hover:text-[#6B5E52]'
+              ? 'bg-gradient-to-r from-[#C8102E] to-[#E53935] text-white shadow-lg shadow-[#C8102E]/30'
+              : 'text-[#737373] hover:text-[#A3A3A3]'
           }`}
         >
-          <span className={`w-2 h-2 rounded-full ${iwpActive ? 'bg-white/60' : 'bg-[#CD212A]'}`} />
+          <span className={`w-2 h-2 rounded-full ${iwpActive ? 'bg-white/80' : 'bg-[#C8102E]'}`} />
           IWP
         </button>
         <button
           onClick={() => handleProjectChange('IWA')}
-          className={`flex-1 flex items-center justify-center gap-2 px-4 py-2 rounded-lg font-medium text-sm transition-all ${
+          className={`flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg font-semibold text-sm transition-all ${
             !iwpActive
-              ? 'bg-[#5C2D91] text-white shadow-md'
-              : 'text-[#9B8E82] hover:text-[#6B5E52]'
+              ? 'bg-gradient-to-r from-[#5C2D91] to-[#7B4FB0] text-white shadow-lg shadow-[#5C2D91]/30'
+              : 'text-[#737373] hover:text-[#A3A3A3]'
           }`}
         >
-          <span className={`w-2 h-2 rounded-full ${!iwpActive ? 'bg-white/60' : 'bg-[#5C2D91]'}`} />
+          <span className={`w-2 h-2 rounded-full ${!iwpActive ? 'bg-white/80' : 'bg-[#5C2D91]'}`} />
           IWA
         </button>
       </div>
 
       {/* Header */}
-      <div className="flex items-center gap-3 mb-4">
-        <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${
+      <div className="flex items-center gap-4 mb-5">
+        <div className={`w-12 h-12 rounded-xl flex items-center justify-center shadow-lg ${
           iwpActive
-            ? 'bg-gradient-to-br from-[#CD212A] to-[#4A0E4E]'
-            : 'bg-gradient-to-br from-[#5C2D91] to-[#D4AF37]'
+            ? 'bg-gradient-to-br from-[#C8102E] to-[#E53935] shadow-[#C8102E]/20'
+            : 'bg-gradient-to-br from-[#5C2D91] to-[#7B4FB0] shadow-[#5C2D91]/20'
         }`}>
-          <Sparkles className="w-5 h-5 text-white" />
+          <Wand2 className="w-6 h-6 text-white" />
         </div>
         <div>
-          <h2 className="text-xl font-bold text-[#2D2D2D]">
+          <h2 className="text-lg font-bold text-[#FAFAFA]">
             {iwpActive ? 'Italian Wine Podcast' : 'Italian Wine Academy'}
           </h2>
-          <p className="text-xs text-[#9B8E82]">
+          <p className="text-xs text-[#737373]">
             {iwpActive ? 'italianwinepodcast.com' : 'italianwineacademy.org'}
           </p>
         </div>
       </div>
 
       {/* Template Selector */}
-      <div className="mb-4 flex-shrink-0">
-        <p className="text-xs font-medium text-[#9B8E82] uppercase tracking-wide mb-2">
+      <div className="mb-5 flex-shrink-0">
+        <p className="text-xs font-semibold text-[#525252] uppercase tracking-wider mb-3">
           Template {project}
         </p>
-        <div className="flex flex-wrap gap-2 max-h-24 overflow-y-auto">
+        <div className="flex flex-wrap gap-2 max-h-28 overflow-y-auto scroll-container">
           {Object.entries(templates).map(([key, template]) => (
             <button
               key={key}
               onClick={() => handleTemplateClick(key)}
               disabled={isLoading || isUploading}
-              className={`px-3 py-1.5 text-xs rounded-lg transition-all ${
+              className={`px-3 py-2 text-xs font-medium rounded-lg transition-all border ${
                 selectedTemplate === key
                   ? iwpActive
-                    ? 'bg-[#CD212A] text-white'
-                    : 'bg-[#5C2D91] text-white'
-                  : 'bg-[#F5EFE7] text-[#6B5E52] hover:bg-[#E8E0D8]'
+                    ? 'bg-[#C8102E]/20 text-[#E53935] border-[#C8102E]/50'
+                    : 'bg-[#5C2D91]/20 text-[#7B4FB0] border-[#5C2D91]/50'
+                  : 'bg-[#1A1A1A] text-[#A3A3A3] border-[#262626] hover:border-[#333333] hover:text-[#FAFAFA]'
               }`}
               title={template.prompt}
             >
@@ -184,27 +184,27 @@ export function InputSection({
       </div>
 
       {/* Image Upload */}
-      <div className="mb-4">
-        <p className="text-xs font-medium text-[#9B8E82] uppercase tracking-wide mb-2">
+      <div className="mb-5">
+        <p className="text-xs font-semibold text-[#525252] uppercase tracking-wider mb-3">
           Immagine (opzionale)
         </p>
 
         {uploadedImage ? (
-          <div className="relative rounded-xl overflow-hidden border border-[#E8E0D8]">
+          <div className="relative rounded-xl overflow-hidden border border-[#262626]">
             <img
               src={uploadedImage}
               alt="Uploaded"
-              className="w-full h-32 object-cover"
+              className="w-full h-36 object-cover"
             />
             <button
               onClick={clearImage}
-              className="absolute top-2 right-2 p-1.5 bg-black/50 hover:bg-black/70 text-white rounded-lg transition-colors"
+              className="absolute top-3 right-3 p-2 bg-black/60 hover:bg-black/80 text-white rounded-lg transition-colors backdrop-blur-sm"
             >
               <X className="w-4 h-4" />
             </button>
-            <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-2">
-              <p className="text-xs text-white flex items-center gap-1">
-                <ImageIcon className="w-3 h-3" />
+            <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-3">
+              <p className="text-xs text-white flex items-center gap-2">
+                <ImageIcon className="w-3.5 h-3.5" />
                 Immagine caricata
               </p>
             </div>
@@ -222,25 +222,25 @@ export function InputSection({
             <button
               onClick={() => fileInputRef.current?.click()}
               disabled={isUploading}
-              className={`w-full flex items-center justify-center gap-2 px-4 py-6 border-2 border-dashed rounded-xl transition-all disabled:opacity-50 ${
+              className={`w-full flex items-center justify-center gap-3 px-4 py-8 border-2 border-dashed rounded-xl transition-all disabled:opacity-50 ${
                 iwpActive
-                  ? 'border-[#E8E0D8] hover:border-[#7B2D4E]/40 text-[#9B8E82] hover:text-[#7B2D4E]'
-                  : 'border-[#E8E0D8] hover:border-[#5C2D91]/40 text-[#9B8E82] hover:text-[#5C2D91]'
+                  ? 'border-[#262626] hover:border-[#C8102E]/50 text-[#525252] hover:text-[#C8102E] bg-[#1A1A1A]/50'
+                  : 'border-[#262626] hover:border-[#5C2D91]/50 text-[#525252] hover:text-[#5C2D91] bg-[#1A1A1A]/50'
               }`}
             >
               {isUploading ? (
                 <>
-                  <div className="w-5 h-5 border-2 border-[#C8956C] border-t-transparent rounded-full animate-spin" />
-                  Caricamento...
+                  <div className="w-5 h-5 border-2 border-[#5C2D91] border-t-transparent rounded-full animate-spin" />
+                  <span className="text-[#A3A3A3]">Caricamento...</span>
                 </>
               ) : (
                 <>
                   <Upload className="w-5 h-5" />
-                  Carica immagine
+                  <span>Carica immagine</span>
                 </>
               )}
             </button>
-            <p className="text-xs text-[#C4B8AD] text-center mt-2">
+            <p className="text-xs text-[#525252] text-center mt-2">
               JPG, PNG, WebP • Max 10MB
             </p>
           </div>
@@ -249,7 +249,7 @@ export function InputSection({
 
       <form onSubmit={handleSubmit} className="flex-1 flex flex-col min-h-0">
         <div className="flex-1 mb-4 min-h-0 flex flex-col">
-          <label className="block text-sm font-medium text-[#6B5E52] mb-2 flex-shrink-0">
+          <label className="block text-xs font-semibold text-[#525252] uppercase tracking-wider mb-2 flex-shrink-0">
             Argomento
           </label>
           <textarea
@@ -262,7 +262,7 @@ export function InputSection({
               ? "Descrivi l'argomento in stile Stevie Kim..."
               : "Descrivi l'argomento in stile educativo..."
             }
-            className="glass-input w-full flex-1 min-h-[80px] px-4 py-3 resize-none"
+            className="dashboard-input w-full flex-1 min-h-[100px] resize-none"
             disabled={isLoading || isUploading}
           />
         </div>
@@ -270,10 +270,10 @@ export function InputSection({
         <button
           type="submit"
           disabled={!topic.trim() || isLoading || isUploading}
-          className={`w-full flex items-center justify-center gap-2 px-6 py-4 text-white font-semibold rounded-2xl disabled:opacity-50 disabled:cursor-not-allowed transition-all ${
+          className={`w-full flex items-center justify-center gap-3 px-6 py-4 text-white font-semibold rounded-xl disabled:opacity-50 disabled:cursor-not-allowed transition-all ${
             iwpActive
-              ? 'bg-gradient-to-r from-[#CD212A] to-[#4A0E4E] hover:from-[#BD111A] hover:to-[#3A0E3E]'
-              : 'bg-gradient-to-r from-[#5C2D91] to-[#722F37] hover:from-[#4C1D81] hover:to-[#621F27]'
+              ? 'bg-gradient-to-r from-[#C8102E] to-[#E53935] hover:shadow-lg hover:shadow-[#C8102E]/30'
+              : 'bg-gradient-to-r from-[#5C2D91] to-[#7B4FB0] hover:shadow-lg hover:shadow-[#5C2D91]/30'
           }`}
         >
           {isLoading ? (
@@ -291,12 +291,12 @@ export function InputSection({
       </form>
 
       {/* Brand Voice Hint */}
-      <div className={`mt-4 p-3 rounded-lg border flex-shrink-0 ${
+      <div className={`mt-4 p-4 rounded-xl border flex-shrink-0 ${
         iwpActive
-          ? 'bg-[#F5E6ED] border-[#CD212A]/20'
-          : 'bg-[#EDE6F5] border-[#5C2D91]/20'
+          ? 'bg-[#C8102E]/10 border-[#C8102E]/20'
+          : 'bg-[#5C2D91]/10 border-[#5C2D91]/20'
       }`}>
-        <p className={`text-xs ${iwpActive ? 'text-[#CD212A]' : 'text-[#5C2D91]'}`}>
+        <p className={`text-xs leading-relaxed ${iwpActive ? 'text-[#E53935]' : 'text-[#7B4FB0]'}`}>
           <strong>Stile {project}:</strong>{' '}
           {iwpActive
             ? 'Conversazionale, "Ok story time...", autoironia, chiusura con Cin Cin!'
