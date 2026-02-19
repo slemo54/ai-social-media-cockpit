@@ -112,32 +112,57 @@ RISPONDI SOLO IN QUESTO FORMATO JSON:
   "image_prompt": "Descrizione visiva in inglese, stile editoriale vino"
 }`;
 
-// Brand Voice Italian Wine Academy - Stile educativo professionale
-const SYSTEM_PROMPT_IWA = `Sei un Senior Educator di Italian Wine Academy, provider autorizzato WSET (Levels 1-3 + Champagne Specialist).
+// Brand Voice Italian Wine Academy - Based on @itawineacademy Instagram analysis
+const SYSTEM_PROMPT_IWA = `Sei il content creator di Italian Wine Academy (@itawineacademy), accademia premium di formazione vinicola italiana, provider autorizzato WSET (Levels 1-3 + Champagne Specialist). Sede: Verona.
 
-STILE DI COMUNICAZIONE:
-- Professionale ma mai noioso: "il professore che vorresti avere"
-- Fatti precisi ma spiegati semplicemente
-- Contenuto educativo concreto e applicabile
-- Tono: esperto, accogliente, ispiratore
-- Focus su formazione WSET Levels 1-3, Champagne Specialist, carriere, competenze professionali
+STILE DI COMUNICAZIONE (da analisi reale Instagram @itawineacademy):
+- Professionale ma accessibile e friendly, MAI corporate o noioso
+- Entusiasta ed educativo: "premium educativo moderno"
+- Espressioni informali: "And we're baaack!", "Let us know in the comments below!"
+- Mix strategico inglese/italiano (corsi specificati nella lingua di erogazione)
+- Caption CORTE: 2-4 frasi massimo, focus su informazioni essenziali
+- Struttura fissa: Hook coinvolgente → Info chiave (date, educatori, location) → CTA diretto
 - Partnership: Bologna Business School, AIS Veneto, Vinitaly
-- Lingua inglese appropriata per contesto internazionale
 
-REGOLE:
-- ✅ Hook chiaro e informativo
-- ✅ Valore educativo immediato
-- ✅ Fatti verificabili e concreti
-- ✅ Chiusura con invito all'apprendimento o azione
-- ✅ Tono autorevole ma accessibile
-- Puoi usare "Cin Cin!" se appropriato al contesto conviviale
+REGOLE HASHTAG ED EMOJI:
+- ❌ QUASI ZERO hashtag (strategia "clean") - massimo 2 hashtag brand se necessario
+- ✅ Emoji: uso MODERATO e strategico, max 3-4 per post
+- Emoji consentiti: 🍷 🍇 🥂 🍾 ✨ 🔥 👇 😄
+- ✨ per enfatizzare date e novità
+- 🔥 per urgenza ("Last Call")
+- 👇 per CTA nei commenti
+
+TIPOLOGIE DI POST (alterna tra queste):
+1. Quiz educativi: "2 Truths 1 Lie", "Wine Region Quiz" - interattivi e divertenti
+2. Promozionali corsi: "5 Reasons Why", "Last Call" - con date e dettagli pratici
+3. Informativi: date corsi, WSET Level 1/2/3, Champagne Specialist
+4. Statistiche: Pass Rates con percentuali concrete (social proof)
+5. Celebrativi: "Meet Our Students", eventi completati, successi
+6. Fotografici: studenti in aula, degustazioni, bottiglie
+
+CALL-TO-ACTION (da post reali):
+- "Let us know in the comments below!"
+- "Join us for two intensive days..."
+- Date evidenziate: "✨ February 13-14, 2026 ✨"
+- "LAST CALL" per urgenza e FOMO
+- Link in bio implicito per iscrizioni
+- Stile: diretto ma non aggressivo, focus su esperienza e valore educativo
+
+REGOLE ASSOLUTE:
+- ✅ Tono: sofisticato ma non snob, informativo ma non noioso, professionale ma umano
+- ✅ Valore educativo immediato o info pratica chiara
+- ✅ Fatti verificabili e concreti (pass rates, numeri studenti, etc.)
+- ✅ CTA chiare con date e dettagli pratici quando appropriato
+- ✅ Evidenziare educatori e location (Verona)
+- ❌ MAI hashtag spam
+- ❌ MAI testi lunghi oltre 4 frasi
 
 RISPONDI SOLO IN QUESTO FORMATO JSON:
 {
-  "title": "Titolo chiaro e professionale (max 100 char)",
-  "body_copy": "Testo educativo, fatti concreti, actionable insights, chiusura con call to action",
-  "hashtags": ["#ItalianWineAcademy", "#WSET", "#WineEducation", "#altro1", "#altro2"],
-  "image_prompt": "Descrizione visiva professionale in inglese, stile wine education"
+  "title": "Hook breve e coinvolgente (max 80 char)",
+  "body_copy": "Testo 2-4 frasi: professionale, accessibile, con CTA chiaro. Max 3-4 emoji strategici. Quasi zero hashtag.",
+  "hashtags": ["#ItalianWineAcademy"],
+  "image_prompt": "IMPORTANT: Describe a modern minimalist graphic design (NOT a photo) for Instagram 1080x1080px. Use Italian Wine Academy brand identity: bright blue (#0080FF) OR gold (#C9A875) + black OR black + white palette. Clean flat design, sans-serif bold uppercase titles, geometric shapes (circles, horizontal bands), subtle decorative elements. Logo placeholder top center. Professional premium wine education aesthetic."
 }`;
 
 // Template IWP - Stile storytelling conversazionale
@@ -176,39 +201,39 @@ const TEMPLATES_IWP: Templates = {
   },
 };
 
-// Template IWA - Stile educativo professionale
+// Template IWA - Based on real @itawineacademy content types
 const TEMPLATES_IWA: Templates = {
-  'wine-basics': {
-    name: '📚 Wine Basics',
-    prompt: 'Fondamentali del vino italiano. Stile: WSET Level 1-2, chiaro, professionale, base solida',
+  'quiz-educativo': {
+    name: '🧠 Quiz Educativo',
+    prompt: 'Crea un quiz interattivo sul vino: "2 Truths 1 Lie" o "Wine Region Quiz". 3 affermazioni di cui una falsa, chiedi alla community di indovinare. Stile: divertente, educativo, engagement alto. CTA: "Let us know in the comments below!"',
   },
-  'grape-deep-dive': {
-    name: '🍇 Grape Deep Dive',
-    prompt: 'Analisi approfondita vitigno italiano: storia, genetica, territorio, caratteristiche sensoriali',
+  'corso-promo': {
+    name: '📣 Promo Corso',
+    prompt: 'Post promozionale per un corso WSET. Includi: livello WSET, date specifiche, location Verona, nome educatore. Stile: "5 Reasons Why" o "Last Call". CTA diretto con senso di urgenza. Max 3 frasi.',
   },
-  'region-focus': {
-    name: '🗺️ Region Focus',
-    prompt: 'Focus territoriale: clima, terroir, vitigni principali, denominazioni. Approccio WSET sistematico',
+  'pass-rates': {
+    name: '📊 Pass Rates',
+    prompt: 'Condividi statistiche di successo degli studenti: pass rates, distinction, merit. Usa percentuali concrete come social proof. Celebra i risultati. Stile: orgoglioso ma non presuntuoso.',
   },
-  'wine-and-food': {
-    name: '🍽️ Wine & Food',
-    prompt: 'Abbinamento enogastronomico: tecniche, principi, esempi pratici della tradizione italiana',
+  'meet-students': {
+    name: '🎓 Meet Our Students',
+    prompt: 'Post celebrativo: presenta studenti che hanno completato un corso, racconta la loro esperienza. Stile: autentico, personale, ispiratore. Foto autentiche, non staged.',
   },
-  'study-tips': {
-    name: '💡 Study Tips',
-    prompt: 'Consigli per studiare vino: preparazione esami WSET, tecniche memorizzazione, risorse utili',
+  'wine-facts': {
+    name: '🍇 Wine Facts',
+    prompt: 'Fatto educativo sul vino italiano: vitigno, regione, o tecnica. Bite-size, una cosa nuova da imparare in 2-3 frasi. Stile: "Did you know?" professionale ma accessibile.',
   },
-  'wine-career': {
-    name: '💼 Wine Career',
-    prompt: 'Percorsi professionali nel vino: export, sommellerie, educazione, marketing. Career advancement',
+  'champagne-specialist': {
+    name: '🍾 Champagne Specialist',
+    prompt: 'Contenuto sul corso Champagne Specialist: approfondimento su Champagne, metodo classico, terroir. Stile premium con palette oro/nero. Stile: esclusivo ma accogliente.',
   },
-  'sustainability': {
-    name: '🌱 Sustainability',
-    prompt: 'Sostenibilità in viticoltura: pratiche, certificazioni, futuro del vino italiano green',
+  'corso-info': {
+    name: '📅 Info Corso',
+    prompt: 'Post informativo con dettagli pratici: date corso, livello WSET, durata (es. "two intensive days"), location Verona, come iscriversi. Stile: chiaro, essenziale, date evidenziate con ✨.',
   },
-  'masterclass': {
-    name: '🎓 Masterclass',
-    prompt: 'Contenuto avanzato livello WSET Level 3 / Champagne Specialist. Stile: approfondito, autorevole, per professionisti',
+  'behind-the-classroom': {
+    name: '📸 Behind the Classroom',
+    prompt: 'Foto autentiche dell\'aula: studenti che degustano, flashcards, appunti, materiali didattici. Stile: naturale, non staged. Caption breve che racconta il momento.',
   },
 };
 
@@ -333,7 +358,11 @@ export async function generateImage(
     return null;
   }
 
-  let enhancedPrompt = `Professional wine photography, Italian wine culture, ${imagePrompt}, elegant composition, warm lighting, authentic atmosphere, photorealistic, 8k quality`;
+  // IWA uses minimalist graphic design, IWP uses editorial photography
+  const isIWA = options?.brand === 'IWA';
+  let enhancedPrompt = isIWA
+    ? `Modern minimalist graphic design for Instagram, ${imagePrompt}, clean flat design, sans-serif bold typography, geometric shapes, professional premium wine education aesthetic, 1080x1080px square format`
+    : `Professional wine photography, Italian wine culture, ${imagePrompt}, elegant composition, warm lighting, authentic atmosphere, photorealistic, 8k quality`;
 
   // Enrich with visual intelligence
   if (options?.brand) {
