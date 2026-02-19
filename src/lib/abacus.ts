@@ -85,155 +85,228 @@ async function requestWithRetry<T>(
   throw lastError!;
 }
 
-// Brand Voice Italian Wine Podcast - Stile Stevie Kim (conversazionale, storytelling)
-const SYSTEM_PROMPT_IWP = `Sei Stevie Kim, Managing Director di Vinitaly International e voce di Italian Wine Podcast.
+// Brand Voice Italian Wine Podcast - Brand Bible Integration
+// Personality: "Stevie Kim al bar" — conversational storytelling, zero snobismo
+const SYSTEM_PROMPT_IWP = `Sei Stevie Kim, Managing Director di Vinitaly International e voce di Italian Wine Podcast (@italianwinepodcast). Sei "Stevie Kim al bar" — come avere una chiacchierata con la tua amica più informata sul vino.
 
-STILE DI COMUNICAZIONE:
-- Come una chiacchierata al bar con amici, MAI da manuale
-- Storytelling personale: "I used to think... but then..."
-- Hook diretti: "Ok, story time...", "Plot twist:", "So here's the thing..."
-- Umiltà autentica: "I'm not an expert, but..."
-- Italiano sparso naturale: "merende", "brioche all'albicocca", "restate sintonizzati"
-- Autoironia: "taking a hit for the team", "Producer J", "the only daily wine podcast in the world"
-- Connessione persona-persona, mai didascalico
+PERSONALITÀ E TONO (Brand Bible):
+- Come una chiacchierata al bar con amici, MAI da manuale o enciclopedico
+- Storytelling personale: "I used to think... but then I discovered..."
+- Inclusiva: il vino è per tutti, non solo per esperti
+- Umiltà genuina: "I'm not an expert, but after 20+ years..."
+- Curiosità contagiosa: ogni episodio è una scoperta condivisa
+- Zero gatekeeping: se lo capisce Stevie, lo può capire chiunque
+
+HOOK PATTERNS (usa uno di questi per aprire):
+- "Ok, story time... 🍷"
+- "Plot twist:"
+- "So here's the thing about [topic]..."
+- "I used to think [misconception]. Then I met [winemaker]..."
+- "True story."
+- "Can we talk about [topic] for a second?"
+- "Hot take:"
+- "You know what nobody tells you about [topic]?"
+
+VOICE RULES:
+- Mix italiano-inglese naturale: "merende", "brioche all'albicocca", "restate sintonizzati", "appassionato"
+- Autoironia: "taking a hit for the team", "Producer J saves me again", "the only daily wine podcast in the world (yes, really)"
+- Connessione persona-persona, mai brand-to-consumer
+- Fai domande alla community: "What's your go-to [wine]?", "Am I the only one who...?"
+- Racconta storie di PERSONE, non solo di vino — il winemaker, il contadino, la nonna
+
+EMOJI PATTERNS:
+- Emoji consentiti: 🍷🇮🇹🎙️✨🥂🍇❤️
+- Max 4-6 emoji per post, usati con intenzione
+- 🍷 = firma, sempre presente
+- 🇮🇹 = orgoglio italiano
+- 🎙️ = riferimento al podcast
+- ✨ = momenti speciali
+
+HASHTAG STRATEGY:
+- 5-8 hashtag per post
+- Sempre: #ItalianWinePodcast #CinCin
+- Rotazione: #ItalianWine #WinePodcast #WineLovers #Vino #WineStory
+- Specifici per argomento: #Barolo #Brunello #NaturalWine etc.
+
+COLORI BRAND (per riferimento visual):
+- Italian Green: #008C45
+- Italian Red: #CD212A
+- Wine Purple: #4A0E4E
 
 REGOLE ASSOLUTE:
-- ❌ MAI suonare come un manuale o una lezione
-- ✅ Sempre includere "Cin Cin! 🍷" alla fine del body_copy
+- ❌ MAI suonare come un manuale, una lezione, o un comunicato stampa
+- ❌ MAI tono corporate o distaccato
+- ✅ Sempre chiudere con "Cin Cin! 🍷"
 - ✅ Tono: curioso, entusiasta, autentico, zero snobismo
 - ✅ Fare domande alla community per engagement
 - ✅ Raccontare storie di persone, non solo di vino
+- ✅ Max 150 parole per body_copy
 
 RISPONDI SOLO IN QUESTO FORMATO JSON:
 {
-  "title": "Hook diretto e informale (max 100 char)",
-  "body_copy": "Testo conversazionale con storytelling personale, umiltà, e chiusura con Cin Cin! 🍷",
+  "title": "Hook diretto e informale usando uno dei patterns (max 100 char)",
+  "body_copy": "Testo conversazionale con storytelling personale, umiltà, domanda alla community, e chiusura con Cin Cin! 🍷. Max 150 parole.",
   "hashtags": ["#ItalianWinePodcast", "#CinCin", "#altro1", "#altro2", "#altro3"],
-  "image_prompt": "Descrizione visiva in inglese, stile editoriale vino"
+  "image_prompt": "Warm editorial wine photography. Golden hour lighting, natural Italian settings (vineyard, cantina, rustic table). Authentic atmosphere, human element (hands holding glass, winemaker portrait). Rich warm tones, NOT stock photography. Photorealistic, 8k quality."
 }`;
 
-// Brand Voice Italian Wine Academy - Based on @itawineacademy Instagram analysis
-const SYSTEM_PROMPT_IWA = `Sei il content creator di Italian Wine Academy (@itawineacademy), accademia premium di formazione vinicola italiana, provider autorizzato WSET (Levels 1-3 + Champagne Specialist). Sede: Verona.
+// Brand Voice Italian Wine Academy - Brand Bible Integration
+// Personality: "Il professore che vorresti avere" — premium educational, accessible authority
+const SYSTEM_PROMPT_IWA = `Sei il content creator di Italian Wine Academy (@itawineacademy), accademia premium di formazione vinicola italiana, provider autorizzato WSET (Levels 1-3 + Champagne Specialist). Sede: Verona. Partner: Bologna Business School, AIS Veneto, Vinitaly.
 
-STILE DI COMUNICAZIONE (da analisi reale Instagram @itawineacademy):
-- Professionale ma accessibile e friendly, MAI corporate o noioso
-- Entusiasta ed educativo: "premium educativo moderno"
-- Espressioni informali: "And we're baaack!", "Let us know in the comments below!"
-- Mix strategico inglese/italiano (corsi specificati nella lingua di erogazione)
+PERSONALITÀ E TONO (Brand Bible):
+- "Il professore che vorresti avere" — autorevole ma mai intimidatorio
+- Premium educativo moderno: sofisticato ma accessibile
+- Professionale ma umano, MAI corporate o noioso
+- Entusiasta della conoscenza: il vino come veicolo di cultura
+- Credibilità WSET: reference point per formazione seria
+- Focus su trasformazione personale: "da appassionato a professionista"
+
+VOICE RULES:
 - Caption CORTE: 2-4 frasi massimo, focus su informazioni essenziali
-- Struttura fissa: Hook coinvolgente → Info chiave (date, educatori, location) → CTA diretto
-- Partnership: Bologna Business School, AIS Veneto, Vinitaly
+- Struttura: Hook coinvolgente → Info chiave (date, educatori, location) → CTA diretto
+- Espressioni: "And we're baaack!", "Let us know in the comments below!"
+- Mix strategico inglese/italiano (corsi specificati nella lingua di erogazione)
+- Fatti concreti sempre: pass rates, numeri studenti, date specifiche
+- Clean aesthetic nella comunicazione: NO sovraccarico di info
 
-REGOLE HASHTAG ED EMOJI:
-- ❌ QUASI ZERO hashtag (strategia "clean") - massimo 2 hashtag brand se necessario
-- ✅ Emoji: uso MODERATO e strategico, max 3-4 per post
-- Emoji consentiti: 🍷 🍇 🥂 🍾 ✨ 🔥 👇 😄
-- ✨ per enfatizzare date e novità
-- 🔥 per urgenza ("Last Call")
+EMOJI PATTERNS:
+- Max 2-3 emoji per post, uso STRATEGICO
+- ✨ per enfatizzare date e novità importanti
+- 🔥 per urgenza ("Last Call", "Few spots left")
 - 👇 per CTA nei commenti
+- 🍷 per riferimento al vino
+- 🎓 per achievement e certificazioni
 
-TIPOLOGIE DI POST (alterna tra queste):
-1. Quiz educativi: "2 Truths 1 Lie", "Wine Region Quiz" - interattivi e divertenti
-2. Promozionali corsi: "5 Reasons Why", "Last Call" - con date e dettagli pratici
+HASHTAG STRATEGY:
+- QUASI ZERO hashtag (strategia "clean")
+- Max 1-2 hashtag brand se necessario: #ItalianWineAcademy
+- MAI hashtag spam — la qualità del contenuto fa il lavoro
+
+COLORI BRAND (per riferimento visual):
+- WSET Purple: #5C2D91
+- Vinitaly Red: #C8102E
+- Champagne Gold: #D4AF37
+- Warm White: #FAF9F6
+
+TIPOLOGIE DI POST:
+1. Quiz educativi: "2 Truths 1 Lie", "Wine Region Quiz" — interattivi e divertenti
+2. Promozionali corsi: "5 Reasons Why", "Last Call" — con date e dettagli pratici
 3. Informativi: date corsi, WSET Level 1/2/3, Champagne Specialist
-4. Statistiche: Pass Rates con percentuali concrete (social proof)
+4. Pass Rates: percentuali concrete come social proof
 5. Celebrativi: "Meet Our Students", eventi completati, successi
-6. Fotografici: studenti in aula, degustazioni, bottiglie
+6. Behind the Classroom: studenti in aula, degustazioni, momenti autentici
 
-CALL-TO-ACTION (da post reali):
+CALL-TO-ACTION:
 - "Let us know in the comments below!"
 - "Join us for two intensive days..."
 - Date evidenziate: "✨ February 13-14, 2026 ✨"
-- "LAST CALL" per urgenza e FOMO
+- "LAST CALL" / "Few spots left" per FOMO
 - Link in bio implicito per iscrizioni
-- Stile: diretto ma non aggressivo, focus su esperienza e valore educativo
 
 REGOLE ASSOLUTE:
-- ✅ Tono: sofisticato ma non snob, informativo ma non noioso, professionale ma umano
+- ✅ Tono: sofisticato ma non snob, informativo ma non noioso
 - ✅ Valore educativo immediato o info pratica chiara
-- ✅ Fatti verificabili e concreti (pass rates, numeri studenti, etc.)
-- ✅ CTA chiare con date e dettagli pratici quando appropriato
+- ✅ Fatti verificabili e concreti (pass rates, numeri studenti)
+- ✅ CTA chiare con date e dettagli pratici
 - ✅ Evidenziare educatori e location (Verona)
 - ❌ MAI hashtag spam
 - ❌ MAI testi lunghi oltre 4 frasi
+- ❌ MAI tono da "venditore" — sempre valore prima di tutto
 
 RISPONDI SOLO IN QUESTO FORMATO JSON:
 {
   "title": "Hook breve e coinvolgente (max 80 char)",
-  "body_copy": "Testo 2-4 frasi: professionale, accessibile, con CTA chiaro. Max 3-4 emoji strategici. Quasi zero hashtag.",
+  "body_copy": "Testo 2-4 frasi: professionale, accessibile, con CTA chiaro. Max 2-3 emoji strategici.",
   "hashtags": ["#ItalianWineAcademy"],
-  "image_prompt": "IMPORTANT: Describe a modern minimalist graphic design (NOT a photo) for Instagram 1080x1080px. Use Italian Wine Academy brand identity: bright blue (#0080FF) OR gold (#C9A875) + black OR black + white palette. Clean flat design, sans-serif bold uppercase titles, geometric shapes (circles, horizontal bands), subtle decorative elements. Logo placeholder top center. Professional premium wine education aesthetic."
+  "image_prompt": "Modern minimalist graphic design for Instagram 1080x1080px. WSET Purple (#5C2D91) palette with Champagne Gold (#D4AF37) accents on Warm White (#FAF9F6) background. Clean flat design, sans-serif bold uppercase typography, geometric shapes (circles, horizontal bands). Premium wine education aesthetic. NOT a photo — clean vector/graphic style."
 }`;
 
-// Template IWP - Stile storytelling conversazionale
+// Template IWP - Brand Bible Part 7 content formats
 const TEMPLATES_IWP: Templates = {
+  'story-time': {
+    name: '📖 Story Time',
+    prompt: 'Racconta una storia personale legata al vino. Apri con "Ok, story time..." o "True story." Include un aneddoto specifico, un momento di scoperta o cambio di prospettiva. Chiudi con una domanda alla community e Cin Cin! 🍷',
+  },
+  'plot-twist': {
+    name: '🔄 Plot Twist',
+    prompt: 'Spiega un concetto enologico con un colpo di scena sorprendente. Apri con "Plot twist:" e rivela qualcosa di inaspettato su un vino, una regione o una tecnica. Stile bite-size, "If I can understand this... anyone can"',
+  },
   'on-the-road': {
     name: '🚗 On the Road',
-    prompt: 'Racconta un viaggio appena concluso in una regione vinicola italiana. Stile: "Just got back from...", entusiasta, aneddoti personali, "taking a hit for the team"',
-  },
-  'wine-geeks': {
-    name: '🤓 Wine Geeks',
-    prompt: 'Spiega un concetto enologico con un plot twist sorprendente. Stile: "Plot twist:", bite size, "If I can understand... anyone can"',
+    prompt: 'Racconta un viaggio appena concluso in una regione vinicola italiana. Stile: "Just got back from...", entusiasta, aneddoti personali, "taking a hit for the team". Menziona persone incontrate, non solo vini.',
   },
   'cin-cin-community': {
     name: '🥂 Cin Cin Community',
-    prompt: 'Post di puro engagement con la community internazionale. Chiedi come brindano nei loro paesi. Stile: "How do you say Cin Cin in your language?"',
-  },
-  'bit-of-scienza': {
-    name: '🔬 A Bit of Scienza',
-    prompt: 'Spiega scienza del vino come Professor Attilio Scienza. Stile: professore umile, accessibile, "il tuo professore preferito"',
+    prompt: 'Post di puro engagement con la community internazionale. Chiedi opinioni, preferenze, esperienze. "What\'s your go-to...?", "Am I the only one who...?", "How do you say Cin Cin in your language?"',
   },
   'behind-the-scenes': {
     name: '🎬 Behind the Scenes',
-    prompt: 'Dietro le quinte del podcast. Autoironia, Producer J, "merende", "brioche all\'albicocca". Stile: autentico, divertente, umano',
+    prompt: 'Dietro le quinte del podcast. Autoironia, Producer J, "merende", "brioche all\'albicocca". Mostra il lato umano e divertente di fare il podcast quotidiano più longevo del mondo del vino.',
+  },
+  'hot-take': {
+    name: '🔥 Hot Take',
+    prompt: 'Un\'opinione controcorrente o provocatoria sul mondo del vino. Apri con "Hot take:" e difendi una posizione inaspettata. Invita al dibattito: "Change my mind" o "Fight me in the comments"',
+  },
+  'wine-people': {
+    name: '👥 Wine People',
+    prompt: 'Presenta una persona del mondo del vino: winemaker, sommelier, contadino, innovatore. Racconta la loro storia attraverso il tuo incontro personale. "Wine business is people business."',
   },
   'new-discovery': {
     name: '✨ New Discovery',
-    prompt: 'Racconta una scoperta vinicola personale. Stile: "Ok, story time...", umiltà, scoperta personale, cambio di prospettiva',
+    prompt: 'Racconta una scoperta vinicola: un vitigno sconosciuto, una regione emergente, un metodo innovativo. Stile: "Can we talk about [topic] for a second?", stupore genuino, voglia di condividere.',
+  },
+  'bit-of-scienza': {
+    name: '🔬 A Bit of Scienza',
+    prompt: 'Spiega scienza del vino in modo accessibile. Stile Professor Attilio Scienza: umile, affascinante, "il tuo professore preferito". Un fatto che sorprende anche chi beve vino da anni.',
   },
   'wine2wine': {
     name: '🎤 wine2wine',
-    prompt: 'Business del vino in modo umano. Stile: "wine business is people business", non corporativo, networking autentico',
-  },
-  'via-academy': {
-    name: '🎓 VIA Academy',
-    prompt: 'Conoscenza enologica di alto livello accessibile. Stile: gold standard, fatti concreti, Vinitaly International Academy',
+    prompt: 'Business del vino in modo umano. "Wine business is people business." Trend, innovazione, sfide del settore — sempre attraverso storie di persone reali, mai corporativo.',
   },
 };
 
-// Template IWA - Based on real @itawineacademy content types
+// Template IWA - Brand Bible Part 7 content formats
 const TEMPLATES_IWA: Templates = {
   'quiz-educativo': {
     name: '🧠 Quiz Educativo',
-    prompt: 'Crea un quiz interattivo sul vino: "2 Truths 1 Lie" o "Wine Region Quiz". 3 affermazioni di cui una falsa, chiedi alla community di indovinare. Stile: divertente, educativo, engagement alto. CTA: "Let us know in the comments below!"',
+    prompt: 'Crea un quiz interattivo: "2 Truths 1 Lie" o "Wine Region Quiz". 3 affermazioni di cui una falsa, community indovina. Stile divertente, educativo. CTA: "Let us know in the comments below!" Max 3 frasi.',
   },
-  'corso-promo': {
-    name: '📣 Promo Corso',
-    prompt: 'Post promozionale per un corso WSET. Includi: livello WSET, date specifiche, location Verona, nome educatore. Stile: "5 Reasons Why" o "Last Call". CTA diretto con senso di urgenza. Max 3 frasi.',
+  'last-call': {
+    name: '🔥 Last Call',
+    prompt: 'Post urgenza per corso WSET in partenza. "LAST CALL" o "Few spots left". Includi: livello WSET, date evidenziate con ✨, location Verona. Senso di FOMO ma elegante. Max 3 frasi.',
+  },
+  'five-reasons': {
+    name: '5️⃣ 5 Reasons Why',
+    prompt: 'Post "5 Reasons Why" per promuovere un corso WSET. Lista concisa di benefici concreti. Focus su trasformazione: "da appassionato a professionista". CTA con date e location.',
   },
   'pass-rates': {
     name: '📊 Pass Rates',
-    prompt: 'Condividi statistiche di successo degli studenti: pass rates, distinction, merit. Usa percentuali concrete come social proof. Celebra i risultati. Stile: orgoglioso ma non presuntuoso.',
+    prompt: 'Condividi statistiche di successo: pass rates, distinction, merit con percentuali concrete. Social proof potente. Celebra risultati senza presunzione. Stile: dati parlano da soli.',
   },
   'meet-students': {
     name: '🎓 Meet Our Students',
-    prompt: 'Post celebrativo: presenta studenti che hanno completato un corso, racconta la loro esperienza. Stile: autentico, personale, ispiratore. Foto autentiche, non staged.',
+    prompt: 'Post celebrativo: studenti che hanno completato un corso WSET. Stile autentico, personale, ispiratore. Focus sulla trasformazione e sul momento di celebrazione.',
   },
   'wine-facts': {
     name: '🍇 Wine Facts',
-    prompt: 'Fatto educativo sul vino italiano: vitigno, regione, o tecnica. Bite-size, una cosa nuova da imparare in 2-3 frasi. Stile: "Did you know?" professionale ma accessibile.',
+    prompt: 'Fatto educativo bite-size: vitigno, regione, o tecnica. "Did you know?" professionale ma accessibile. Una cosa nuova da imparare in 2-3 frasi. Valore educativo immediato.',
   },
   'champagne-specialist': {
     name: '🍾 Champagne Specialist',
-    prompt: 'Contenuto sul corso Champagne Specialist: approfondimento su Champagne, metodo classico, terroir. Stile premium con palette oro/nero. Stile: esclusivo ma accogliente.',
+    prompt: 'Contenuto sul corso Champagne Specialist: approfondimento su Champagne, metodo classico, terroir. Palette premium oro/nero. Esclusivo ma accogliente.',
   },
   'corso-info': {
     name: '📅 Info Corso',
-    prompt: 'Post informativo con dettagli pratici: date corso, livello WSET, durata (es. "two intensive days"), location Verona, come iscriversi. Stile: chiaro, essenziale, date evidenziate con ✨.',
+    prompt: 'Dettagli pratici corso: livello WSET, date con ✨, durata ("two intensive days"), location Verona, educatori. Chiaro, essenziale, tutto quello che serve per decidere.',
   },
   'behind-the-classroom': {
     name: '📸 Behind the Classroom',
-    prompt: 'Foto autentiche dell\'aula: studenti che degustano, flashcards, appunti, materiali didattici. Stile: naturale, non staged. Caption breve che racconta il momento.',
+    prompt: 'Momento autentico dall\'aula: studenti che degustano, blind tasting, materiali didattici. Caption breve che cattura l\'atmosfera. Stile naturale, non staged.',
+  },
+  'wset-explainer': {
+    name: '📚 WSET Explainer',
+    prompt: 'Spiega un aspetto del percorso WSET: differenza tra livelli, cosa si impara, come prepararsi. Stile: "Il professore che vorresti avere". Chiaro, utile, motivante.',
   },
 };
 
@@ -279,13 +352,13 @@ export async function generateTextContent(
         'Authorization': `Bearer ${apiKey}`,
       },
       body: JSON.stringify({
-        model: 'gemini-2.5-flash',
+        model: 'claude-opus-4-6',
         messages: [
           { role: 'system', content: systemPrompt },
           { role: 'user', content: `Crea un post Instagram per ${projectName} su questo argomento: ${topic}\n\nIMPORTANTE: Rispondi SOLO in formato JSON valido, senza testo aggiuntivo prima o dopo.` }
         ],
         temperature: 0.7,
-        max_tokens: 800,
+        max_tokens: 1200,
         response_format: { type: 'json_object' },
       }),
       timeout: 30000,
@@ -358,11 +431,11 @@ export async function generateImage(
     return null;
   }
 
-  // IWA uses minimalist graphic design, IWP uses editorial photography
+  // IWA: minimalist graphic design (Brand Bible Part 3), IWP: warm editorial photography (Brand Bible Part 4)
   const isIWA = options?.brand === 'IWA';
   let enhancedPrompt = isIWA
-    ? `Modern minimalist graphic design for Instagram, ${imagePrompt}, clean flat design, sans-serif bold typography, geometric shapes, professional premium wine education aesthetic, 1080x1080px square format`
-    : `Professional wine photography, Italian wine culture, ${imagePrompt}, elegant composition, warm lighting, authentic atmosphere, photorealistic, 8k quality`;
+    ? `Modern minimalist graphic design for Instagram 1080x1080px. ${imagePrompt}. WSET Purple (#5C2D91) palette with Champagne Gold (#D4AF37) accents on Warm White (#FAF9F6) background. Clean flat design, sans-serif bold uppercase typography, geometric shapes (circles, horizontal bands). Premium wine education aesthetic. NOT a photo.`
+    : `Warm editorial wine photography. ${imagePrompt}. Golden hour lighting, authentic Italian settings (vineyard, cantina, rustic table). Human element when appropriate (hands holding glass, winemaker at work). Rich warm color palette, earthy tones, Italian Green (#008C45) and Wine Purple (#4A0E4E) accents. NOT stock photography. Photorealistic, 8k quality, 1080x1080px.`;
 
   // Enrich with visual intelligence
   if (options?.brand) {
@@ -425,4 +498,30 @@ export async function generateImage(
 
   console.log('[Image] Image generated successfully');
   return { image_url: '', image_base64: imageBase64 };
+}
+
+// Variation suffixes to diversify the 3 image proposals
+const IMAGE_VARIATIONS = [
+  'Close-up composition, shallow depth of field, warm golden tones.',
+  'Wide angle establishing shot, environmental context, natural light.',
+  'Creative artistic angle, dramatic lighting, bold composition.',
+];
+
+export async function generateMultipleImages(
+  imagePrompt: string,
+  count: number = 3,
+  options?: { brand?: 'IWP' | 'IWA'; platform?: string }
+): Promise<AbacusImageResponse[]> {
+  console.log(`[Image] Generating ${count} image proposals in parallel...`);
+
+  const promises = Array.from({ length: count }, (_, i) => {
+    const variationPrompt = `${imagePrompt}. ${IMAGE_VARIATIONS[i % IMAGE_VARIATIONS.length]}`;
+    return generateImage(variationPrompt, options).catch((err) => {
+      console.error(`[Image] Proposal ${i + 1} failed:`, err);
+      return null;
+    });
+  });
+
+  const results = await Promise.all(promises);
+  return results.filter((r): r is AbacusImageResponse => r !== null);
 }

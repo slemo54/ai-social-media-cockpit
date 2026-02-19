@@ -20,6 +20,7 @@ interface UsePostGeneratorReturn {
   downloadImage: () => void;
   cancelGeneration: () => void;
   isCancelling: boolean;
+  selectImage: (index: number) => void;
 }
 
 export function usePostGenerator(): UsePostGeneratorReturn {
@@ -155,6 +156,20 @@ export function usePostGenerator(): UsePostGeneratorReturn {
     toast.success('Immagine scaricata!');
   }, [post]);
 
+  const selectImage = useCallback((index: number) => {
+    if (!post?.image_proposals || index < 0 || index >= post.image_proposals.length) return;
+    setPost((prev) =>
+      prev
+        ? {
+            ...prev,
+            image_url: prev.image_proposals![index],
+            selected_image_index: index,
+          }
+        : null
+    );
+    toast.success(`Immagine ${index + 1} selezionata`);
+  }, [post]);
+
   return {
     post,
     isLoading,
@@ -170,5 +185,6 @@ export function usePostGenerator(): UsePostGeneratorReturn {
     downloadImage,
     cancelGeneration,
     isCancelling,
+    selectImage,
   };
 }

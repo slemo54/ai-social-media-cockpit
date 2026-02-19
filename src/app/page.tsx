@@ -14,7 +14,7 @@ import { useSearchParams } from 'next/navigation';
 export default function Home() {
   const searchParams = useSearchParams();
   const template = searchParams.get('template');
-  
+
   const {
     post,
     isLoading,
@@ -30,6 +30,7 @@ export default function Home() {
     downloadImage,
     cancelGeneration,
     isCancelling,
+    selectImage,
   } = usePostGenerator();
 
   const [mounted, setMounted] = useState(false);
@@ -42,7 +43,6 @@ export default function Home() {
 
   const handleGenerate = useCallback(async (topic: string, selectedProject: 'IWP' | 'IWA', imageUrl?: string) => {
     await generatePost(topic, selectedProject, imageUrl);
-    // Non mostrare toast qui perché potrebbe essere sovrascritto da errori
   }, [generatePost]);
 
   const handleImageUpload = useCallback((imageUrl: string) => {
@@ -59,7 +59,6 @@ export default function Home() {
 
   const handleImageChange = useCallback((newUrl: string) => {
     setUploadedImage(newUrl);
-    // Aggiorna anche il post se esiste
     if (post) {
       updatePost({ image_url: newUrl });
     }
@@ -68,33 +67,33 @@ export default function Home() {
   if (!mounted) return null;
 
   return (
-    <main className="h-screen flex flex-col overflow-hidden">
-      <Toaster 
-        position="top-center" 
-        richColors 
+    <main className="h-screen flex flex-col overflow-hidden bg-[#FAF6F0]">
+      <Toaster
+        position="top-center"
+        richColors
         toastOptions={{
           style: {
-            background: 'rgba(30, 30, 60, 0.9)',
-            backdropFilter: 'blur(10px)',
-            border: '1px solid rgba(255,255,255,0.1)',
-            color: 'white',
+            background: '#FFFFFF',
+            border: '1px solid #E8E0D8',
+            color: '#2D2D2D',
+            boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
           },
         }}
       />
-      
-      {/* Header - Fixed Height */}
-      <header className="flex-shrink-0 border-b border-white/10 backdrop-blur-md bg-black/20">
+
+      {/* Header */}
+      <header className="flex-shrink-0 border-b border-[#E8E0D8] bg-white/80 backdrop-blur-sm">
         <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-600 via-pink-500 to-orange-400 flex items-center justify-center shadow-lg shadow-purple-500/30">
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#C8956C] to-[#D4AF37] flex items-center justify-center shadow-md">
                 <Wine className="w-5 h-5 text-white" />
               </div>
               <div>
-                <h1 className="text-xl font-bold bg-gradient-to-r from-white via-purple-200 to-pink-200 bg-clip-text text-transparent">
+                <h1 className="text-xl font-bold text-[#2D2D2D]">
                   AI Social
                 </h1>
-                <p className="text-xs text-white/50">
+                <p className="text-xs text-[#9B8E82]">
                   IWP × IWA Content Generator
                 </p>
               </div>
@@ -104,21 +103,21 @@ export default function Home() {
                 onClick={() => setShowImageEditor(!showImageEditor)}
                 className={`hidden sm:flex items-center gap-2 px-3 py-1.5 border rounded-lg text-sm transition-colors ${
                   showImageEditor
-                    ? 'bg-purple-500/20 border-purple-500/50 text-purple-300'
-                    : 'bg-white/5 hover:bg-white/10 border-white/10 text-white/80'
+                    ? 'bg-[#C8956C]/10 border-[#C8956C]/50 text-[#C8956C]'
+                    : 'bg-white hover:bg-[#F5EFE7] border-[#E8E0D8] text-[#6B5E52]'
                 }`}
               >
                 <ImageIcon className="w-4 h-4" />
                 {showImageEditor ? 'Chiudi Editor' : 'Editor Immagine'}
               </button>
-              <Link 
+              <Link
                 href="/dashboard"
-                className="hidden sm:flex items-center gap-2 px-3 py-1.5 bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg text-white/80 text-sm transition-colors"
+                className="hidden sm:flex items-center gap-2 px-3 py-1.5 bg-white hover:bg-[#F5EFE7] border border-[#E8E0D8] rounded-lg text-[#6B5E52] text-sm transition-colors"
               >
                 <LayoutDashboard className="w-4 h-4" />
                 Dashboard
               </Link>
-              <span className="px-2.5 py-1 bg-purple-500/20 text-purple-300 text-xs font-medium rounded-full border border-purple-500/30">
+              <span className="px-2.5 py-1 bg-[#C8956C]/10 text-[#C8956C] text-xs font-medium rounded-full border border-[#C8956C]/20">
                 Human-in-the-Loop
               </span>
             </div>
@@ -126,15 +125,15 @@ export default function Home() {
         </div>
       </header>
 
-      {/* Main Content - Fill Remaining Space */}
+      {/* Main Content */}
       <div className="flex-1 overflow-hidden max-w-[1600px] mx-auto w-full px-4 sm:px-6 lg:px-8 py-4">
         {error && (
-          <div className="mb-4 p-3 bg-red-500/10 border border-red-500/30 rounded-xl flex items-center justify-between">
-            <p className="text-red-300 text-sm">{error}</p>
+          <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-xl flex items-center justify-between">
+            <p className="text-red-600 text-sm">{error}</p>
             {isLoading && (
               <button
                 onClick={cancelGeneration}
-                className="px-3 py-1 bg-red-500/20 hover:bg-red-500/30 text-red-300 text-xs rounded-lg transition-colors"
+                className="px-3 py-1 bg-red-100 hover:bg-red-200 text-red-600 text-xs rounded-lg transition-colors"
               >
                 Annulla
               </button>
@@ -144,23 +143,23 @@ export default function Home() {
 
         {/* Loading Progress */}
         {isLoading && !error && (
-          <div className="mb-4 p-4 bg-purple-500/10 border border-purple-500/30 rounded-xl">
+          <div className="mb-4 p-4 bg-[#C8956C]/5 border border-[#C8956C]/20 rounded-xl">
             <div className="flex items-center justify-between mb-2">
-              <p className="text-purple-300 text-sm flex items-center gap-2">
-                <span className="w-2 h-2 bg-purple-400 rounded-full animate-pulse" />
+              <p className="text-[#C8956C] text-sm flex items-center gap-2">
+                <span className="w-2 h-2 bg-[#C8956C] rounded-full animate-pulse" />
                 Generazione in corso...
               </p>
               <button
                 onClick={cancelGeneration}
                 disabled={isCancelling}
-                className="flex items-center gap-1 px-3 py-1 bg-white/10 hover:bg-white/20 text-white/70 text-xs rounded-lg transition-colors disabled:opacity-50"
+                className="flex items-center gap-1 px-3 py-1 bg-[#F5EFE7] hover:bg-[#E8E0D8] text-[#6B5E52] text-xs rounded-lg transition-colors disabled:opacity-50"
               >
                 <X className="w-3 h-3" />
                 Annulla
               </button>
             </div>
-            <div className="w-full bg-white/10 rounded-full h-1.5 overflow-hidden">
-              <div className="bg-gradient-to-r from-purple-500 to-pink-500 h-full rounded-full animate-pulse w-2/3" />
+            <div className="w-full bg-[#E8E0D8] rounded-full h-1.5 overflow-hidden">
+              <div className="bg-gradient-to-r from-[#C8956C] to-[#D4AF37] h-full rounded-full animate-pulse w-2/3" />
             </div>
           </div>
         )}
@@ -168,8 +167,8 @@ export default function Home() {
         <div className={`grid gap-4 h-full ${showImageEditor ? 'grid-cols-1 lg:grid-cols-4' : 'grid-cols-1 lg:grid-cols-3'}`}>
           {/* Column 1: Input */}
           <div className="h-full min-h-0">
-            <InputSection 
-              onGenerate={handleGenerate} 
+            <InputSection
+              onGenerate={handleGenerate}
               isLoading={isLoading}
               project={project}
               onProjectChange={setProject}
@@ -185,6 +184,7 @@ export default function Home() {
               previewMode={previewMode}
               onModeChange={setPreviewMode}
               isLoading={isLoading}
+              onSelectImage={selectImage}
             />
           </div>
 
@@ -222,14 +222,14 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Footer - Compact */}
-      <footer className="flex-shrink-0 border-t border-white/10 backdrop-blur-md bg-black/20">
+      {/* Footer */}
+      <footer className="flex-shrink-0 border-t border-[#E8E0D8] bg-white/80 backdrop-blur-sm">
         <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-2">
           <div className="flex items-center justify-between">
-            <p className="text-xs text-white/40">
+            <p className="text-xs text-[#9B8E82]">
               by Anselmo Acquah — powered by Abacus API
             </p>
-            <span className="text-white/40 text-xs">
+            <span className="text-[#9B8E82] text-xs">
               IWP o IWA
             </span>
           </div>

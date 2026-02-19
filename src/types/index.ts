@@ -7,6 +7,8 @@ export interface Post {
   hashtags: string[] | null;
   image_prompt: string | null;
   image_url: string | null;
+  image_proposals?: string[];
+  selected_image_index?: number;
   status: 'draft' | 'published';
   feedback_score: number | null;
   project?: 'IWP' | 'IWA';

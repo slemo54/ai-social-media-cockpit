@@ -1,9 +1,6 @@
 import { NextResponse } from 'next/server';
 import { getAuthenticatedUser } from '@/lib/auth';
 
-const ABACUS_API_KEY = process.env.ABACUS_API_KEY;
-const ABACUS_BASE_URL = 'https://routellm.abacus.ai/v1';
-
 export const maxDuration = 120;
 
 interface EditRequest {
@@ -28,8 +25,9 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'Server configuration error' }, { status: 500 });
   }
 
-  if (!ABACUS_API_KEY) {
-    return NextResponse.json({ error: 'ABACUS_API_KEY not configured' }, { status: 500 });
+  const googleApiKey = process.env.GOOGLE_AI_API_KEY;
+  if (!googleApiKey) {
+    return NextResponse.json({ error: 'GOOGLE_AI_API_KEY not configured' }, { status: 500 });
   }
 
   try {
@@ -58,31 +56,46 @@ export async function POST(request: Request) {
         return NextResponse.json({ error: 'Invalid operation' }, { status: 400 });
     }
 
-    console.log(`[ImageEdit] Starting ${operation} operation`);
+    console.log(`[ImageEdit] Starting ${operation} with Nano Banana Pro 2 (gemini-3-pro-image-preview)`);
+
+    // Extract raw base64 data (strip data URL prefix if present)
+    let rawBase64 = imageBase64;
+    let mimeType = 'image/jpeg';
+    if (imageBase64.startsWith('data:')) {
+      const match = imageBase64.match(/^data:([^;]+);base64,(.+)$/);
+      if (match) {
+        mimeType = match[1];
+        rawBase64 = match[2];
+      }
+    }
 
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 90000);
 
-    const response = await fetch(`${ABACUS_BASE_URL}/chat/completions`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${ABACUS_API_KEY}`,
-      },
-      body: JSON.stringify({
-        model: 'nano-banana-pro',
-        messages: [{
-          role: 'user',
-          content: [
-            { type: 'text', text: editPrompt },
-            { type: 'image_url', image_url: { url: `data:image/jpeg;base64,${imageBase64}` } },
-          ],
-        }],
-        modalities: ['image'],
-        image_config: { num_images: 1, aspect_ratio: '1:1' },
-      }),
-      signal: controller.signal,
-    });
+    const response = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp:generateContent?key=${googleApiKey}`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          contents: [{
+            parts: [
+              { text: editPrompt },
+              {
+                inlineData: {
+                  mimeType,
+                  data: rawBase64,
+                },
+              },
+            ],
+          }],
+          generationConfig: {
+            responseModalities: ['IMAGE', 'TEXT'],
+          },
+        }),
+        signal: controller.signal,
+      }
+    );
 
     clearTimeout(timeoutId);
 
@@ -94,28 +107,27 @@ export async function POST(request: Request) {
 
     const data = await response.json();
     let editedImageBase64: string | undefined;
-    let editedImageUrl: string | undefined;
 
-    if (data.choices?.[0]?.message) {
-      const message = data.choices[0].message;
-      if (message.images?.[0]) {
-        if (message.images[0].b64_json) {
-          editedImageBase64 = message.images[0].b64_json;
-        } else if (message.images[0].image_url) {
-          editedImageUrl = message.images[0].image_url.url;
+    // Extract image from Gemini response
+    if (data.candidates?.[0]?.content?.parts) {
+      for (const part of data.candidates[0].content.parts) {
+        if (part.inlineData) {
+          editedImageBase64 = part.inlineData.data;
+          break;
         }
-      }
-      if (!editedImageBase64 && !editedImageUrl && message.content?.startsWith('data:image')) {
-        editedImageBase64 = message.content.split(',')[1];
       }
     }
 
-    if (!editedImageBase64 && !editedImageUrl) {
+    if (!editedImageBase64) {
       throw new Error('No edited image received from API');
     }
 
     console.log('[ImageEdit] Operation completed successfully');
-    return NextResponse.json({ success: true, imageBase64: editedImageBase64, imageUrl: editedImageUrl, operation });
+    return NextResponse.json({
+      success: true,
+      imageBase64: editedImageBase64,
+      operation,
+    });
 
   } catch (error) {
     console.error('[ImageEdit] Error:', error);

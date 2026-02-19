@@ -21,12 +21,12 @@ export default function Dashboard() {
 
   if (statsError || postsError) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-950 to-gray-900 flex items-center justify-center">
+      <div className="min-h-screen bg-[#FAF6F0] flex items-center justify-center">
         <div className="text-center">
-          <p className="text-red-400 mb-4">Errore nel caricamento dei dati</p>
+          <p className="text-red-600 mb-4">Errore nel caricamento dei dati</p>
           <button
             onClick={handleRefresh}
-            className="px-4 py-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg hover:from-purple-700 hover:to-pink-700"
+            className="px-4 py-2 bg-gradient-to-r from-[#C8956C] to-[#D4AF37] text-white rounded-lg hover:opacity-90"
           >
             Riprova
           </button>
@@ -36,31 +36,31 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-950 to-gray-900">
+    <div className="min-h-screen bg-[#FAF6F0]">
       {/* Header */}
-      <header className="bg-black/20 backdrop-blur-md border-b border-white/10 sticky top-0 z-10">
+      <header className="bg-white/80 backdrop-blur-sm border-b border-[#E8E0D8] sticky top-0 z-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center gap-4">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-600 via-pink-500 to-orange-400 flex items-center justify-center">
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#C8956C] to-[#D4AF37] flex items-center justify-center">
                 <LayoutDashboard className="w-5 h-5 text-white" />
               </div>
               <div>
-                <h1 className="text-xl font-bold text-white">Dashboard</h1>
-                <p className="text-xs text-white/50">IWP × IWA Analytics</p>
+                <h1 className="text-xl font-bold text-[#2D2D2D]">Dashboard</h1>
+                <p className="text-xs text-[#9B8E82]">IWP × IWA Analytics</p>
               </div>
             </div>
             <div className="flex items-center gap-4">
               <button
                 onClick={handleRefresh}
-                className="text-sm text-purple-400 hover:text-purple-300 transition-colors"
+                className="text-sm text-[#C8956C] hover:text-[#B5845D] transition-colors"
                 disabled={statsLoading}
               >
                 {statsLoading ? 'Aggiornamento...' : 'Aggiorna dati'}
               </button>
               <Link
                 href="/"
-                className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white text-sm font-medium rounded-lg hover:from-purple-700 hover:to-pink-700 transition-all"
+                className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-[#C8956C] to-[#D4AF37] text-white text-sm font-medium rounded-lg hover:opacity-90 transition-all"
               >
                 <Sparkles className="w-4 h-4" />
                 Nuovo Contenuto
@@ -106,29 +106,29 @@ export default function Dashboard() {
 
         {/* Secondary Stats */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          <div className="bg-gradient-to-br from-purple-500 to-pink-500 rounded-xl p-6 text-white">
+          <div className="bg-gradient-to-br from-[#C8956C] to-[#D4AF37] rounded-xl p-6 text-white">
             <div className="flex items-center gap-3 mb-2">
               <Sparkles className="w-5 h-5" />
-              <span className="text-purple-100">Parole Generate</span>
+              <span className="text-white/80">Parole Generate</span>
             </div>
             <div className="text-3xl font-bold">
               {statsLoading ? '...' : (stats?.overview.totalWords || 0).toLocaleString('it-IT')}
             </div>
-            <div className="text-sm text-purple-100 mt-1">
+            <div className="text-sm text-white/80 mt-1">
               {stats?.trends.last30Days.words || 0} negli ultimi 30 giorni
             </div>
           </div>
 
-          <div className="bg-white/10 backdrop-blur-md rounded-xl p-6 border border-white/10">
-            <div className="text-sm text-white/60 mb-1">Template Preferito</div>
-            <div className="text-lg font-semibold text-white">
+          <div className="bg-white rounded-xl p-6 border border-[#E8E0D8] shadow-sm">
+            <div className="text-sm text-[#9B8E82] mb-1">Template Preferito</div>
+            <div className="text-lg font-semibold text-[#2D2D2D]">
               {statsLoading ? '...' : (stats?.overview.favoriteTemplate || 'Nessuno ancora')}
             </div>
           </div>
 
-          <div className="bg-white/10 backdrop-blur-md rounded-xl p-6 border border-white/10">
-            <div className="text-sm text-white/60 mb-1">Tempo Medio Generazione</div>
-            <div className="text-lg font-semibold text-white">
+          <div className="bg-white rounded-xl p-6 border border-[#E8E0D8] shadow-sm">
+            <div className="text-sm text-[#9B8E82] mb-1">Tempo Medio Generazione</div>
+            <div className="text-lg font-semibold text-[#2D2D2D]">
               {statsLoading ? '...' : `${Math.round((stats?.overview.avgGenerationTime || 0) / 1000)}s`}
             </div>
           </div>
@@ -136,23 +136,23 @@ export default function Dashboard() {
 
         {/* Charts & Templates */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-          <ActivityChart 
-            data={stats?.activity || []} 
-            loading={statsLoading} 
+          <ActivityChart
+            data={stats?.activity || []}
+            loading={statsLoading}
           />
-          <TemplateStats 
-            templates={stats?.templates || []} 
-            loading={statsLoading} 
+          <TemplateStats
+            templates={stats?.templates || []}
+            loading={statsLoading}
           />
         </div>
 
         {/* Recent Posts */}
         <div>
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-xl font-semibold text-white">Contenuti Recenti</h2>
+            <h2 className="text-xl font-semibold text-[#2D2D2D]">Contenuti Recenti</h2>
             <Link
               href="/"
-              className="text-sm text-purple-400 hover:text-purple-300 transition-colors"
+              className="text-sm text-[#C8956C] hover:text-[#B5845D] transition-colors"
             >
               Vedi tutti →
             </Link>
@@ -163,5 +163,3 @@ export default function Dashboard() {
     </div>
   );
 }
-
-// Deploy fix 1770131086
