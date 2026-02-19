@@ -118,11 +118,11 @@ export function InputSection({
           onClick={() => handleProjectChange('IWP')}
           className={`flex-1 flex items-center justify-center gap-2 px-4 py-2 rounded-lg font-medium text-sm transition-all ${
             iwpActive
-              ? 'bg-[#7B2D4E] text-white shadow-md'
+              ? 'bg-[#CD212A] text-white shadow-md'
               : 'text-[#9B8E82] hover:text-[#6B5E52]'
           }`}
         >
-          <span className={`w-2 h-2 rounded-full ${iwpActive ? 'bg-white/60' : 'bg-[#7B2D4E]'}`} />
+          <span className={`w-2 h-2 rounded-full ${iwpActive ? 'bg-white/60' : 'bg-[#CD212A]'}`} />
           IWP
         </button>
         <button
@@ -142,7 +142,7 @@ export function InputSection({
       <div className="flex items-center gap-3 mb-4">
         <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${
           iwpActive
-            ? 'bg-gradient-to-br from-[#7B2D4E] to-[#CD212A]'
+            ? 'bg-gradient-to-br from-[#CD212A] to-[#4A0E4E]'
             : 'bg-gradient-to-br from-[#5C2D91] to-[#D4AF37]'
         }`}>
           <Sparkles className="w-5 h-5 text-white" />
@@ -171,7 +171,7 @@ export function InputSection({
               className={`px-3 py-1.5 text-xs rounded-lg transition-all ${
                 selectedTemplate === key
                   ? iwpActive
-                    ? 'bg-[#7B2D4E] text-white'
+                    ? 'bg-[#CD212A] text-white'
                     : 'bg-[#5C2D91] text-white'
                   : 'bg-[#F5EFE7] text-[#6B5E52] hover:bg-[#E8E0D8]'
               }`}
@@ -272,8 +272,8 @@ export function InputSection({
           disabled={!topic.trim() || isLoading || isUploading}
           className={`w-full flex items-center justify-center gap-2 px-6 py-4 text-white font-semibold rounded-2xl disabled:opacity-50 disabled:cursor-not-allowed transition-all ${
             iwpActive
-              ? 'bg-gradient-to-r from-[#7B2D4E] to-[#CD212A] hover:from-[#6B1D3E] hover:to-[#BD111A]'
-              : 'bg-gradient-to-r from-[#5C2D91] to-[#D4AF37] hover:from-[#4C1D81] hover:to-[#C49F27]'
+              ? 'bg-gradient-to-r from-[#CD212A] to-[#4A0E4E] hover:from-[#BD111A] hover:to-[#3A0E3E]'
+              : 'bg-gradient-to-r from-[#5C2D91] to-[#722F37] hover:from-[#4C1D81] hover:to-[#621F27]'
           }`}
         >
           {isLoading ? (
@@ -293,10 +293,10 @@ export function InputSection({
       {/* Brand Voice Hint */}
       <div className={`mt-4 p-3 rounded-lg border flex-shrink-0 ${
         iwpActive
-          ? 'bg-[#F5E6ED] border-[#7B2D4E]/20'
+          ? 'bg-[#F5E6ED] border-[#CD212A]/20'
           : 'bg-[#EDE6F5] border-[#5C2D91]/20'
       }`}>
-        <p className={`text-xs ${iwpActive ? 'text-[#7B2D4E]' : 'text-[#5C2D91]'}`}>
+        <p className={`text-xs ${iwpActive ? 'text-[#CD212A]' : 'text-[#5C2D91]'}`}>
           <strong>Stile {project}:</strong>{' '}
           {iwpActive
             ? 'Conversazionale, "Ok story time...", autoironia, chiusura con Cin Cin!'
