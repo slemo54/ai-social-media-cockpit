@@ -107,14 +107,14 @@ export default function Dashboard() {
             value={stats?.overview.draft || 0}
             icon={Clock}
             loading={statsLoading}
-            variant="gold"
+            variant="level1"
           />
           <StatCard
             label="Tasso Conversione"
             value={stats ? `${Math.round((stats.overview.published / Math.max(stats.overview.total, 1)) * 100)}%` : '0%'}
             icon={TrendingUp}
             loading={statsLoading}
-            variant="red"
+            variant="level2"
           />
         </div>
 
