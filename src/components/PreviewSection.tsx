@@ -30,7 +30,7 @@ function getProfileInfo(post: Post | null) {
   return {
     username: isIWA ? 'itawineacademy' : 'italianwinepodcast',
     displayName: isIWA ? 'Italian Wine Academy' : 'Italian Wine Podcast',
-    avatarBg: isIWA ? 'bg-gradient-to-br from-[#5C2D91] to-[#D4AF37]' : 'bg-gradient-to-br from-[#7B2D4E] to-[#CD212A]',
+    avatarBg: isIWA ? 'bg-gradient-to-br from-[#5C2D91] to-[#D4AF37]' : 'bg-gradient-to-br from-[#CD212A] to-[#4A0E4E]',
     avatarLetter: isIWA ? 'A' : 'P',
   };
 }
@@ -130,13 +130,13 @@ function InstagramFeedPreview({ post, isLoading, onSelectImage }: { post: Post |
                 onClick={() => onSelectImage?.(idx)}
                 className={`relative aspect-square rounded-lg overflow-hidden border-2 transition-all ${
                   idx === selectedIndex
-                    ? 'border-[#C8956C] shadow-md scale-[1.02]'
+                    ? 'border-[#5C2D91] shadow-md scale-[1.02]'
                     : 'border-transparent hover:border-[#E8E0D8]'
                 }`}
               >
                 <img src={url} alt={`Proposal ${idx + 1}`} className="w-full h-full object-cover" />
                 {idx === selectedIndex && (
-                  <div className="absolute top-1 right-1 w-5 h-5 bg-[#C8956C] rounded-full flex items-center justify-center">
+                  <div className="absolute top-1 right-1 w-5 h-5 bg-[#5C2D91] rounded-full flex items-center justify-center">
                     <span className="text-white text-[10px] font-bold">✓</span>
                   </div>
                 )}
@@ -160,7 +160,7 @@ function StoryPreview({ post, isLoading }: { post: Post | null; isLoading: boole
         {/* Story image */}
         {isLoading ? (
           <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-b from-[#2D2D2D] to-[#1a1a1a]">
-            <div className="w-8 h-8 border-2 border-[#C8956C] border-t-transparent rounded-full animate-spin" />
+            <div className="w-8 h-8 border-2 border-[#5C2D91] border-t-transparent rounded-full animate-spin" />
           </div>
         ) : mainImage ? (
           <img src={mainImage} alt="Story" className="w-full h-full object-cover" />
@@ -283,7 +283,7 @@ export function PreviewSection({ post, previewMode, onModeChange, isLoading, onS
   return (
     <div className="glass-card p-5 h-full flex flex-col animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
       <div className="flex items-center gap-3 mb-4 flex-shrink-0">
-        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#C8956C] to-[#D4AF37] flex items-center justify-center">
+        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#5C2D91] to-[#722F37] flex items-center justify-center">
           <ImageIcon className="w-5 h-5 text-white" />
         </div>
         <h2 className="text-xl font-bold text-[#2D2D2D]">Anteprima Visiva</h2>
@@ -300,7 +300,7 @@ export function PreviewSection({ post, previewMode, onModeChange, isLoading, onS
               onClick={() => onModeChange(mode)}
               className={`flex items-center justify-center gap-2 px-4 py-3 rounded-xl font-medium transition-all ${
                 isActive
-                  ? 'toggle-btn active text-[#C8956C]'
+                  ? 'toggle-btn active text-[#5C2D91]'
                   : 'toggle-btn text-[#9B8E82] hover:text-[#6B5E52]'
               }`}
             >

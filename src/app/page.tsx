@@ -7,7 +7,7 @@ import { ImageEditor } from '@/components/ImageEditor';
 import { usePostGenerator } from '@/hooks/usePostGenerator';
 import { Toaster, toast } from 'sonner';
 import { useCallback, useEffect, useState } from 'react';
-import { Wine, LayoutDashboard, X, Image as ImageIcon } from 'lucide-react';
+import { Wine, LayoutDashboard, X, Image as ImageIcon, Sparkles } from 'lucide-react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 
@@ -67,57 +67,60 @@ export default function Home() {
   if (!mounted) return null;
 
   return (
-    <main className="h-screen flex flex-col overflow-hidden bg-[#FAF9F6]">
+    <main className="h-screen flex flex-col overflow-hidden bg-[#0F0F0F]">
       <Toaster
         position="top-center"
         richColors
         toastOptions={{
           style: {
-            background: '#FFFFFF',
-            border: '1px solid #E8E0D8',
-            color: '#2D2D2D',
-            boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
+            background: '#1A1A1A',
+            border: '1px solid #262626',
+            color: '#FAFAFA',
+            boxShadow: '0 8px 30px rgba(0,0,0,0.5)',
           },
         }}
       />
 
       {/* Header */}
-      <header className="flex-shrink-0 border-b border-[#E8E0D8] bg-white/80 backdrop-blur-sm">
-        <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-3">
+      <header className="flex-shrink-0 border-b border-[#262626] bg-[#141414]">
+        <div className="max-w-[1800px] mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#5C2D91] to-[#722F37] flex items-center justify-center shadow-md">
+            <div className="flex items-center gap-4">
+              <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-[#5C2D91] via-[#7B4FB0] to-[#D4AF37] flex items-center justify-center shadow-lg shadow-[#5C2D91]/20">
                 <Wine className="w-5 h-5 text-white" />
               </div>
               <div>
-                <h1 className="text-xl font-bold text-[#2D2D2D]">
-                  AI Social
+                <h1 className="text-xl font-bold text-[#FAFAFA]">
+                  AI Social Cockpit
                 </h1>
-                <p className="text-xs text-[#9B8E82]">
-                  IWP × IWA Content Generator
+                <p className="text-xs text-[#737373]">
+                  IWP × IWA Content Studio
                 </p>
               </div>
             </div>
+            
             <div className="flex items-center gap-3">
               <button
                 onClick={() => setShowImageEditor(!showImageEditor)}
-                className={`hidden sm:flex items-center gap-2 px-3 py-1.5 border rounded-lg text-sm transition-colors ${
+                className={`hidden sm:flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition-all ${
                   showImageEditor
-                    ? 'bg-[#5C2D91]/10 border-[#5C2D91]/50 text-[#5C2D91]'
-                    : 'bg-white hover:bg-[#F5EFE7] border-[#E8E0D8] text-[#6B5E52]'
+                    ? 'bg-[#5C2D91]/20 text-[#7B4FB0] border border-[#5C2D91]/50'
+                    : 'bg-[#1A1A1A] hover:bg-[#262626] border border-[#262626] text-[#A3A3A3] hover:text-[#FAFAFA]'
                 }`}
               >
                 <ImageIcon className="w-4 h-4" />
                 {showImageEditor ? 'Chiudi Editor' : 'Editor Immagine'}
               </button>
+              
               <Link
                 href="/dashboard"
-                className="hidden sm:flex items-center gap-2 px-3 py-1.5 bg-white hover:bg-[#F5EFE7] border border-[#E8E0D8] rounded-lg text-[#6B5E52] text-sm transition-colors"
+                className="hidden sm:flex items-center gap-2 px-4 py-2 bg-[#1A1A1A] hover:bg-[#262626] border border-[#262626] rounded-xl text-[#A3A3A3] hover:text-[#FAFAFA] text-sm font-medium transition-all"
               >
                 <LayoutDashboard className="w-4 h-4" />
                 Dashboard
               </Link>
-              <span className="px-2.5 py-1 bg-[#5C2D91]/10 text-[#5C2D91] text-xs font-medium rounded-full border border-[#5C2D91]/20">
+              
+              <span className="px-3 py-1.5 bg-[#5C2D91]/20 text-[#7B4FB0] text-xs font-semibold rounded-full border border-[#5C2D91]/30">
                 Human-in-the-Loop
               </span>
             </div>
@@ -126,14 +129,14 @@ export default function Home() {
       </header>
 
       {/* Main Content */}
-      <div className="flex-1 overflow-hidden max-w-[1600px] mx-auto w-full px-4 sm:px-6 lg:px-8 py-4">
+      <div className="flex-1 overflow-hidden max-w-[1800px] mx-auto w-full px-4 sm:px-6 lg:px-8 py-5">
         {error && (
-          <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-xl flex items-center justify-between">
-            <p className="text-red-600 text-sm">{error}</p>
+          <div className="mb-4 p-4 bg-red-500/10 border border-red-500/30 rounded-xl flex items-center justify-between">
+            <p className="text-red-400 text-sm">{error}</p>
             {isLoading && (
               <button
                 onClick={cancelGeneration}
-                className="px-3 py-1 bg-red-100 hover:bg-red-200 text-red-600 text-xs rounded-lg transition-colors"
+                className="px-4 py-2 bg-red-500/20 hover:bg-red-500/30 text-red-400 text-sm font-medium rounded-lg transition-colors"
               >
                 Annulla
               </button>
@@ -143,28 +146,28 @@ export default function Home() {
 
         {/* Loading Progress */}
         {isLoading && !error && (
-          <div className="mb-4 p-4 bg-[#5C2D91]/5 border border-[#5C2D91]/20 rounded-xl">
-            <div className="flex items-center justify-between mb-2">
-              <p className="text-[#5C2D91] text-sm flex items-center gap-2">
+          <div className="mb-4 p-4 bg-[#5C2D91]/10 border border-[#5C2D91]/30 rounded-xl">
+            <div className="flex items-center justify-between mb-3">
+              <p className="text-[#7B4FB0] text-sm font-medium flex items-center gap-2">
                 <span className="w-2 h-2 bg-[#5C2D91] rounded-full animate-pulse" />
                 Generazione in corso...
               </p>
               <button
                 onClick={cancelGeneration}
                 disabled={isCancelling}
-                className="flex items-center gap-1 px-3 py-1 bg-[#F5EFE7] hover:bg-[#E8E0D8] text-[#6B5E52] text-xs rounded-lg transition-colors disabled:opacity-50"
+                className="flex items-center gap-1.5 px-3 py-1.5 bg-[#262626] hover:bg-[#333333] text-[#A3A3A3] text-xs font-medium rounded-lg transition-colors disabled:opacity-50"
               >
                 <X className="w-3 h-3" />
                 Annulla
               </button>
             </div>
-            <div className="w-full bg-[#E8E0D8] rounded-full h-1.5 overflow-hidden">
-              <div className="bg-gradient-to-r from-[#5C2D91] via-[#722F37] to-[#D4AF37] h-full rounded-full animate-pulse w-2/3" />
+            <div className="w-full bg-[#262626] rounded-full h-2 overflow-hidden">
+              <div className="bg-gradient-to-r from-[#5C2D91] via-[#7B4FB0] to-[#D4AF37] h-full rounded-full animate-pulse w-2/3" />
             </div>
           </div>
         )}
 
-        <div className={`grid gap-4 h-full ${showImageEditor ? 'grid-cols-1 lg:grid-cols-4' : 'grid-cols-1 lg:grid-cols-3'}`}>
+        <div className={`grid gap-5 h-full ${showImageEditor ? 'grid-cols-1 lg:grid-cols-4' : 'grid-cols-1 lg:grid-cols-3'}`}>
           {/* Column 1: Input */}
           <div className="h-full min-h-0">
             <InputSection
@@ -223,15 +226,20 @@ export default function Home() {
       </div>
 
       {/* Footer */}
-      <footer className="flex-shrink-0 border-t border-[#E8E0D8] bg-white/80 backdrop-blur-sm">
-        <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-2">
+      <footer className="flex-shrink-0 border-t border-[#262626] bg-[#141414]">
+        <div className="max-w-[1800px] mx-auto px-4 sm:px-6 lg:px-8 py-3">
           <div className="flex items-center justify-between">
-            <p className="text-xs text-[#9B8E82]">
+            <p className="text-xs text-[#525252]">
               by Anselmo Acquah — powered by Abacus API
             </p>
-            <span className="text-[#9B8E82] text-xs">
-              IWP o IWA
-            </span>
+            <div className="flex items-center gap-4">
+              <span className="text-[#525252] text-xs">IWP o IWA</span>
+              <div className="flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-[#C8102E]"></span>
+                <span className="w-2 h-2 rounded-full bg-[#5C2D91]"></span>
+                <span className="w-2 h-2 rounded-full bg-[#D4AF37]"></span>
+              </div>
+            </div>
           </div>
         </div>
       </footer>
