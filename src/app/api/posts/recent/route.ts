@@ -20,14 +20,18 @@ export async function GET(request: Request) {
   const limit = parseInt(searchParams.get('limit') || '10');
 
   try {
+    // Get all posts (not filtered by user_id for anonymous mode)
     const { data: posts, error } = await supabase
       .from('posts')
       .select(`id, title, body_copy, status, platform, template_used, created_at, image_url, word_count`)
-      .eq('user_id', userId)
       .order('created_at', { ascending: false })
       .limit(limit);
 
-    if (error) throw error;
+    if (error) {
+      console.error('Database error:', error);
+      // Return empty array instead of error for better UX
+      return NextResponse.json({ posts: [] });
+    }
 
     const formatted = posts?.map((post: any) => ({
       id: post.id,
@@ -44,6 +48,7 @@ export async function GET(request: Request) {
     return NextResponse.json({ posts: formatted });
   } catch (error) {
     console.error('Recent posts error:', error);
-    return NextResponse.json({ error: 'Failed to fetch posts' }, { status: 500 });
+    // Return empty array instead of error
+    return NextResponse.json({ posts: [] });
   }
 }
