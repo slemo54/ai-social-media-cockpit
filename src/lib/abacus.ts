@@ -355,13 +355,12 @@ export async function generateTextContent(
         model: 'claude-opus-4-6',
         messages: [
           { role: 'system', content: systemPrompt },
-          { role: 'user', content: `Crea un post Instagram per ${projectName} su questo argomento: ${topic}\n\nIMPORTANTE: Rispondi SOLO in formato JSON valido, senza testo aggiuntivo prima o dopo.` }
+          { role: 'user', content: `Crea un post Instagram per ${projectName} su questo argomento: ${topic}\n\nIMPORTANTE: Rispondi SOLO con un oggetto JSON valido. Niente testo prima o dopo, niente markdown, niente code blocks. Solo il JSON puro.` }
         ],
         temperature: 0.7,
         max_tokens: 1200,
-        response_format: { type: 'json_object' },
       }),
-      timeout: 30000,
+      timeout: 60000,
     });
     return checkResponse(res);
   }, {
@@ -378,12 +377,29 @@ export async function generateTextContent(
   
   if (data.choices?.[0]?.message?.content) {
     const messageContent = data.choices[0].message.content;
-    
+
     if (typeof messageContent === 'string') {
+      // Try to extract JSON from the response — Claude often wraps in markdown
+      let jsonStr = messageContent.trim();
+
+      // Strip markdown code blocks: ```json ... ``` or ``` ... ```
+      const codeBlockMatch = jsonStr.match(/```(?:json)?\s*\n?([\s\S]*?)\n?\s*```/);
+      if (codeBlockMatch) {
+        jsonStr = codeBlockMatch[1].trim();
+      }
+
+      // Strip any leading/trailing non-JSON text — find first { and last }
+      const firstBrace = jsonStr.indexOf('{');
+      const lastBrace = jsonStr.lastIndexOf('}');
+      if (firstBrace !== -1 && lastBrace !== -1 && lastBrace > firstBrace) {
+        jsonStr = jsonStr.substring(firstBrace, lastBrace + 1);
+      }
+
       try {
-        content = JSON.parse(messageContent);
+        content = JSON.parse(jsonStr);
       } catch (e) {
-        console.error('[Abacus] JSON parse error:', messageContent);
+        console.error('[Abacus] JSON parse error. Raw:', messageContent.substring(0, 500));
+        console.error('[Abacus] Extracted:', jsonStr.substring(0, 500));
         throw new Error('Invalid JSON format in AI response');
       }
     } else {
