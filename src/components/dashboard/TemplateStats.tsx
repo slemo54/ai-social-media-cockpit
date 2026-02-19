@@ -73,8 +73,7 @@ export function TemplateStats({ templates, loading }: TemplateStatsProps) {
 
             return (
               <div key={template.name} className="space-y-2">
-                <div className="flex items-center justify-between text-sm"
-003e
+                <div className="flex items-center justify-between text-sm">
                   <span className="flex items-center gap-2">
                     <span className="text-lg">{icon}</span>
                     <span className="text-[#FAFAFA] font-medium">
