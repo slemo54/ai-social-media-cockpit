@@ -1,16 +1,23 @@
 @import "tailwindcss";
 
 :root {
-  /* IWA Brand Colors */
-  --iwa-purple: #5C2D91;
-  --iwa-purple-light: #7B4FB0;
-  --iwa-purple-dark: #4A1F7A;
-  --iwa-red: #C8102E;
-  --iwa-red-light: #E53935;
-  --iwa-red-dark: #A00C24;
-  --iwa-gold: #D4AF37;
-  --iwa-gold-light: #E8C547;
-  --iwa-gold-dark: #B8962E;
+  /* IWA Brand Colors - CORRETTE (da screenshot) */
+  --iwa-header: #003366;        /* Header/Navbar - Blu Navy */
+  --iwa-level1: #FF8800;        /* WSET Level 1 - Arancione */
+  --iwa-level1-alt: #F47920;    /* WSET Level 1 - Arancione alt */
+  --iwa-level2: #004A8F;        /* WSET Level 2 - Blu Navy */
+  --iwa-level2-alt: #005B96;    /* WSET Level 2 - Blu Navy alt */
+  --iwa-level3: #007749;        /* WSET Level 3 - Verde Bosco */
+  --iwa-level3-alt: #006837;    /* WSET Level 3 - Verde Bosco alt */
+  --iwa-champagne: #C4A775;     /* Champagne - Oro/Beige */
+  --iwa-champagne-alt: #D4AF7A; /* Champagne - Oro/Beige alt */
+  --iwa-grapegeek-green: #2E5F3E; /* Grape Geek - Verde */
+  --iwa-grapegeek-red: #B71C1C;   /* Grape Geek - Rosso */
+  
+  /* Legacy colors - DEPRECATED (non usare più) */
+  /* --iwa-purple: #5C2D91; - SBAGLIATO */
+  /* --iwa-red: #C8102E; - SBAGLIATO */
+  /* --iwa-gold: #D4AF37; - SBAGLIATO */
   
   /* Neutral Colors */
   --neutral-50: #FAFAFA;
@@ -40,9 +47,11 @@
   --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -2px rgba(0, 0, 0, 0.4);
   --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -4px rgba(0, 0, 0, 0.5);
   --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.6), 0 8px 10px -6px rgba(0, 0, 0, 0.6);
-  --shadow-glow-purple: 0 0 30px rgba(92, 45, 145, 0.3);
-  --shadow-glow-red: 0 0 30px rgba(200, 16, 46, 0.3);
-  --shadow-glow-gold: 0 0 30px rgba(212, 175, 55, 0.3);
+  --shadow-glow-header: 0 0 30px rgba(0, 51, 102, 0.3);
+  --shadow-glow-level1: 0 0 30px rgba(255, 136, 0, 0.3);
+  --shadow-glow-level2: 0 0 30px rgba(0, 74, 143, 0.3);
+  --shadow-glow-level3: 0 0 30px rgba(0, 119, 73, 0.3);
+  --shadow-glow-champagne: 0 0 30px rgba(196, 167, 117, 0.3);
 }
 
 @theme inline {
@@ -86,7 +95,7 @@ body {
   inset: 0;
   border-radius: 16px;
   padding: 1px;
-  background: linear-gradient(135deg, var(--iwa-purple), var(--iwa-red), var(--iwa-gold));
+  background: linear-gradient(135deg, var(--iwa-header), var(--iwa-level2), var(--iwa-champagne));
   -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
   mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
   -webkit-mask-composite: xor;
@@ -94,9 +103,9 @@ body {
   pointer-events: none;
 }
 
-/* Primary Button - Purple Gradient */
+/* Primary Button - Header Navy */
 .btn-primary {
-  background: linear-gradient(135deg, var(--iwa-purple) 0%, var(--iwa-purple-light) 100%);
+  background: linear-gradient(135deg, var(--iwa-header) 0%, var(--iwa-level2) 100%);
   color: white;
   font-weight: 600;
   padding: 12px 24px;
@@ -104,21 +113,21 @@ body {
   border: none;
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 4px 14px rgba(92, 45, 145, 0.4);
+  box-shadow: 0 4px 14px rgba(0, 51, 102, 0.4);
 }
 
 .btn-primary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(92, 45, 145, 0.5), var(--shadow-glow-purple);
+  box-shadow: 0 8px 25px rgba(0, 51, 102, 0.5), var(--shadow-glow-header);
 }
 
 .btn-primary:active {
   transform: translateY(0);
 }
 
-/* Secondary Button - Red */
+/* Secondary Button - Level 2 Navy */
 .btn-secondary {
-  background: linear-gradient(135deg, var(--iwa-red) 0%, var(--iwa-red-light) 100%);
+  background: linear-gradient(135deg, var(--iwa-level2) 0%, var(--iwa-level2-alt) 100%);
   color: white;
   font-weight: 600;
   padding: 12px 24px;
@@ -126,17 +135,17 @@ body {
   border: none;
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 4px 14px rgba(200, 16, 46, 0.4);
+  box-shadow: 0 4px 14px rgba(0, 74, 143, 0.4);
 }
 
 .btn-secondary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(200, 16, 46, 0.5), var(--shadow-glow-red);
+  box-shadow: 0 8px 25px rgba(0, 74, 143, 0.5), var(--shadow-glow-level2);
 }
 
-/* Accent Button - Gold */
+/* Accent Button - Level 1 Orange */
 .btn-accent {
-  background: linear-gradient(135deg, var(--iwa-gold) 0%, var(--iwa-gold-light) 100%);
+  background: linear-gradient(135deg, var(--iwa-level1) 0%, var(--iwa-level1-alt) 100%);
   color: var(--neutral-900);
   font-weight: 600;
   padding: 12px 24px;
@@ -144,12 +153,48 @@ body {
   border: none;
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 4px 14px rgba(212, 175, 55, 0.4);
+  box-shadow: 0 4px 14px rgba(255, 136, 0, 0.4);
 }
 
 .btn-accent:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(212, 175, 55, 0.5), var(--shadow-glow-gold);
+  box-shadow: 0 8px 25px rgba(255, 136, 0, 0.5), var(--shadow-glow-level1);
+}
+
+/* Level 3 Button - Green */
+.btn-level3 {
+  background: linear-gradient(135deg, var(--iwa-level3) 0%, var(--iwa-level3-alt) 100%);
+  color: white;
+  font-weight: 600;
+  padding: 12px 24px;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 14px rgba(0, 119, 73, 0.4);
+}
+
+.btn-level3:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 119, 73, 0.5), var(--shadow-glow-level3);
+}
+
+/* Champagne Button */
+.btn-champagne {
+  background: linear-gradient(135deg, var(--iwa-champagne) 0%, var(--iwa-champagne-alt) 100%);
+  color: var(--neutral-900);
+  font-weight: 600;
+  padding: 12px 24px;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 14px rgba(196, 167, 117, 0.4);
+}
+
+.btn-champagne:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(196, 167, 117, 0.5), var(--shadow-glow-champagne);
 }
 
 /* Ghost Button */
@@ -184,17 +229,17 @@ body {
 }
 
 .toggle-btn.active {
-  background: rgba(92, 45, 145, 0.15);
-  border-color: var(--iwa-purple);
-  color: var(--iwa-purple-light);
-  box-shadow: 0 0 20px rgba(92, 45, 145, 0.2);
+  background: rgba(0, 51, 102, 0.15);
+  border-color: var(--iwa-header);
+  color: var(--iwa-level2-alt);
+  box-shadow: 0 0 20px rgba(0, 51, 102, 0.2);
 }
 
 .toggle-btn.active-iwp {
-  background: rgba(200, 16, 46, 0.15);
-  border-color: var(--iwa-red);
-  color: var(--iwa-red-light);
-  box-shadow: 0 0 20px rgba(200, 16, 46, 0.2);
+  background: rgba(205, 33, 42, 0.15);
+  border-color: #CD212A;
+  color: #E53935;
+  box-shadow: 0 0 20px rgba(205, 33, 42, 0.2);
 }
 
 /* Input Styling */
@@ -210,8 +255,8 @@ body {
 
 .dashboard-input:focus {
   outline: none;
-  border-color: var(--iwa-purple);
-  box-shadow: 0 0 0 3px rgba(92, 45, 145, 0.15);
+  border-color: var(--iwa-header);
+  box-shadow: 0 0 0 3px rgba(0, 51, 102, 0.15);
 }
 
 .dashboard-input::placeholder {
@@ -236,15 +281,15 @@ body {
 }
 
 .chip.active {
-  background: rgba(92, 45, 145, 0.2);
-  border-color: var(--iwa-purple);
-  color: var(--iwa-purple-light);
+  background: rgba(0, 51, 102, 0.2);
+  border-color: var(--iwa-header);
+  color: var(--iwa-level2-alt);
 }
 
 .chip.active-iwp {
-  background: rgba(200, 16, 46, 0.2);
-  border-color: var(--iwa-red);
-  color: var(--iwa-red-light);
+  background: rgba(205, 33, 42, 0.2);
+  border-color: #CD212A;
+  color: #E53935;
 }
 
 /* Preview Phone Frame */
@@ -259,10 +304,10 @@ body {
 /* Loading Animation */
 @keyframes pulse-glow {
   0%, 100% {
-    box-shadow: 0 0 20px rgba(92, 45, 145, 0.3);
+    box-shadow: 0 0 20px rgba(0, 51, 102, 0.3);
   }
   50% {
-    box-shadow: 0 0 40px rgba(92, 45, 145, 0.5);
+    box-shadow: 0 0 40px rgba(0, 51, 102, 0.5);
   }
 }
 
@@ -350,14 +395,14 @@ body {
 
 /* Gradient Text */
 .gradient-text {
-  background: linear-gradient(135deg, var(--iwa-purple), var(--iwa-gold));
+  background: linear-gradient(135deg, var(--iwa-header), var(--iwa-champagne));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
-.gradient-text-red {
-  background: linear-gradient(135deg, var(--iwa-red), var(--iwa-gold));
+.gradient-text-level1 {
+  background: linear-gradient(135deg, var(--iwa-level1), var(--iwa-champagne));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -374,9 +419,9 @@ body {
 }
 
 .badge-draft {
-  background: rgba(212, 175, 55, 0.15);
-  color: var(--iwa-gold);
-  border: 1px solid rgba(212, 175, 55, 0.3);
+  background: rgba(196, 167, 117, 0.15);
+  color: var(--iwa-champagne);
+  border: 1px solid rgba(196, 167, 117, 0.3);
 }
 
 .badge-published {
@@ -386,19 +431,29 @@ body {
 }
 
 /* Stat Card Variants */
-.stat-card-purple {
-  background: linear-gradient(135deg, rgba(92, 45, 145, 0.1), rgba(92, 45, 145, 0.05));
-  border: 1px solid rgba(92, 45, 145, 0.2);
+.stat-card-header {
+  background: linear-gradient(135deg, rgba(0, 51, 102, 0.1), rgba(0, 51, 102, 0.05));
+  border: 1px solid rgba(0, 51, 102, 0.2);
 }
 
-.stat-card-red {
-  background: linear-gradient(135deg, rgba(200, 16, 46, 0.1), rgba(200, 16, 46, 0.05));
-  border: 1px solid rgba(200, 16, 46, 0.2);
+.stat-card-level1 {
+  background: linear-gradient(135deg, rgba(255, 136, 0, 0.1), rgba(255, 136, 0, 0.05));
+  border: 1px solid rgba(255, 136, 0, 0.2);
 }
 
-.stat-card-gold {
-  background: linear-gradient(135deg, rgba(212, 175, 55, 0.1), rgba(212, 175, 55, 0.05));
-  border: 1px solid rgba(212, 175, 55, 0.2);
+.stat-card-level2 {
+  background: linear-gradient(135deg, rgba(0, 74, 143, 0.1), rgba(0, 74, 143, 0.05));
+  border: 1px solid rgba(0, 74, 143, 0.2);
+}
+
+.stat-card-level3 {
+  background: linear-gradient(135deg, rgba(0, 119, 73, 0.1), rgba(0, 119, 73, 0.05));
+  border: 1px solid rgba(0, 119, 73, 0.2);
+}
+
+.stat-card-champagne {
+  background: linear-gradient(135deg, rgba(196, 167, 117, 0.1), rgba(196, 167, 117, 0.05));
+  border: 1px solid rgba(196, 167, 117, 0.2);
 }
 
 /* Progress Bar */
@@ -411,7 +466,7 @@ body {
 
 .progress-bar-fill {
   height: 100%;
-  background: linear-gradient(90deg, var(--iwa-purple), var(--iwa-gold));
+  background: linear-gradient(90deg, var(--iwa-header), var(--iwa-champagne));
   border-radius: 4px;
   transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -431,15 +486,15 @@ body {
 
 /* Navigation Active State */
 .nav-active {
-  background: rgba(92, 45, 145, 0.15);
-  color: var(--iwa-purple-light);
-  border: 1px solid rgba(92, 45, 145, 0.3);
+  background: rgba(0, 51, 102, 0.15);
+  color: var(--iwa-level2-alt);
+  border: 1px solid rgba(0, 51, 102, 0.3);
 }
 
 .nav-active-iwp {
-  background: rgba(200, 16, 46, 0.15);
-  color: var(--iwa-red-light);
-  border: 1px solid rgba(200, 16, 46, 0.3);
+  background: rgba(205, 33, 42, 0.15);
+  color: #E53935;
+  border: 1px solid rgba(205, 33, 42, 0.3);
 }
 
 /* Template Quick Action Cards */
@@ -452,17 +507,17 @@ body {
 
 .template-card:hover {
   transform: translateY(-4px);
-  border-color: var(--iwa-purple);
-  box-shadow: 0 8px 30px rgba(92, 45, 145, 0.2);
+  border-color: var(--iwa-header);
+  box-shadow: 0 8px 30px rgba(0, 51, 102, 0.2);
 }
 
 /* Chart Bar Gradient */
 .chart-bar {
-  background: linear-gradient(180deg, var(--iwa-purple-light), var(--iwa-purple));
+  background: linear-gradient(180deg, var(--iwa-level2-alt), var(--iwa-header));
   border-radius: 4px 4px 0 0;
   transition: all 0.3s ease;
 }
 
 .chart-bar:hover {
-  background: linear-gradient(180deg, var(--iwa-gold), var(--iwa-gold-dark));
+  background: linear-gradient(180deg, var(--iwa-champagne), var(--iwa-champagne-alt));
 }

@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { CONTENT_TEMPLATES } from '@/lib/abacus';
-import { Car, Brain, Users, Microscope, Camera, Sparkles, Mic2, GraduationCap, BookOpen, Grape, MapPin, UtensilsCrossed, Lightbulb, Briefcase, Leaf, Award, Flame, MessageCircle, Eye, Zap } from 'lucide-react';
+import { Car, Brain, Users, Microscope, Camera, Sparkles, Mic2, GraduationCap, BookOpen, Grape, MapPin, UtensilsCrossed, Lightbulb, Briefcase, Leaf, Award, Flame, Zap } from 'lucide-react';
 
 const templateIcons: Record<string, React.ReactNode> = {
   'story-time': <BookOpen className="w-5 h-5" />,
@@ -29,7 +29,7 @@ const templateIcons: Record<string, React.ReactNode> = {
   'champagne-specialist': <Sparkles className="w-5 h-5" />,
   'corso-info': <BookOpen className="w-5 h-5" />,
   'behind-the-classroom': <Camera className="w-5 h-5" />,
-  'wset-explainer': <Eye className="w-5 h-5" />,
+  'wset-explainer': <BookOpen className="w-5 h-5" />,
   'wine-basics': <BookOpen className="w-5 h-5" />,
   'grape-deep-dive': <Grape className="w-5 h-5" />,
   'region-focus': <MapPin className="w-5 h-5" />,
@@ -43,18 +43,22 @@ const templateIcons: Record<string, React.ReactNode> = {
 export function QuickActions() {
   return (
     <div className="mb-8">
-      <h2 className="text-lg font-semibold text-[#2D2D2D] mb-4">Template Rapidi</h2>
+      <div className="flex items-center justify-between mb-5">
+        <h2 className="text-xl font-bold text-[#FAFAFA]">Template Rapidi</h2>
+        <p className="text-sm text-[#737373]">Clicca per iniziare con un template</p>
+      </div>
+      
       <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-3">
         {Object.entries(CONTENT_TEMPLATES).map(([key, template]) => (
           <Link
             key={key}
             href={`/?template=${key}`}
-            className="flex flex-col items-center p-4 bg-white border border-[#E8E0D8] rounded-xl hover:shadow-md hover:border-[#C8956C]/30 transition-all group"
+            className="flex flex-col items-center p-4 bg-[#141414] border border-[#262626] rounded-xl hover:border-[#003366]/50 hover:bg-[#1A1A1A] transition-all group"
           >
-            <div className="w-10 h-10 bg-[#C8956C]/10 rounded-lg flex items-center justify-center text-[#C8956C] mb-2 group-hover:scale-110 transition-transform">
+            <div className="w-11 h-11 bg-[#003366]/10 rounded-xl flex items-center justify-center text-[#004A8F] mb-3 group-hover:scale-110 group-hover:bg-[#003366]/20 transition-all">
               {templateIcons[key] || <Sparkles className="w-5 h-5" />}
             </div>
-            <span className="text-xs text-center text-[#6B5E52] group-hover:text-[#C8956C] transition-colors line-clamp-2">
+            <span className="text-xs text-center text-[#A3A3A3] group-hover:text-[#FAFAFA] transition-colors line-clamp-2">
               {template.name}
             </span>
           </Link>

@@ -46,10 +46,11 @@ const templateIcons: Record<string, string> = {
 export function TemplateStats({ templates, loading }: TemplateStatsProps) {
   if (loading) {
     return (
-      <div className="bg-white rounded-xl p-6 border border-[#E8E0D8] shadow-sm animate-pulse">
+      <div className="dashboard-card p-6 animate-pulse">
+        <div className="h-6 w-40 bg-[#1A1A1A] rounded mb-4"></div>
         <div className="space-y-3">
           {[1, 2, 3].map(i => (
-            <div key={i} className="h-12 bg-[#F5EFE7] rounded"></div>
+            <div key={i} className="h-12 bg-[#1A1A1A] rounded-xl"></div>
           ))}
         </div>
       </div>
@@ -59,31 +60,32 @@ export function TemplateStats({ templates, loading }: TemplateStatsProps) {
   const total = templates.reduce((sum, t) => sum + t.count, 0);
 
   return (
-    <div className="bg-white rounded-xl p-6 border border-[#E8E0D8] shadow-sm">
-      <h3 className="text-lg font-semibold text-[#2D2D2D] mb-4">Template Più Usati</h3>
+    <div className="dashboard-card p-6">
+      <h3 className="text-lg font-bold text-[#FAFAFA] mb-5">Template Più Usati</h3>
 
-      <div className="space-y-3">
+      <div className="space-y-4">
         {templates.length === 0 ? (
-          <p className="text-[#9B8E82] text-sm">Nessun dato disponibile</p>
+          <p className="text-[#737373] text-sm">Nessun dato disponibile</p>
         ) : (
           templates.map((template) => {
             const percentage = total > 0 ? (template.count / total) * 100 : 0;
             const icon = templateIcons[template.name] || '📝';
 
             return (
-              <div key={template.name} className="space-y-1">
-                <div className="flex items-center justify-between text-sm">
+              <div key={template.name} className="space-y-2">
+                <div className="flex items-center justify-between text-sm"
+003e
                   <span className="flex items-center gap-2">
-                    <span>{icon}</span>
-                    <span className="text-[#4A4A4A]">
+                    <span className="text-lg">{icon}</span>
+                    <span className="text-[#FAFAFA] font-medium">
                       {CONTENT_TEMPLATES[template.name]?.name || template.name}
                     </span>
                   </span>
-                  <span className="text-[#9B8E82]">{template.count} usi</span>
+                  <span className="text-[#737373] text-xs">{template.count} usi</span>
                 </div>
-                <div className="h-2 bg-[#F5EFE7] rounded-full overflow-hidden">
+                <div className="h-2 bg-[#1A1A1A] rounded-full overflow-hidden">
                   <div
-                    className="h-full bg-gradient-to-r from-[#C8956C] to-[#D4AF37] rounded-full transition-all duration-500"
+                    className="h-full bg-gradient-to-r from-[#5C2D91] to-[#D4AF37] rounded-full transition-all duration-500"
                     style={{ width: `${percentage}%` }}
                   />
                 </div>

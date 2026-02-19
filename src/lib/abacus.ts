@@ -495,7 +495,7 @@ export async function generateTextContent(
   if (!content.image_prompt) {
     content.image_prompt = project === 'IWP'
       ? `Professional wine podcast episode cover. Dark background with wine-purple to red gradient. Episode number, guest photo, topic text. Italian Wine Podcast branding. --ar 1:1`
-      : `Professional wine education photography. WSET Purple (#5C2D91) and Champagne Gold (#D4AF37) palette. Clean, authentic, warm lighting. --ar 4:5`;
+      : `Professional wine education photography. Header Navy (#003366), Level 1 Orange (#FF8800) / Level 2 Navy (#004A8F) / Level 3 Green (#007749) / Champagne Gold (#C4A775) palette per corso. Clean, authentic, warm lighting. --ar 4:5`;
   }
 
   // Per IWP, assicurati che ci sia "Tune in wherever you get your podcasts!" nel body
@@ -525,14 +525,19 @@ export async function generateImage(
   // IWA: minimalist graphic design (Brand Bible Part 3), IWP: warm editorial photography (Brand Bible Part 4)
   const isIWA = options?.brand === 'IWA';
   
-  // Palette colori IWA esatta
+  // Palette colori IWA CORRETTA (da screenshot)
   const IWA_COLORS = {
-    wsetPurple: '#5C2D91',
-    vinitalyRed: '#C8102E',
-    champagneGold: '#D4AF37',
-    warmWhite: '#FAF9F6',
-    deepCharcoal: '#2D2D2D',
-    wineRed: '#722F37'
+    header: '#003366',        // Header/Navbar - Blu Navy
+    level1: '#FF8800',        // WSET Level 1 - Arancione
+    level1Alt: '#F47920',     // WSET Level 1 - Arancione alt
+    level2: '#004A8F',        // WSET Level 2 - Blu Navy
+    level2Alt: '#005B96',     // WSET Level 2 - Blu Navy alt
+    level3: '#007749',        // WSET Level 3 - Verde Bosco
+    level3Alt: '#006837',     // WSET Level 3 - Verde Bosco alt
+    champagne: '#C4A775',     // Champagne - Oro/Beige
+    champagneAlt: '#D4AF7A',  // Champagne - Oro/Beige alt
+    grapeGeekGreen: '#2E5F3E', // Grape Geek - Verde
+    grapeGeekRed: '#B71C1C',   // Grape Geek - Rosso
   };
 
   // Palette colori IWP esatta
@@ -545,7 +550,7 @@ export async function generateImage(
   };
 
   let enhancedPrompt = isIWA
-    ? `Modern minimalist graphic design for Instagram 1080x1080px. ${imagePrompt}. EXACT colors: WSET Purple ${IWA_COLORS.wsetPurple}, Champagne Gold ${IWA_COLORS.champagneGold}, Warm White ${IWA_COLORS.warmWhite} background, Deep Charcoal ${IWA_COLORS.deepCharcoal} text. Clean flat design, sans-serif bold uppercase typography (Montserrat or Helvetica Neue), geometric shapes. Premium wine education aesthetic. NOT a photo - clean vector/graphic style. Professional, sophisticated, minimal. --ar 1:1`
+    ? `Modern minimalist graphic design for Instagram 1080x1080px. ${imagePrompt}. EXACT colors: Header Navy ${IWA_COLORS.header}, Level 1 Orange ${IWA_COLORS.level1}, Level 2 Navy ${IWA_COLORS.level2}, Level 3 Green ${IWA_COLORS.level3}, Champagne Gold ${IWA_COLORS.champagne}, Warm White #FAF9F6 background, Deep Charcoal #2D2D2D text. Clean flat design, sans-serif bold uppercase typography (Montserrat or Helvetica Neue), geometric shapes. Premium wine education aesthetic. NOT a photo - clean vector/graphic style. Professional, sophisticated, minimal. --ar 1:1`
     : `Warm editorial wine photography for Instagram 1080x1080px. ${imagePrompt}. EXACT colors: Italian Green ${IWP_COLORS.italianGreen}, Italian Red ${IWP_COLORS.italianRed}, Wine Purple ${IWP_COLORS.winePurple}. Golden hour lighting 5500-6000K, authentic Italian settings (vineyard, cantina, rustic table). Human element when appropriate (hands holding glass, winemaker at work). Rich warm color palette. NOT stock photography. Photorealistic, 8k quality, professional editorial style. --ar 1:1`;
 
   // Enrich with visual intelligence

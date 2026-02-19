@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { Clock, CheckCircle, Image as ImageIcon, FileText } from 'lucide-react';
+import { Clock, CheckCircle, Image as ImageIcon, FileText, ArrowUpRight } from 'lucide-react';
 
 interface Post {
   id: string;
@@ -21,10 +21,10 @@ interface RecentPostsListProps {
 }
 
 const platformColors: Record<string, string> = {
-  instagram: 'bg-pink-50 text-pink-600',
-  linkedin: 'bg-blue-50 text-blue-600',
-  tiktok: 'bg-gray-100 text-gray-700',
-  twitter: 'bg-sky-50 text-sky-600',
+  instagram: 'bg-[#5C2D91]/10 text-[#7B4FB0] border-[#5C2D91]/30',
+  linkedin: 'bg-[#0A66C2]/10 text-[#0A66C2] border-[#0A66C2]/30',
+  tiktok: 'bg-[#262626] text-[#FAFAFA] border-[#333333]',
+  twitter: 'bg-[#1DA1F2]/10 text-[#1DA1F2] border-[#1DA1F2]/30',
 };
 
 const platformLabels: Record<string, string> = {
@@ -39,12 +39,12 @@ export function RecentPostsList({ posts, loading }: RecentPostsListProps) {
     return (
       <div className="space-y-3">
         {[1, 2, 3, 4, 5].map(i => (
-          <div key={i} className="bg-white p-4 rounded-xl border border-[#E8E0D8] animate-pulse">
+          <div key={i} className="dashboard-card p-4 animate-pulse">
             <div className="flex gap-4">
-              <div className="w-16 h-16 bg-[#F5EFE7] rounded-lg"></div>
+              <div className="w-16 h-16 bg-[#1A1A1A] rounded-xl"></div>
               <div className="flex-1 space-y-2">
-                <div className="w-3/4 h-5 bg-[#F5EFE7] rounded"></div>
-                <div className="w-full h-4 bg-[#F5EFE7] rounded"></div>
+                <div className="w-3/4 h-5 bg-[#1A1A1A] rounded"></div>
+                <div className="w-full h-4 bg-[#1A1A1A] rounded"></div>
               </div>
             </div>
           </div>
@@ -55,15 +55,15 @@ export function RecentPostsList({ posts, loading }: RecentPostsListProps) {
 
   if (posts.length === 0) {
     return (
-      <div className="text-center py-12 bg-white rounded-xl border border-[#E8E0D8]">
-        <div className="w-16 h-16 bg-[#F5EFE7] rounded-full flex items-center justify-center mx-auto mb-4">
-          <FileText className="w-8 h-8 text-[#C4B8AD]" />
+      <div className="text-center py-12 dashboard-card">
+        <div className="w-16 h-16 bg-[#1A1A1A] rounded-2xl flex items-center justify-center mx-auto mb-4 border border-[#262626]">
+          <FileText className="w-8 h-8 text-[#525252]" />
         </div>
-        <h3 className="text-lg font-medium text-[#2D2D2D] mb-2">Nessun contenuto ancora</h3>
-        <p className="text-[#9B8E82] mb-4">Inizia generando il tuo primo post!</p>
+        <h3 className="text-lg font-bold text-[#FAFAFA] mb-2">Nessun contenuto ancora</h3>
+        <p className="text-[#737373] mb-5">Inizia generando il tuo primo post!</p>
         <Link
           href="/"
-          className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-[#C8956C] to-[#D4AF37] text-white rounded-lg hover:opacity-90 transition-colors"
+          className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-[#5C2D91] to-[#7B4FB0] text-white font-semibold rounded-xl hover:shadow-lg hover:shadow-[#5C2D91]/30 transition-all"
         >
           Genera il primo post
         </Link>
@@ -77,39 +77,39 @@ export function RecentPostsList({ posts, loading }: RecentPostsListProps) {
         <Link
           key={post.id}
           href={`/?edit=${post.id}`}
-          className="block bg-white p-4 rounded-xl border border-[#E8E0D8] hover:shadow-md transition-all group"
+          className="block dashboard-card p-4 hover:border-[#5C2D91]/50 transition-all group"
         >
           <div className="flex gap-4">
-            <div className="w-16 h-16 bg-[#C8956C]/10 rounded-lg flex items-center justify-center flex-shrink-0">
+            <div className="w-16 h-16 bg-[#5C2D91]/10 rounded-xl flex items-center justify-center flex-shrink-0 border border-[#5C2D91]/20">
               {post.hasImage ? (
-                <ImageIcon className="w-6 h-6 text-[#C8956C]" />
+                <ImageIcon className="w-6 h-6 text-[#7B4FB0]" />
               ) : (
-                <FileText className="w-6 h-6 text-[#C8956C]" />
+                <FileText className="w-6 h-6 text-[#7B4FB0]" />
               )}
             </div>
 
             <div className="flex-1 min-w-0">
               <div className="flex items-start justify-between gap-2 mb-1">
-                <h4 className="font-medium text-[#2D2D2D] truncate group-hover:text-[#C8956C] transition-colors">
+                <h4 className="font-semibold text-[#FAFAFA] truncate group-hover:text-[#7B4FB0] transition-colors">
                   {post.title}
                 </h4>
-                <span className={`text-xs px-2 py-1 rounded-full flex-shrink-0 ${platformColors[post.platform] || 'bg-[#F5EFE7] text-[#6B5E52]'}`}>
+                <span className={`text-xs px-2.5 py-1 rounded-full flex-shrink-0 border ${platformColors[post.platform] || 'bg-[#1A1A1A] text-[#737373] border-[#262626]'}`}>
                   {platformLabels[post.platform] || post.platform}
                 </span>
               </div>
 
-              <p className="text-sm text-[#9B8E82] line-clamp-2 mb-2">{post.preview}</p>
+              <p className="text-sm text-[#737373] line-clamp-2 mb-2">{post.preview}</p>
 
-              <div className="flex items-center gap-4 text-xs text-[#C4B8AD]">
-                <span className="flex items-center gap-1">
+              <div className="flex items-center gap-4 text-xs text-[#525252]">
+                <span className="flex items-center gap-1.5">
                   {post.status === 'published' ? (
                     <>
-                      <CheckCircle className="w-3 h-3 text-green-600" />
-                      <span className="text-green-600">Pubblicato</span>
+                      <CheckCircle className="w-3.5 h-3.5 text-green-400" />
+                      <span className="text-green-400 font-medium">Pubblicato</span>
                     </>
                   ) : (
                     <>
-                      <Clock className="w-3 h-3" />
+                      <Clock className="w-3.5 h-3.5" />
                       <span>Bozza</span>
                     </>
                   )}
@@ -117,9 +117,13 @@ export function RecentPostsList({ posts, loading }: RecentPostsListProps) {
                 <span>{post.date}</span>
                 <span>{post.wordCount} parole</span>
                 {post.template && (
-                  <span className="text-[#C8956C]">{post.template}</span>
+                  <span className="text-[#7B4FB0]">{post.template}</span>
                 )}
               </div>
+            </div>
+            
+            <div className="flex-shrink-0 self-center opacity-0 group-hover:opacity-100 transition-opacity">
+              <ArrowUpRight className="w-5 h-5 text-[#7B4FB0]" />
             </div>
           </div>
         </Link>
