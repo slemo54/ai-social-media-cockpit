@@ -1,25 +1,31 @@
 @import "tailwindcss";
 
 :root {
-  --background: #FAF6F0;
+  --background: #FAF9F6;
   --foreground: #2D2D2D;
-  --primary: #C8956C;
-  --primary-hover: #B5845D;
-  --secondary: #8B6F5E;
+  --primary: #5C2D91;
+  --primary-hover: #4A2475;
+  --secondary: #722F37;
   --accent: #D4AF37;
   --card-bg: #FFFFFF;
   --card-border: #E8E0D8;
   --card-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
   --input-bg: #FFFFFF;
   --input-border: #DDD5CC;
-  --input-focus: #C8956C;
+  --input-focus: #5C2D91;
   --muted: #9B8E82;
   --muted-light: #C4B8AD;
   --surface: #F5EFE7;
-  --iwp-primary: #7B2D4E;
+  --iwp-primary: #CD212A;
   --iwp-light: #F5E6ED;
   --iwa-primary: #5C2D91;
   --iwa-light: #EDE6F5;
+  --wset-purple: #5C2D91;
+  --vinitaly-red: #C8102E;
+  --champagne-gold: #D4AF37;
+  --warm-white: #FAF9F6;
+  --deep-charcoal: #2D2D2D;
+  --wine-red: #722F37;
 }
 
 @theme inline {
@@ -45,14 +51,14 @@ body {
 
 /* Gradient Button */
 .btn-gradient {
-  background: linear-gradient(135deg, #C8956C 0%, #D4AF37 100%);
+  background: linear-gradient(135deg, #5C2D91 0%, #722F37 100%);
   transition: all 0.3s ease;
-  box-shadow: 0 4px 16px rgba(200, 149, 108, 0.3);
+  box-shadow: 0 4px 16px rgba(92, 45, 145, 0.3);
 }
 
 .btn-gradient:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(200, 149, 108, 0.4);
+  box-shadow: 0 8px 24px rgba(92, 45, 145, 0.4);
 }
 
 .btn-gradient:active {
@@ -67,9 +73,9 @@ body {
 }
 
 .toggle-btn.active {
-  background: rgba(200, 149, 108, 0.15);
+  background: rgba(92, 45, 145, 0.15);
   border-color: var(--primary);
-  box-shadow: 0 0 12px rgba(200, 149, 108, 0.15);
+  box-shadow: 0 0 12px rgba(92, 45, 145, 0.15);
 }
 
 /* Input Styling */
@@ -84,7 +90,7 @@ body {
 .glass-input:focus {
   outline: none;
   border-color: var(--input-focus);
-  box-shadow: 0 0 0 3px rgba(200, 149, 108, 0.15);
+  box-shadow: 0 0 0 3px rgba(92, 45, 145, 0.15);
   background: var(--input-bg);
 }
 
@@ -105,7 +111,7 @@ body {
 }
 
 .chip:hover {
-  background: rgba(200, 149, 108, 0.15);
+  background: rgba(92, 45, 145, 0.15);
   border-color: var(--primary);
 }
 
@@ -121,10 +127,10 @@ body {
 /* Loading Animation */
 @keyframes pulse-glow {
   0%, 100% {
-    box-shadow: 0 0 16px rgba(200, 149, 108, 0.3);
+    box-shadow: 0 0 16px rgba(92, 45, 145, 0.3);
   }
   50% {
-    box-shadow: 0 0 28px rgba(200, 149, 108, 0.5);
+    box-shadow: 0 0 28px rgba(92, 45, 145, 0.5);
   }
 }
 

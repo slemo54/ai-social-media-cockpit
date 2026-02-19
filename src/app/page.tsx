@@ -67,7 +67,7 @@ export default function Home() {
   if (!mounted) return null;
 
   return (
-    <main className="h-screen flex flex-col overflow-hidden bg-[#FAF6F0]">
+    <main className="h-screen flex flex-col overflow-hidden bg-[#FAF9F6]">
       <Toaster
         position="top-center"
         richColors
@@ -86,7 +86,7 @@ export default function Home() {
         <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#C8956C] to-[#D4AF37] flex items-center justify-center shadow-md">
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#5C2D91] to-[#722F37] flex items-center justify-center shadow-md">
                 <Wine className="w-5 h-5 text-white" />
               </div>
               <div>
@@ -103,7 +103,7 @@ export default function Home() {
                 onClick={() => setShowImageEditor(!showImageEditor)}
                 className={`hidden sm:flex items-center gap-2 px-3 py-1.5 border rounded-lg text-sm transition-colors ${
                   showImageEditor
-                    ? 'bg-[#C8956C]/10 border-[#C8956C]/50 text-[#C8956C]'
+                    ? 'bg-[#5C2D91]/10 border-[#5C2D91]/50 text-[#5C2D91]'
                     : 'bg-white hover:bg-[#F5EFE7] border-[#E8E0D8] text-[#6B5E52]'
                 }`}
               >
@@ -117,7 +117,7 @@ export default function Home() {
                 <LayoutDashboard className="w-4 h-4" />
                 Dashboard
               </Link>
-              <span className="px-2.5 py-1 bg-[#C8956C]/10 text-[#C8956C] text-xs font-medium rounded-full border border-[#C8956C]/20">
+              <span className="px-2.5 py-1 bg-[#5C2D91]/10 text-[#5C2D91] text-xs font-medium rounded-full border border-[#5C2D91]/20">
                 Human-in-the-Loop
               </span>
             </div>
@@ -143,10 +143,10 @@ export default function Home() {
 
         {/* Loading Progress */}
         {isLoading && !error && (
-          <div className="mb-4 p-4 bg-[#C8956C]/5 border border-[#C8956C]/20 rounded-xl">
+          <div className="mb-4 p-4 bg-[#5C2D91]/5 border border-[#5C2D91]/20 rounded-xl">
             <div className="flex items-center justify-between mb-2">
-              <p className="text-[#C8956C] text-sm flex items-center gap-2">
-                <span className="w-2 h-2 bg-[#C8956C] rounded-full animate-pulse" />
+              <p className="text-[#5C2D91] text-sm flex items-center gap-2">
+                <span className="w-2 h-2 bg-[#5C2D91] rounded-full animate-pulse" />
                 Generazione in corso...
               </p>
               <button
@@ -159,7 +159,7 @@ export default function Home() {
               </button>
             </div>
             <div className="w-full bg-[#E8E0D8] rounded-full h-1.5 overflow-hidden">
-              <div className="bg-gradient-to-r from-[#C8956C] to-[#D4AF37] h-full rounded-full animate-pulse w-2/3" />
+              <div className="bg-gradient-to-r from-[#5C2D91] via-[#722F37] to-[#D4AF37] h-full rounded-full animate-pulse w-2/3" />
             </div>
           </div>
         )}
