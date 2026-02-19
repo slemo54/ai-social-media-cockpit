@@ -9,7 +9,7 @@ interface StatCardProps {
   changeLabel?: string;
   icon: LucideIcon;
   loading?: boolean;
-  variant?: 'purple' | 'red' | 'gold' | 'green' | 'default';
+  variant?: 'header' | 'level1' | 'level2' | 'level3' | 'champagne' | 'green' | 'default';
 }
 
 export function StatCard({ label, value, change, changeLabel = 'vs scorso mese', icon: Icon, loading, variant = 'default' }: StatCardProps) {
@@ -42,12 +42,16 @@ export function StatCard({ label, value, change, changeLabel = 'vs scorso mese',
 
   const getVariantStyles = () => {
     switch (variant) {
-      case 'purple':
-        return 'bg-[#5C2D91]/10 text-[#7B4FB0]';
-      case 'red':
-        return 'bg-[#C8102E]/10 text-[#E53935]';
-      case 'gold':
-        return 'bg-[#D4AF37]/10 text-[#E8C547]';
+      case 'header':
+        return 'bg-[#003366]/10 text-[#004A8F]';
+      case 'level1':
+        return 'bg-[#FF8800]/10 text-[#F47920]';
+      case 'level2':
+        return 'bg-[#004A8F]/10 text-[#005B96]';
+      case 'level3':
+        return 'bg-[#007749]/10 text-[#006837]';
+      case 'champagne':
+        return 'bg-[#C4A775]/10 text-[#D4AF7A]';
       case 'green':
         return 'bg-green-500/10 text-green-400';
       default:

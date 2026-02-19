@@ -30,7 +30,7 @@ function getProfileInfo(post: Post | null) {
   return {
     username: isIWA ? 'itawineacademy' : 'italianwinepodcast',
     displayName: isIWA ? 'Italian Wine Academy' : 'Italian Wine Podcast',
-    avatarBg: isIWA ? 'bg-gradient-to-br from-[#5C2D91] to-[#7B4FB0]' : 'bg-gradient-to-br from-[#C8102E] to-[#E53935]',
+    avatarBg: isIWA ? 'bg-gradient-to-br from-[#003366] to-[#004A8F]' : 'bg-gradient-to-br from-[#CD212A] to-[#E53935]',
     avatarLetter: isIWA ? 'A' : 'P',
   };
 }
@@ -47,7 +47,7 @@ function InstagramFeedPreview({ post, isLoading, onSelectImage }: { post: Post |
       {/* Header */}
       <div className="flex items-center justify-between px-4 py-3">
         <div className="flex items-center gap-3">
-          <div className={`w-9 h-9 rounded-full ${profile.avatarBg} flex items-center justify-center text-white text-xs font-bold ring-2 ring-[#5C2D91] ring-offset-2 ring-offset-[#1A1A1A]`}>
+          <div className={`w-9 h-9 rounded-full ${profile.avatarBg} flex items-center justify-center text-white text-xs font-bold ring-2 ring-[#003366] ring-offset-2 ring-offset-[#1A1A1A]`}>
             {profile.avatarLetter}
           </div>
           <div>
@@ -63,7 +63,7 @@ function InstagramFeedPreview({ post, isLoading, onSelectImage }: { post: Post |
         {isLoading ? (
           <div className="absolute inset-0 flex items-center justify-center">
             <div className="text-center">
-              <div className="w-10 h-10 border-3 border-[#5C2D91] border-t-transparent rounded-full animate-spin mx-auto mb-3" />
+              <div className="w-10 h-10 border-3 border-[#003366] border-t-transparent rounded-full animate-spin mx-auto mb-3" />
               <p className="text-[#525252] text-xs">Generazione...</p>
             </div>
           </div>
@@ -83,9 +83,9 @@ function InstagramFeedPreview({ post, isLoading, onSelectImage }: { post: Post |
       <div className="px-4 pt-3 pb-1">
         <div className="flex items-center justify-between mb-3">
           <div className="flex items-center gap-4">
-            <Heart className="w-6 h-6 text-[#FAFAFA] cursor-pointer hover:text-[#C8102E] transition-colors" />
-            <MessageCircle className="w-6 h-6 text-[#FAFAFA] cursor-pointer hover:text-[#5C2D91] transition-colors" />
-            <Send className="w-6 h-6 text-[#FAFAFA] cursor-pointer hover:text-[#D4AF37] transition-colors" />
+            <Heart className="w-6 h-6 text-[#FAFAFA] cursor-pointer hover:text-[#CD212A] transition-colors" />
+            <MessageCircle className="w-6 h-6 text-[#FAFAFA] cursor-pointer hover:text-[#003366] transition-colors" />
+            <Send className="w-6 h-6 text-[#FAFAFA] cursor-pointer hover:text-[#C4A775] transition-colors" />
           </div>
           <Bookmark className="w-6 h-6 text-[#FAFAFA] cursor-pointer hover:text-[#D4AF37] transition-colors" />
         </div>
@@ -108,7 +108,7 @@ function InstagramFeedPreview({ post, isLoading, onSelectImage }: { post: Post |
               )}
             </p>
             {post.hashtags && post.hashtags.length > 0 && (
-              <p className="text-[13px] text-[#5C2D91] mt-1">
+              <p className="text-[13px] text-[#003366] mt-1">
                 {post.hashtags.slice(0, 5).join(' ')}
               </p>
             )}
@@ -130,13 +130,13 @@ function InstagramFeedPreview({ post, isLoading, onSelectImage }: { post: Post |
                 onClick={() => onSelectImage?.(idx)}
                 className={`relative aspect-square rounded-lg overflow-hidden border-2 transition-all ${
                   idx === selectedIndex
-                    ? 'border-[#5C2D91] shadow-lg shadow-[#5C2D91]/30 scale-[1.02]'
+                    ? 'border-[#003366] shadow-lg shadow-[#003366]/30 scale-[1.02]'
                     : 'border-transparent hover:border-[#333333]'
                 }`}
               >
                 <img src={url} alt={`Proposal ${idx + 1}`} className="w-full h-full object-cover" />
                 {idx === selectedIndex && (
-                  <div className="absolute top-1.5 right-1.5 w-5 h-5 bg-[#5C2D91] rounded-full flex items-center justify-center">
+                  <div className="absolute top-1.5 right-1.5 w-5 h-5 bg-[#003366] rounded-full flex items-center justify-center">
                     <span className="text-white text-[10px] font-bold">✓</span>
                   </div>
                 )}
@@ -236,7 +236,7 @@ function LinkedInPreview({ post, isLoading }: { post: Post | null; isLoading: bo
             )}
           </p>
           {post.hashtags && post.hashtags.length > 0 && (
-            <p className="text-[13px] text-[#5C2D91] mt-1">
+            <p className="text-[13px] text-[#003366] mt-1">
               {post.hashtags.slice(0, 3).join(' ')}
             </p>
           )}
@@ -247,7 +247,7 @@ function LinkedInPreview({ post, isLoading }: { post: Post | null; isLoading: bo
       <div className="relative aspect-[1.91/1] bg-[#0F0F0F]">
         {isLoading ? (
           <div className="absolute inset-0 flex items-center justify-center">
-            <div className="w-8 h-8 border-2 border-[#5C2D91] border-t-transparent rounded-full animate-spin" />
+            <div className="w-8 h-8 border-2 border-[#003366] border-t-transparent rounded-full animate-spin" />
           </div>
         ) : mainImage ? (
           <img src={mainImage} alt="Post" className="w-full h-full object-cover" />
@@ -283,7 +283,7 @@ export function PreviewSection({ post, previewMode, onModeChange, isLoading, onS
   return (
     <div className="dashboard-card p-6 h-full flex flex-col animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
       <div className="flex items-center gap-4 mb-5 flex-shrink-0">
-        <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#D4AF37] to-[#E8C547] flex items-center justify-center shadow-lg shadow-[#D4AF37]/20">
+        <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#C4A775] to-[#D4AF7A] flex items-center justify-center shadow-lg shadow-[#C4A775]/20">
           <ImageIcon className="w-6 h-6 text-[#0F0F0F]" />
         </div>
         <div>
@@ -303,7 +303,7 @@ export function PreviewSection({ post, previewMode, onModeChange, isLoading, onS
               onClick={() => onModeChange(mode)}
               className={`flex items-center justify-center gap-2 px-4 py-3 rounded-xl font-medium transition-all ${
                 isActive
-                  ? 'bg-[#5C2D91]/20 text-[#7B4FB0] border border-[#5C2D91]/50'
+                  ? 'bg-[#003366]/20 text-[#004A8F] border border-[#003366]/50'
                   : 'bg-[#1A1A1A] text-[#737373] border border-[#262626] hover:border-[#333333] hover:text-[#A3A3A3]'
               }`}
             >
