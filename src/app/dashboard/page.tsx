@@ -93,7 +93,7 @@ export default function Dashboard() {
             changeLabel="vs 7 giorni fa"
             icon={FileText}
             loading={statsLoading}
-            variant="purple"
+            variant="header"
           />
           <StatCard
             label="Pubblicati"
