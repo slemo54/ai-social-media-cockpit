@@ -16,20 +16,33 @@ export async function createPost(
   const sb = client ?? supabase;
   if (!sb) {
     console.warn('Supabase client not initialized');
-    return null;
+    throw new Error('Supabase client not initialized - check env vars');
   }
+
+  console.log('[Supabase] Inserting post:', JSON.stringify({
+    user_id: post.user_id,
+    topic: post.topic?.substring(0, 50),
+    project: post.project,
+    platform: post.platform,
+  }));
 
   const { data, error } = await sb
     .from('posts')
     .insert([post])
     .select()
-    .single();
+    .maybeSingle();
 
   if (error) {
-    console.error('Error creating post:', error);
-    return null;
+    console.error('[Supabase] Error creating post:', error);
+    throw new Error(`Database error: ${error.message} (code: ${error.code})`);
   }
 
+  if (!data) {
+    console.error('[Supabase] No data returned after insert');
+    throw new Error('Insert succeeded but no data returned - check RLS policies');
+  }
+
+  console.log('[Supabase] Post created:', data.id);
   return data;
 }
 

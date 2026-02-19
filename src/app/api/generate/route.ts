@@ -174,6 +174,13 @@ export async function POST(request: NextRequest): Promise<NextResponse<GenerateR
     // Step 4: Save to database
     let post;
     try {
+      console.log('[API] Saving post to database...', {
+        user_id: userId,
+        topic: topic.substring(0, 50),
+        project,
+        platform,
+      });
+      
       post = await createPost({
         user_id: userId,
         topic,
@@ -191,28 +198,38 @@ export async function POST(request: NextRequest): Promise<NextResponse<GenerateR
         prompt_length: topic.length,
         template_used: template || (imageSource === 'uploaded' ? 'user-image' : 'ai-generated'),
       }, supabase);
+      
+      console.log('[API] Post saved successfully:', post?.id);
     } catch (err) {
       console.error('[API] Database save error:', err);
-      if (logEntry) {
-        await supabase
-          .from('generation_logs')
-          .update({
-            completed_at: new Date().toISOString(),
-            duration_ms: generationTime,
-            success: false,
-            error_message: err instanceof Error ? err.message : 'Database save failed',
-          })
-          .eq('id', logEntry.id);
+      const errorMessage = err instanceof Error ? err.message : 'Unknown error';
+      
+      // Try to update log entry, but don't fail if it doesn't work
+      try {
+        if (logEntry) {
+          await supabase
+            .from('generation_logs')
+            .update({
+              completed_at: new Date().toISOString(),
+              duration_ms: generationTime,
+              success: false,
+              error_message: errorMessage,
+            })
+            .eq('id', logEntry.id);
+        }
+      } catch (logErr) {
+        console.error('[API] Failed to update log:', logErr);
       }
+      
       return NextResponse.json(
-        { success: false, error: `Database save failed: ${err instanceof Error ? err.message : 'Unknown error'}` },
+        { success: false, error: `Database save failed: ${errorMessage}` },
         { status: 500 }
       );
     }
 
     if (!post) {
       return NextResponse.json(
-        { success: false, error: 'Failed to save post to database' },
+        { success: false, error: 'Failed to save post to database - no data returned' },
         { status: 500 }
       );
     }
