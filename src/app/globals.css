@@ -103,6 +103,49 @@ body {
   pointer-events: none;
 }
 
+/* Glassmorphism Utilities */
+.glass-panel {
+  background: rgba(20, 20, 20, 0.6);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+}
+
+.glass-panel-heavy {
+  background: rgba(15, 15, 15, 0.85);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: var(--shadow-xl);
+}
+
+/* Ambient Glow Animations */
+@keyframes ambient-glow-slow {
+  0%, 100% { opacity: 0.3; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(1.1); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+.ambient-glow {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(100px);
+  z-index: 0;
+  pointer-events: none;
+  animation: ambient-glow-slow 8s ease-in-out infinite;
+}
+
+
 /* Primary Button - Header Navy */
 .btn-primary {
   background: linear-gradient(135deg, var(--iwa-header) 0%, var(--iwa-level2) 100%);
@@ -256,7 +299,8 @@ body {
 .dashboard-input:focus {
   outline: none;
   border-color: var(--iwa-header);
-  box-shadow: 0 0 0 3px rgba(0, 51, 102, 0.15);
+  box-shadow: 0 0 0 3px rgba(0, 51, 102, 0.15), inset 0 2px 4px rgba(0,0,0,0.2);
+  transform: translateY(-1px);
 }
 
 .dashboard-input::placeholder {
