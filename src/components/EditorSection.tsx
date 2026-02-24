@@ -22,7 +22,7 @@ export function EditorSection({
     return (
       <div className="dashboard-card p-6 h-full flex flex-col animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
         <div className="flex items-center gap-4 mb-5 flex-shrink-0">
-          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#5C2D91] to-[#7B4FB0] flex items-center justify-center shadow-lg shadow-[#5C2D91]/20">
+          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#003366] to-[#004A8F] flex items-center justify-center shadow-lg shadow-[#003366]/20">
             <Edit3 className="w-6 h-6 text-white" />
           </div>
           <div>
@@ -33,7 +33,7 @@ export function EditorSection({
         <div className="flex-1 flex items-center justify-center text-[#525252] min-h-0">
           <div className="text-center">
             <div className="w-20 h-20 bg-[#1A1A1A] rounded-2xl flex items-center justify-center mx-auto mb-4 border border-[#262626]">
-              <Sparkles className="w-10 h-10 text-[#5C2D91]" />
+              <Sparkles className="w-10 h-10 text-[#003366]" />
             </div>
             <p className="text-[#737373]">Genera un contenuto per iniziare ad editare</p>
           </div>
@@ -48,7 +48,7 @@ export function EditorSection({
     <div className="dashboard-card p-6 h-full flex flex-col animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
       <div className="flex items-center justify-between mb-5 flex-shrink-0">
         <div className="flex items-center gap-4">
-          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#5C2D91] to-[#7B4FB0] flex items-center justify-center shadow-lg shadow-[#5C2D91]/20">
+          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#003366] to-[#004A8F] flex items-center justify-center shadow-lg shadow-[#003366]/20">
             <Edit3 className="w-6 h-6 text-white" />
           </div>
           <div>
@@ -58,11 +58,10 @@ export function EditorSection({
         </div>
         <div className="flex items-center gap-2">
           <span
-            className={`px-3 py-1.5 rounded-full text-xs font-semibold ${
-              post.status === 'published'
+            className={`px-3 py-1.5 rounded-full text-xs font-semibold ${post.status === 'published'
                 ? 'bg-green-500/15 text-green-400 border border-green-500/30'
                 : 'bg-[#D4AF37]/15 text-[#D4AF37] border border-[#D4AF37]/30'
-            }`}
+              }`}
           >
             {post.status === 'published' ? '✓ Pubblicato' : 'Bozza'}
           </span>
@@ -73,7 +72,7 @@ export function EditorSection({
         {/* Title Field */}
         <div>
           <label className="flex items-center gap-2 text-sm font-semibold text-[#A3A3A3] mb-2">
-            <Type className="w-4 h-4 text-[#5C2D91]" />
+            <Type className="w-4 h-4 text-[#003366]" />
             Titolo (Hook)
           </label>
           <input
@@ -133,20 +132,20 @@ export function EditorSection({
           className="flex flex-col items-center justify-center gap-1.5 p-3 bg-[#1A1A1A] hover:bg-[#262626] border border-[#262626] hover:border-[#333333] rounded-xl transition-all group"
           title="Copia testo"
         >
-          <Copy className="w-5 h-5 text-[#737373] group-hover:text-[#5C2D91] transition-colors" />
+          <Copy className="w-5 h-5 text-[#737373] group-hover:text-[#003366] transition-colors" />
           <span className="text-xs text-[#525252] group-hover:text-[#A3A3A3]">Copia</span>
         </button>
-        
+
         <button
           onClick={onDownload}
           disabled={!post.image_url}
           className="flex flex-col items-center justify-center gap-1.5 p-3 bg-[#1A1A1A] hover:bg-[#262626] border border-[#262626] hover:border-[#333333] rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed group"
           title="Scarica immagine"
         >
-          <Download className="w-5 h-5 text-[#737373] group-hover:text-[#7B4FB0] transition-colors" />
+          <Download className="w-5 h-5 text-[#737373] group-hover:text-[#004A8F] transition-colors" />
           <span className="text-xs text-[#525252] group-hover:text-[#A3A3A3]">Scarica</span>
         </button>
-        
+
         <button
           onClick={onMarkPublished}
           disabled={post.status === 'published'}
@@ -158,12 +157,12 @@ export function EditorSection({
             {post.status === 'published' ? 'Fatto' : 'Pubblica'}
           </span>
         </button>
-        
+
         <button
           onClick={() => navigator.share?.({
             title: post.title || '',
             text: fullText,
-          }).catch(() => {})}
+          }).catch(() => { })}
           className="flex flex-col items-center justify-center gap-1.5 p-3 bg-[#1A1A1A] hover:bg-[#262626] border border-[#262626] hover:border-[#333333] rounded-xl transition-all group"
           title="Condividi"
         >

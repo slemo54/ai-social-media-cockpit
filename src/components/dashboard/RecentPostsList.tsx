@@ -21,7 +21,7 @@ interface RecentPostsListProps {
 }
 
 const platformColors: Record<string, string> = {
-  instagram: 'bg-[#5C2D91]/10 text-[#7B4FB0] border-[#5C2D91]/30',
+  instagram: 'bg-[#003366]/10 text-[#004A8F] border-[#003366]/30',
   linkedin: 'bg-[#0A66C2]/10 text-[#0A66C2] border-[#0A66C2]/30',
   tiktok: 'bg-[#262626] text-[#FAFAFA] border-[#333333]',
   twitter: 'bg-[#1DA1F2]/10 text-[#1DA1F2] border-[#1DA1F2]/30',
@@ -62,8 +62,8 @@ export function RecentPostsList({ posts, loading }: RecentPostsListProps) {
         <h3 className="text-lg font-bold text-[#FAFAFA] mb-2">Nessun contenuto ancora</h3>
         <p className="text-[#737373] mb-5">Inizia generando il tuo primo post!</p>
         <Link
-          href="/"
-          className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-[#5C2D91] to-[#7B4FB0] text-white font-semibold rounded-xl hover:shadow-lg hover:shadow-[#5C2D91]/30 transition-all"
+          href="/generate"
+          className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-[#003366] to-[#004A8F] text-white font-semibold rounded-xl hover:shadow-lg hover:shadow-[#003366]/30 transition-all"
         >
           Genera il primo post
         </Link>
@@ -76,21 +76,21 @@ export function RecentPostsList({ posts, loading }: RecentPostsListProps) {
       {posts.map((post) => (
         <Link
           key={post.id}
-          href={`/?edit=${post.id}`}
-          className="block dashboard-card p-4 hover:border-[#5C2D91]/50 transition-all group"
+          href={`/generate?edit=${post.id}`}
+          className="block dashboard-card p-4 hover:border-[#003366]/50 transition-all group"
         >
           <div className="flex gap-4">
-            <div className="w-16 h-16 bg-[#5C2D91]/10 rounded-xl flex items-center justify-center flex-shrink-0 border border-[#5C2D91]/20">
+            <div className="w-16 h-16 bg-[#003366]/10 rounded-xl flex items-center justify-center flex-shrink-0 border border-[#003366]/20">
               {post.hasImage ? (
-                <ImageIcon className="w-6 h-6 text-[#7B4FB0]" />
+                <ImageIcon className="w-6 h-6 text-[#004A8F]" />
               ) : (
-                <FileText className="w-6 h-6 text-[#7B4FB0]" />
+                <FileText className="w-6 h-6 text-[#004A8F]" />
               )}
             </div>
 
             <div className="flex-1 min-w-0">
               <div className="flex items-start justify-between gap-2 mb-1">
-                <h4 className="font-semibold text-[#FAFAFA] truncate group-hover:text-[#7B4FB0] transition-colors">
+                <h4 className="font-semibold text-[#FAFAFA] truncate group-hover:text-[#004A8F] transition-colors">
                   {post.title}
                 </h4>
                 <span className={`text-xs px-2.5 py-1 rounded-full flex-shrink-0 border ${platformColors[post.platform] || 'bg-[#1A1A1A] text-[#737373] border-[#262626]'}`}>
@@ -117,13 +117,13 @@ export function RecentPostsList({ posts, loading }: RecentPostsListProps) {
                 <span>{post.date}</span>
                 <span>{post.wordCount} parole</span>
                 {post.template && (
-                  <span className="text-[#7B4FB0]">{post.template}</span>
+                  <span className="text-[#004A8F]">{post.template}</span>
                 )}
               </div>
             </div>
-            
+
             <div className="flex-shrink-0 self-center opacity-0 group-hover:opacity-100 transition-opacity">
-              <ArrowUpRight className="w-5 h-5 text-[#7B4FB0]" />
+              <ArrowUpRight className="w-5 h-5 text-[#004A8F]" />
             </div>
           </div>
         </Link>

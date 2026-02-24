@@ -116,35 +116,32 @@ export function InputSection({
       <div className="flex items-center justify-center gap-2 mb-6 p-1.5 bg-[#1A1A1A] rounded-xl border border-[#262626]">
         <button
           onClick={() => handleProjectChange('IWP')}
-          className={`flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg font-semibold text-sm transition-all ${
-            iwpActive
+          className={`flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg font-semibold text-sm transition-all ${iwpActive
               ? 'bg-gradient-to-r from-[#C8102E] to-[#E53935] text-white shadow-lg shadow-[#C8102E]/30'
               : 'text-[#737373] hover:text-[#A3A3A3]'
-          }`}
+            }`}
         >
           <span className={`w-2 h-2 rounded-full ${iwpActive ? 'bg-white/80' : 'bg-[#C8102E]'}`} />
           IWP
         </button>
         <button
           onClick={() => handleProjectChange('IWA')}
-          className={`flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg font-semibold text-sm transition-all ${
-            !iwpActive
-              ? 'bg-gradient-to-r from-[#5C2D91] to-[#7B4FB0] text-white shadow-lg shadow-[#5C2D91]/30'
+          className={`flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg font-semibold text-sm transition-all ${!iwpActive
+              ? 'bg-gradient-to-r from-[#003366] to-[#004A8F] text-white shadow-lg shadow-[#003366]/30'
               : 'text-[#737373] hover:text-[#A3A3A3]'
-          }`}
+            }`}
         >
-          <span className={`w-2 h-2 rounded-full ${!iwpActive ? 'bg-white/80' : 'bg-[#5C2D91]'}`} />
+          <span className={`w-2 h-2 rounded-full ${!iwpActive ? 'bg-white/80' : 'bg-[#003366]'}`} />
           IWA
         </button>
       </div>
 
       {/* Header */}
       <div className="flex items-center gap-4 mb-5">
-        <div className={`w-12 h-12 rounded-xl flex items-center justify-center shadow-lg ${
-          iwpActive
+        <div className={`w-12 h-12 rounded-xl flex items-center justify-center shadow-lg ${iwpActive
             ? 'bg-gradient-to-br from-[#C8102E] to-[#E53935] shadow-[#C8102E]/20'
-            : 'bg-gradient-to-br from-[#5C2D91] to-[#7B4FB0] shadow-[#5C2D91]/20'
-        }`}>
+            : 'bg-gradient-to-br from-[#003366] to-[#004A8F] shadow-[#003366]/20'
+          }`}>
           <Wand2 className="w-6 h-6 text-white" />
         </div>
         <div>
@@ -168,13 +165,12 @@ export function InputSection({
               key={key}
               onClick={() => handleTemplateClick(key)}
               disabled={isLoading || isUploading}
-              className={`px-3 py-2 text-xs font-medium rounded-lg transition-all border ${
-                selectedTemplate === key
+              className={`px-3 py-2 text-xs font-medium rounded-lg transition-all border ${selectedTemplate === key
                   ? iwpActive
                     ? 'bg-[#C8102E]/20 text-[#E53935] border-[#C8102E]/50'
-                    : 'bg-[#5C2D91]/20 text-[#7B4FB0] border-[#5C2D91]/50'
+                    : 'bg-[#003366]/20 text-[#004A8F] border-[#003366]/50'
                   : 'bg-[#1A1A1A] text-[#A3A3A3] border-[#262626] hover:border-[#333333] hover:text-[#FAFAFA]'
-              }`}
+                }`}
               title={template.prompt}
             >
               {template.name}
@@ -222,15 +218,14 @@ export function InputSection({
             <button
               onClick={() => fileInputRef.current?.click()}
               disabled={isUploading}
-              className={`w-full flex items-center justify-center gap-3 px-4 py-8 border-2 border-dashed rounded-xl transition-all disabled:opacity-50 ${
-                iwpActive
+              className={`w-full flex items-center justify-center gap-3 px-4 py-8 border-2 border-dashed rounded-xl transition-all disabled:opacity-50 ${iwpActive
                   ? 'border-[#262626] hover:border-[#C8102E]/50 text-[#525252] hover:text-[#C8102E] bg-[#1A1A1A]/50'
-                  : 'border-[#262626] hover:border-[#5C2D91]/50 text-[#525252] hover:text-[#5C2D91] bg-[#1A1A1A]/50'
-              }`}
+                  : 'border-[#262626] hover:border-[#003366]/50 text-[#525252] hover:text-[#003366] bg-[#1A1A1A]/50'
+                }`}
             >
               {isUploading ? (
                 <>
-                  <div className="w-5 h-5 border-2 border-[#5C2D91] border-t-transparent rounded-full animate-spin" />
+                  <div className="w-5 h-5 border-2 border-[#003366] border-t-transparent rounded-full animate-spin" />
                   <span className="text-[#A3A3A3]">Caricamento...</span>
                 </>
               ) : (
@@ -270,11 +265,10 @@ export function InputSection({
         <button
           type="submit"
           disabled={!topic.trim() || isLoading || isUploading}
-          className={`w-full flex items-center justify-center gap-3 px-6 py-4 text-white font-semibold rounded-xl disabled:opacity-50 disabled:cursor-not-allowed transition-all ${
-            iwpActive
+          className={`w-full flex items-center justify-center gap-3 px-6 py-4 text-white font-semibold rounded-xl disabled:opacity-50 disabled:cursor-not-allowed transition-all ${iwpActive
               ? 'bg-gradient-to-r from-[#C8102E] to-[#E53935] hover:shadow-lg hover:shadow-[#C8102E]/30'
-              : 'bg-gradient-to-r from-[#5C2D91] to-[#7B4FB0] hover:shadow-lg hover:shadow-[#5C2D91]/30'
-          }`}
+              : 'bg-gradient-to-r from-[#003366] to-[#004A8F] hover:shadow-lg hover:shadow-[#003366]/30'
+            }`}
         >
           {isLoading ? (
             <>
@@ -291,12 +285,11 @@ export function InputSection({
       </form>
 
       {/* Brand Voice Hint */}
-      <div className={`mt-4 p-4 rounded-xl border flex-shrink-0 ${
-        iwpActive
+      <div className={`mt-4 p-4 rounded-xl border flex-shrink-0 ${iwpActive
           ? 'bg-[#C8102E]/10 border-[#C8102E]/20'
-          : 'bg-[#5C2D91]/10 border-[#5C2D91]/20'
-      }`}>
-        <p className={`text-xs leading-relaxed ${iwpActive ? 'text-[#E53935]' : 'text-[#7B4FB0]'}`}>
+          : 'bg-[#003366]/10 border-[#003366]/20'
+        }`}>
+        <p className={`text-xs leading-relaxed ${iwpActive ? 'text-[#E53935]' : 'text-[#004A8F]'}`}>
           <strong>Stile {project}:</strong>{' '}
           {iwpActive
             ? 'Conversazionale, "Ok story time...", autoironia, chiusura con Cin Cin!'

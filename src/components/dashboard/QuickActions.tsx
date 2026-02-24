@@ -47,12 +47,12 @@ export function QuickActions() {
         <h2 className="text-xl font-bold text-[#FAFAFA]">Template Rapidi</h2>
         <p className="text-sm text-[#737373]">Clicca per iniziare con un template</p>
       </div>
-      
+
       <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-3">
         {Object.entries(CONTENT_TEMPLATES).map(([key, template]) => (
           <Link
             key={key}
-            href={`/?template=${key}`}
+            href={`/generate?template=${key}`}
             className="flex flex-col items-center p-4 bg-[#141414] border border-[#262626] rounded-xl hover:border-[#003366]/50 hover:bg-[#1A1A1A] transition-all group"
           >
             <div className="w-11 h-11 bg-[#003366]/10 rounded-xl flex items-center justify-center text-[#004A8F] mb-3 group-hover:scale-110 group-hover:bg-[#003366]/20 transition-all">

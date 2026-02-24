@@ -84,7 +84,7 @@ export function TemplateStats({ templates, loading }: TemplateStatsProps) {
                 </div>
                 <div className="h-2 bg-[#1A1A1A] rounded-full overflow-hidden">
                   <div
-                    className="h-full bg-gradient-to-r from-[#5C2D91] to-[#D4AF37] rounded-full transition-all duration-500"
+                    className="h-full bg-gradient-to-r from-[#003366] to-[#C4A775] rounded-full transition-all duration-500"
                     style={{ width: `${percentage}%` }}
                   />
                 </div>
