@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { generateTextContent, generateImage, generateMultipleImages, generateMultipleTextProposals } from '@/lib/abacus';
+import { generateMultipleImages, generateMultipleTextProposals } from '@/lib/abacus';
 import { createPost, uploadImageToStorage } from '@/lib/supabase';
 import { GenerateRequest, GenerateResponse, AbacusTextResponse } from '@/types';
 import { getAuthenticatedUser } from '@/lib/auth';
