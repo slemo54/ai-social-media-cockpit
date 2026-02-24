@@ -1,19 +1,18 @@
 'use client';
 
-import { InputSection } from '@/components/InputSection';
 import { PreviewSection } from '@/components/PreviewSection';
 import { EditorSection } from '@/components/EditorSection';
-import { ImageEditor } from '@/components/ImageEditor';
 import { usePostGenerator } from '@/hooks/usePostGenerator';
 import { Toaster } from 'sonner';
-import { useCallback, useEffect, useState } from 'react';
-import { Wine, Home, X, Image as ImageIcon } from 'lucide-react';
-import Link from 'next/link';
-import { useSearchParams } from 'next/navigation';
+import { useCallback, useEffect, useState, Suspense } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 
-export default function GeneratePage() {
+function GenerateContent() {
+    const router = useRouter();
     const searchParams = useSearchParams();
     const template = searchParams.get('template');
+    const topicParam = searchParams.get('topic');
+    const projectParam = searchParams.get('project') as 'IWP' | 'IWA' | null;
 
     const {
         post,
@@ -28,26 +27,21 @@ export default function GeneratePage() {
         markAsPublished,
         copyToClipboard,
         downloadImage,
-        cancelGeneration,
-        isCancelling,
         selectImage,
         selectTextProposal,
     } = usePostGenerator();
 
     const [mounted, setMounted] = useState(false);
-    const [showImageEditor, setShowImageEditor] = useState(false);
-    const [uploadedImage, setUploadedImage] = useState<string | undefined>(undefined);
 
     useEffect(() => {
         setMounted(true);
-    }, []);
-
-    const handleGenerate = useCallback(async (topic: string, selectedProject: 'IWP' | 'IWA', imageUrl?: string) => {
-        await generatePost(topic, selectedProject, imageUrl);
-    }, [generatePost]);
-
-    const handleImageUpload = useCallback((imageUrl: string) => {
-        setUploadedImage(imageUrl);
+        if (topicParam && projectParam) {
+            setProject(projectParam);
+            generatePost(topicParam, projectParam);
+        } else if (template) {
+            // Handle template if needed, though usePostGenerator might already handle it via initialTemplate prop if passed to InputSection
+            // For now, let's assume the user might have come from the dashboard quick gen
+        }
     }, []);
 
     const handleCopy = useCallback(() => {
@@ -58,193 +52,95 @@ export default function GeneratePage() {
         await markAsPublished();
     }, [markAsPublished]);
 
-    const handleImageChange = useCallback((newUrl: string) => {
-        setUploadedImage(newUrl);
-        if (post) {
-            updatePost({ image_url: newUrl });
-        }
-    }, [post, updatePost]);
-
     if (!mounted) return null;
 
     return (
-        <main className="h-screen flex flex-col overflow-hidden bg-[#0F0F0F]">
-            <Toaster
-                position="top-center"
-                richColors
-                toastOptions={{
-                    style: {
-                        background: '#1A1A1A',
-                        border: '1px solid #262626',
-                        color: '#FAFAFA',
-                        boxShadow: '0 8px 30px rgba(0,0,0,0.5)',
-                    },
-                }}
-            />
+        <div className="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen flex flex-col overflow-x-hidden antialiased selection:bg-accent-gold/30 pb-32">
+            <Toaster position="top-center" />
 
-            {/* Header */}
-            <header className="flex-shrink-0 border-b border-[#262626] bg-[#141414]">
-                <div className="max-w-[1800px] mx-auto px-4 sm:px-6 lg:px-8 py-4">
-                    <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-4">
-                            <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-[#003366] via-[#004A8F] to-[#C4A775] flex items-center justify-center shadow-lg shadow-[#003366]/20">
-                                <Wine className="w-5 h-5 text-white" />
-                            </div>
-                            <div>
-                                <h1 className="text-xl font-bold text-[#FAFAFA]">
-                                    AI Social Cockpit
-                                </h1>
-                                <p className="text-xs text-[#737373]">
-                                    Genera Contenuto
-                                </p>
-                            </div>
-                        </div>
-
-                        <div className="flex items-center gap-3">
-                            <button
-                                onClick={() => setShowImageEditor(!showImageEditor)}
-                                className={`hidden sm:flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition-all ${showImageEditor
-                                    ? 'bg-[#003366]/20 text-[#004A8F] border border-[#003366]/50'
-                                    : 'bg-[#1A1A1A] hover:bg-[#262626] border border-[#262626] text-[#A3A3A3] hover:text-[#FAFAFA]'
-                                    }`}
-                            >
-                                <ImageIcon className="w-4 h-4" />
-                                {showImageEditor ? 'Chiudi Editor' : 'Editor Immagine'}
-                            </button>
-
-                            <Link
-                                href="/"
-                                className="hidden sm:flex items-center gap-2 px-4 py-2 bg-[#1A1A1A] hover:bg-[#262626] border border-[#262626] rounded-xl text-[#A3A3A3] hover:text-[#FAFAFA] text-sm font-medium transition-all"
-                            >
-                                <Home className="w-4 h-4" />
-                                Dashboard
-                            </Link>
-
-                            <span className="px-3 py-1.5 bg-[#003366]/20 text-[#004A8F] text-xs font-semibold rounded-full border border-[#003366]/30">
-                                Human-in-the-Loop
-                            </span>
-                        </div>
-                    </div>
-                </div>
-            </header>
+            {/* Top App Bar */}
+            <div className="sticky top-0 z-50 flex items-center bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 p-4 pb-3 justify-between">
+                <button
+                    onClick={() => router.back()}
+                    className="text-slate-900 dark:text-white flex size-10 shrink-0 items-center justify-center hover:bg-slate-200 dark:hover:bg-slate-800 rounded-full transition-colors"
+                >
+                    <span className="material-symbols-outlined" style={{ fontSize: '24px' }}>arrow_back</span>
+                </button>
+                <h2 className="text-slate-900 dark:text-white text-lg font-bold leading-tight tracking-tight flex-1 text-center">Editor Contenuti</h2>
+                <button
+                    onClick={() => router.push('/')}
+                    className="flex items-center justify-center h-10 px-2 rounded-lg text-slate-500 dark:text-[#9aabbc] text-sm font-semibold hover:text-primary dark:hover:text-white transition-colors"
+                >
+                    Annulla
+                </button>
+            </div>
 
             {/* Main Content */}
-            <div className="flex-1 overflow-hidden max-w-[1800px] mx-auto w-full px-4 sm:px-6 lg:px-8 py-5">
+            <main className="flex-1 flex flex-col p-4 gap-6 max-w-2xl mx-auto w-full">
                 {error && (
-                    <div className="mb-4 p-4 bg-red-500/10 border border-red-500/30 rounded-xl flex items-center justify-between">
-                        <p className="text-red-400 text-sm">{error}</p>
-                        {isLoading && (
-                            <button
-                                onClick={cancelGeneration}
-                                className="px-4 py-2 bg-red-500/20 hover:bg-red-500/30 text-red-400 text-sm font-medium rounded-lg transition-colors"
-                            >
-                                Annulla
-                            </button>
-                        )}
+                    <div className="p-4 bg-red-500/10 border border-red-500/30 rounded-xl text-red-400 text-sm">
+                        {error}
                     </div>
                 )}
 
-                {/* Loading Progress */}
-                {isLoading && !error && (
-                    <div className="mb-4 p-4 bg-[#003366]/10 border border-[#003366]/30 rounded-xl">
-                        <div className="flex items-center justify-between mb-3">
-                            <p className="text-[#004A8F] text-sm font-medium flex items-center gap-2">
-                                <span className="w-2 h-2 bg-[#003366] rounded-full animate-pulse" />
-                                Generazione in corso...
-                            </p>
-                            <button
-                                onClick={cancelGeneration}
-                                disabled={isCancelling}
-                                className="flex items-center gap-1.5 px-3 py-1.5 bg-[#262626] hover:bg-[#333333] text-[#A3A3A3] text-xs font-medium rounded-lg transition-colors disabled:opacity-50"
-                            >
-                                <X className="w-3 h-3" />
-                                Annulla
-                            </button>
-                        </div>
-                        <div className="w-full bg-[#262626] rounded-full h-2 overflow-hidden">
-                            <div className="bg-gradient-to-r from-[#003366] via-[#004A8F] to-[#C4A775] h-full rounded-full animate-pulse w-2/3" />
-                        </div>
-                    </div>
-                )}
+                {/* Preview Section */}
+                <PreviewSection
+                    post={post}
+                    previewMode={previewMode}
+                    onModeChange={setPreviewMode}
+                    isLoading={isLoading}
+                    onSelectImage={selectImage}
+                />
 
-                <div className={`grid gap-5 h-full ${showImageEditor ? 'grid-cols-1 lg:grid-cols-4' : 'grid-cols-1 lg:grid-cols-3'}`}>
-                    {/* Column 1: Input */}
-                    <div className="h-full min-h-0">
-                        <InputSection
-                            onGenerate={handleGenerate}
-                            isLoading={isLoading}
-                            project={project}
-                            onProjectChange={setProject}
-                            initialTemplate={template || undefined}
-                            onImageUpload={handleImageUpload}
-                        />
-                    </div>
+                {/* Editor Section */}
+                <EditorSection
+                    post={post}
+                    onUpdate={updatePost}
+                    onCopy={handleCopy}
+                    onDownload={downloadImage}
+                    onMarkPublished={handleMarkPublished}
+                    onSelectTextProposal={selectTextProposal}
+                />
+            </main>
 
-                    {/* Column 2: Preview */}
-                    <div className="h-full min-h-0">
-                        <PreviewSection
-                            post={post}
-                            previewMode={previewMode}
-                            onModeChange={setPreviewMode}
-                            isLoading={isLoading}
-                            onSelectImage={selectImage}
-                        />
-                    </div>
-
-                    {/* Column 3: Editor or Image Editor */}
-                    <div className="h-full min-h-0">
-                        {showImageEditor ? (
-                            <ImageEditor
-                                initialImageUrl={uploadedImage || post?.image_url || undefined}
-                                onImageChange={handleImageChange}
-                                onClose={() => setShowImageEditor(false)}
-                            />
-                        ) : (
-                            <EditorSection
-                                post={post}
-                                onUpdate={updatePost}
-                                onCopy={handleCopy}
-                                onDownload={downloadImage}
-                                onMarkPublished={handleMarkPublished}
-                                onSelectTextProposal={selectTextProposal}
-                            />
-                        )}
-                    </div>
-
-                    {/* Column 4: Editor (when Image Editor is shown) */}
-                    {showImageEditor && (
-                        <div className="h-full min-h-0">
-                            <EditorSection
-                                post={post}
-                                onUpdate={updatePost}
-                                onCopy={handleCopy}
-                                onDownload={downloadImage}
-                                onMarkPublished={handleMarkPublished}
-                                onSelectTextProposal={selectTextProposal}
-                            />
-                        </div>
-                    )}
+            {/* Bottom Actions */}
+            <div className="fixed bottom-0 left-0 right-0 z-50 bg-background-light/95 dark:bg-background-dark/95 backdrop-blur border-t border-slate-200 dark:border-slate-800 p-4 pb-6">
+                <div className="max-w-2xl mx-auto w-full flex gap-3">
+                    <button
+                        onClick={() => {/* Save draft logic if separate from auto-save */}}
+                        className="flex-1 h-12 rounded-xl border border-slate-300 dark:border-slate-600 bg-transparent text-slate-700 dark:text-slate-200 font-semibold text-base hover:bg-slate-100 dark:hover:bg-slate-800 active:scale-[0.98] transition-all flex items-center justify-center gap-2"
+                    >
+                        <span className="material-symbols-outlined" style={{ fontSize: '20px' }}>save</span>
+                        Salva Bozza
+                    </button>
+                    <button
+                        onClick={handleMarkPublished}
+                        disabled={!post || post.status === 'published'}
+                        className="flex-1 h-12 rounded-xl bg-accent-gold text-[#101418] font-bold text-base hover:bg-[#d4b988] active:scale-[0.98] transition-all shadow-lg shadow-accent-gold/20 flex items-center justify-center gap-2 disabled:opacity-50"
+                    >
+                        <span className="material-symbols-outlined" style={{ fontSize: '20px' }}>send</span>
+                        Pubblica
+                    </button>
                 </div>
             </div>
 
-            {/* Footer */}
-            <footer className="flex-shrink-0 border-t border-[#262626] bg-[#141414]">
-                <div className="max-w-[1800px] mx-auto px-4 sm:px-6 lg:px-8 py-3">
-                    <div className="flex items-center justify-between">
-                        <p className="text-xs text-[#525252]">
-                            by Anselmo Acquah — powered by Abacus API
-                        </p>
-                        <div className="flex items-center gap-4">
-                            <span className="text-[#525252] text-xs">IWP o IWA</span>
-                            <div className="flex items-center gap-2">
-                                <span className="w-2 h-2 rounded-full bg-[#C8102E]"></span>
-                                <span className="w-2 h-2 rounded-full bg-[#003366]"></span>
-                                <span className="w-2 h-2 rounded-full bg-[#D4AF37]"></span>
-                            </div>
-                        </div>
+            {/* Toast Notification Simulation */}
+            {isLoading && (
+                <div className="fixed bottom-24 left-1/2 -translate-x-1/2 w-auto min-w-[300px] bg-slate-800 dark:bg-white text-white dark:text-slate-900 px-4 py-3 rounded-lg shadow-xl flex items-center gap-3 animate-slide-up z-50">
+                    <div className="flex items-center justify-center rounded-full bg-primary text-white p-0.5">
+                        <span className="material-symbols-outlined animate-spin" style={{ fontSize: '16px' }}>refresh</span>
                     </div>
+                    <span className="text-sm font-medium">Generazione in corso...</span>
                 </div>
-            </footer>
-        </main>
+            )}
+        </div>
+    );
+}
+
+export default function GeneratePage() {
+    return (
+        <Suspense fallback={<div>Loading...</div>}>
+            <GenerateContent />
+        </Suspense>
     );
 }
