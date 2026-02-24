@@ -9,6 +9,7 @@ interface EditorSectionProps {
   onCopy: () => void;
   onDownload: () => void;
   onMarkPublished: () => void;
+  onSelectTextProposal?: (index: number) => void;
 }
 
 export function EditorSection({
@@ -17,6 +18,7 @@ export function EditorSection({
   onCopy,
   onDownload,
   onMarkPublished,
+  onSelectTextProposal,
 }: EditorSectionProps) {
   if (!post) {
     return (
@@ -59,8 +61,8 @@ export function EditorSection({
         <div className="flex items-center gap-2">
           <span
             className={`px-3 py-1.5 rounded-full text-xs font-semibold ${post.status === 'published'
-                ? 'bg-green-500/15 text-green-400 border border-green-500/30'
-                : 'bg-[#D4AF37]/15 text-[#D4AF37] border border-[#D4AF37]/30'
+              ? 'bg-green-500/15 text-green-400 border border-green-500/30'
+              : 'bg-[#D4AF37]/15 text-[#D4AF37] border border-[#D4AF37]/30'
               }`}
           >
             {post.status === 'published' ? '✓ Pubblicato' : 'Bozza'}
@@ -69,6 +71,27 @@ export function EditorSection({
       </div>
 
       <div className="space-y-4 flex-1 overflow-y-auto min-h-0 pr-1 scroll-container">
+        {/* Text Proposals Selection */}
+        {post?.text_proposals && post.text_proposals.length > 1 && (
+          <div className="p-3 bg-[#1A1A1A] rounded-xl border border-[#262626]">
+            <p className="text-[11px] font-semibold text-[#525252] uppercase tracking-wider mb-2">Varianti Testo (AI)</p>
+            <div className="flex gap-2">
+              {post.text_proposals.map((_, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => onSelectTextProposal?.(idx)}
+                  className={`flex-1 py-2 px-3 rounded-lg text-xs font-medium transition-all ${(post.selected_text_index ?? 0) === idx
+                      ? 'bg-[#003366] text-white shadow-lg shadow-[#003366]/20'
+                      : 'bg-[#262626] text-[#737373] hover:text-[#A3A3A3] hover:bg-[#333333]'
+                    }`}
+                >
+                  Variante {idx + 1}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
         {/* Title Field */}
         <div>
           <label className="flex items-center gap-2 text-sm font-semibold text-[#A3A3A3] mb-2">

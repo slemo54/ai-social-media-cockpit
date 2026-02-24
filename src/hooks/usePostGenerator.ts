@@ -21,6 +21,7 @@ interface UsePostGeneratorReturn {
   cancelGeneration: () => void;
   isCancelling: boolean;
   selectImage: (index: number) => void;
+  selectTextProposal: (index: number) => void;
 }
 
 export function usePostGenerator(): UsePostGeneratorReturn {
@@ -30,7 +31,7 @@ export function usePostGenerator(): UsePostGeneratorReturn {
   const [error, setError] = useState<string | null>(null);
   const [previewMode, setPreviewMode] = useState<PreviewMode>('feed');
   const [project, setProject] = useState<Project>('IWP');
-  
+
   // Ref per tracciare se il componente è montato
   const abortControllerRef = useRef<AbortController | null>(null);
 
@@ -60,8 +61,8 @@ export function usePostGenerator(): UsePostGeneratorReturn {
         const response = await apiClient.fetchWithTimeout('/api/generate', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ 
-            topic, 
+          body: JSON.stringify({
+            topic,
             project: activeProject,
             imageUrl, // Invia l'URL dell'immagine se presente
           }),
@@ -89,10 +90,10 @@ export function usePostGenerator(): UsePostGeneratorReturn {
       if (err instanceof Error && err.name === 'AbortError') {
         return;
       }
-      
+
       const errorMessage = err instanceof Error ? err.message : 'An error occurred';
       setError(errorMessage);
-      
+
       // Mostra toast solo per errori non di abort
       if (!errorMessage.includes('aborted')) {
         toast.error(`Errore: ${errorMessage}`);
@@ -161,13 +162,31 @@ export function usePostGenerator(): UsePostGeneratorReturn {
     setPost((prev) =>
       prev
         ? {
-            ...prev,
-            image_url: prev.image_proposals![index],
-            selected_image_index: index,
-          }
+          ...prev,
+          image_url: prev.image_proposals![index],
+          selected_image_index: index,
+        }
         : null
     );
     toast.success(`Immagine ${index + 1} selezionata`);
+  }, [post]);
+
+  const selectTextProposal = useCallback((index: number) => {
+    if (!post?.text_proposals || index < 0 || index >= post.text_proposals.length) return;
+    const proposal = post.text_proposals[index];
+    setPost((prev) =>
+      prev
+        ? {
+          ...prev,
+          title: proposal.title,
+          body_copy: proposal.body_copy,
+          hashtags: proposal.hashtags,
+          image_prompt: proposal.image_prompt,
+          selected_text_index: index,
+        }
+        : null
+    );
+    toast.success(`Variante testo ${index + 1} selezionata`);
   }, [post]);
 
   return {
@@ -186,5 +205,6 @@ export function usePostGenerator(): UsePostGeneratorReturn {
     cancelGeneration,
     isCancelling,
     selectImage,
+    selectTextProposal,
   };
 }

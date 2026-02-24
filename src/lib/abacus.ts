@@ -87,7 +87,6 @@ async function requestWithRetry<T>(
 
 // =============================================================================
 // BRAND VOICE ITALIAN WINE PODCAST (IWP) - VERSIONE PERFEZIONATA
-// Basata su analisi forense di post reali @italianwinepodcast
 // =============================================================================
 const SYSTEM_PROMPT_IWP = `Sei il social media manager ufficiale di Italian Wine Podcast (@italianwinepodcast). 
 
@@ -173,7 +172,6 @@ RISPONDI SOLO IN QUESTO FORMATO JSON:
 
 // =============================================================================
 // BRAND VOICE ITALIAN WINE ACADEMY (IWA) - VERSIONE PERFEZIONATA
-// Basata su analisi forense di post reali @itawineacademy
 // =============================================================================
 const SYSTEM_PROMPT_IWA = `Sei il social media manager ufficiale di Italian Wine Academy (@itawineacademy).
 
@@ -304,9 +302,9 @@ RISPONDI SOLO IN QUESTO FORMATO JSON:
   "body_copy": "📅 [Date]\\n📍 [Location]\\n🎓 [Educator]\\n\\n[What students will learn - 2-3 key points]\\n\\n[Who this is for]\\n\\n🔗 Link in bio to register",
   "hashtags": ["#ItalianWineAcademy", "#WSET", "#WineEducation", "#Verona"],
   "image_prompt": "Professional wine education photography for Italian Wine Academy Instagram. [Specific scene: class photo OR tasting detail OR course announcement]. Warm natural lighting 5500-6000K, authentic atmosphere. IWA Navy Blue (#003366) and Champagne Gold (#C4A775) color accents. Students diverse adults 25-45 years old, professional but welcoming. Clean composition, rule of thirds. NOT stock photography. Photorealistic, 8k quality. --ar 4:5"
-}
+}`;
 
-// Template IWP - Brand Bible Part 7 content formats (PERFEZIONATI)
+// Template IWP - Brand Bible Part 7 content formats
 const TEMPLATES_IWP: Templates = {
   'new-episode': {
     name: '🎙 New Episode',
@@ -342,7 +340,7 @@ const TEMPLATES_IWP: Templates = {
   },
 };
 
-// Template IWA - Brand Bible Part 7 content formats (PERFEZIONATI)
+// Template IWA - Brand Bible Part 7 content formats
 const TEMPLATES_IWA: Templates = {
   'course-launch': {
     name: '🍷 Course Launch',
@@ -378,15 +376,34 @@ const TEMPLATES_IWA: Templates = {
   },
 };
 
-export function getTemplates(project: 'IWP' | 'IWA'): Templates {
-  return project === 'IWP' ? TEMPLATES_IWP : TEMPLATES_IWA;
-}
-
 // Export combined templates for dashboard
 export const CONTENT_TEMPLATES: Templates = {
   ...TEMPLATES_IWP,
   ...TEMPLATES_IWA,
 };
+
+export function getTemplates(project: 'IWP' | 'IWA'): Templates {
+  return project === 'IWP' ? TEMPLATES_IWP : TEMPLATES_IWA;
+}
+
+export async function generateMultipleTextProposals(
+  topic: string,
+  project: 'IWP' | 'IWA' = 'IWP',
+  platform: string = 'instagram',
+  count: number = 3
+): Promise<AbacusTextResponse[]> {
+  console.log(`[Abacus] Generating ${count} text proposals for ${project}...`);
+
+  // Call in parallel
+  const promises = Array.from({ length: count }, (_, i) =>
+    generateTextContent(topic + (i > 0 ? ` (variante ${i + 1})` : ''), project, platform)
+  );
+
+  const results = await Promise.all(promises);
+  const filtered = results.filter((r): r is AbacusTextResponse => r !== null);
+
+  return filtered;
+}
 
 export async function generateTextContent(
   topic: string,
@@ -403,27 +420,27 @@ export async function generateTextContent(
     const intelligence = await getContentIntelligence(project, platform);
     const enhancement = buildPromptEnhancement(intelligence);
     if (enhancement) {
-      systemPrompt += `\n\n--- CONTENT INTELLIGENCE(basata su analisi di post reali ad alto engagement)-- -\n${ enhancement } `;
-      console.log(`[Abacus] Prompt enriched with ${ intelligence.voiceRules.length } rules`);
+      systemPrompt += `\n\n--- CONTENT INTELLIGENCE (basata su analisi di post reali ad alto engagement) ---\n${enhancement}`;
+      console.log(`[Abacus] Prompt enriched with ${intelligence.voiceRules.length} rules`);
     }
   } catch (err) {
     console.warn('[Abacus] Content intelligence unavailable, using base prompt');
   }
 
-  console.log(`[Abacus] Generating for ${ projectName }: ${ topic.substring(0, 50) } `);
+  console.log(`[Abacus] Generating for ${projectName}: ${topic.substring(0, 50)}`);
 
   const response = await requestWithRetry(async () => {
-    const res = await fetchWithTimeout(`${ ABACUS_BASE_URL } /chat/completions`, {
+    const res = await fetchWithTimeout(`${ABACUS_BASE_URL}/chat/completions`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${ apiKey } `,
+        'Authorization': `Bearer ${apiKey}`,
       },
       body: JSON.stringify({
         model: 'claude-opus-4-6',
         messages: [
           { role: 'system', content: systemPrompt },
-          { role: 'user', content: `Crea un post Instagram per ${ projectName } su questo argomento: ${ topic } \n\nIMPORTANTE: Segui ESATTAMENTE la struttura e i pattern del Brand Bible.Rispondi SOLO con un oggetto JSON valido.Niente testo prima o dopo, niente markdown, niente code blocks.Solo il JSON puro.` }
+          { role: 'user', content: `Crea un post Instagram per ${projectName} su questo argomento: ${topic}\n\nIMPORTANTE: Segui ESATTAMENTE la struttura e i pattern del Brand Bible. Rispondi SOLO con un oggetto JSON valido. Niente testo prima o dopo, niente markdown, niente code blocks. Solo il JSON puro.` }
         ],
         temperature: 0.7,
         max_tokens: 1200,
@@ -439,24 +456,23 @@ export async function generateTextContent(
 
   const data = await response.json();
   console.log('[Abacus] Raw response:', JSON.stringify(data).substring(0, 300));
-  
+
   // Estrai il contenuto
   let content: AbacusTextResponse;
-  
+
   if (data.choices?.[0]?.message?.content) {
     const messageContent = data.choices[0].message.content;
 
     if (typeof messageContent === 'string') {
-      // Try to extract JSON from the response — Claude often wraps in markdown
       let jsonStr = messageContent.trim();
 
-      // Strip markdown code blocks: ```json ... ``` or ``` ... ```
-      const codeBlockMatch = jsonStr.match(/```(?: json) ?\s *\n ? ([\s\S] *?) \n ?\s * ```/);
+      // Strip markdown code blocks
+      const codeBlockMatch = jsonStr.match(/```(?:json)?\s*\n?([\s\S]*?)\n?\s*```/);
       if (codeBlockMatch) {
         jsonStr = codeBlockMatch[1].trim();
       }
 
-      // Strip any leading/trailing non-JSON text — find first { and last }
+      // Strip any leading/trailing non-JSON text
       const firstBrace = jsonStr.indexOf('{');
       const lastBrace = jsonStr.lastIndexOf('}');
       if (firstBrace !== -1 && lastBrace !== -1 && lastBrace > firstBrace) {
@@ -467,7 +483,6 @@ export async function generateTextContent(
         content = JSON.parse(jsonStr);
       } catch (e) {
         console.error('[Abacus] JSON parse error. Raw:', messageContent.substring(0, 500));
-        console.error('[Abacus] Extracted:', jsonStr.substring(0, 500));
         throw new Error('Invalid JSON format in AI response');
       }
     } else {
@@ -486,16 +501,16 @@ export async function generateTextContent(
 
   // Normalizza hashtags
   if (!content.hashtags || !Array.isArray(content.hashtags) || content.hashtags.length === 0) {
-    content.hashtags = project === 'IWP' 
-      ? ['#ItalianWinePodcast', '#CinCin'] 
+    content.hashtags = project === 'IWP'
+      ? ['#ItalianWinePodcast', '#CinCin']
       : ['#ItalianWineAcademy', '#WineEducation'];
   }
 
   // Normalizza image_prompt
   if (!content.image_prompt) {
     content.image_prompt = project === 'IWP'
-      ? `Professional wine podcast episode cover.Dark background with wine - purple to red gradient.Episode number, guest photo, topic text.Italian Wine Podcast branding. --ar 1: 1`
-      : `Professional wine education photography.Header Navy(#003366), Level 1 Orange(#FF8800) / Level 2 Navy(#004A8F) / Level 3 Green(#007749) / Champagne Gold(#C4A775) palette per corso.Clean, authentic, warm lighting. --ar 4: 5`;
+      ? 'Professional wine podcast episode cover. Dark background with wine-purple to red gradient. Episode number, guest photo, topic text. Italian Wine Podcast branding. --ar 1:1'
+      : 'Professional wine education photography. Header Navy (#003366), Level 1 Orange (#FF8800), Level 2 Navy (#004A8F), Level 3 Green (#007749), Champagne Gold (#C4A775) palette. Clean, authentic, warm lighting. --ar 4:5';
   }
 
   // Per IWP, assicurati che ci sia "Tune in wherever you get your podcasts!" nel body
@@ -522,36 +537,25 @@ export async function generateImage(
     return null;
   }
 
-  // IWA: minimalist graphic design (Brand Bible Part 3), IWP: warm editorial photography (Brand Bible Part 4)
   const isIWA = options?.brand === 'IWA';
-  
-  // Palette colori IWA CORRETTA (da screenshot)
+
   const IWA_COLORS = {
-    header: '#003366',        // Header/Navbar - Blu Navy
-    level1: '#FF8800',        // WSET Level 1 - Arancione
-    level1Alt: '#F47920',     // WSET Level 1 - Arancione alt
-    level2: '#004A8F',        // WSET Level 2 - Blu Navy
-    level2Alt: '#005B96',     // WSET Level 2 - Blu Navy alt
-    level3: '#007749',        // WSET Level 3 - Verde Bosco
-    level3Alt: '#006837',     // WSET Level 3 - Verde Bosco alt
-    champagne: '#C4A775',     // Champagne - Oro/Beige
-    champagneAlt: '#D4AF7A',  // Champagne - Oro/Beige alt
-    grapeGeekGreen: '#2E5F3E', // Grape Geek - Verde
-    grapeGeekRed: '#B71C1C',   // Grape Geek - Rosso
+    header: '#003366',
+    level1: '#FF8800',
+    level2: '#004A8F',
+    level3: '#007749',
+    champagne: '#C4A775',
   };
 
-  // Palette colori IWP esatta
   const IWP_COLORS = {
     italianGreen: '#008C45',
     italianRed: '#CD212A',
     winePurple: '#4A0E4E',
-    deepBlack: '#0D0D0D',
-    offWhite: '#F5F5F5'
   };
 
   let enhancedPrompt = isIWA
-    ? `Modern minimalist graphic design for Instagram 1080x1080px.${ imagePrompt }. EXACT colors: Header Navy ${ IWA_COLORS.header }, Level 1 Orange ${ IWA_COLORS.level1 }, Level 2 Navy ${ IWA_COLORS.level2 }, Level 3 Green ${ IWA_COLORS.level3 }, Champagne Gold ${ IWA_COLORS.champagne }, Warm White #FAF9F6 background, Deep Charcoal #2D2D2D text.Clean flat design, sans - serif bold uppercase typography(Montserrat or Helvetica Neue), geometric shapes.Premium wine education aesthetic.NOT a photo - clean vector / graphic style.Professional, sophisticated, minimal. --ar 1: 1`
-    : `Warm editorial wine photography for Instagram 1080x1080px.${ imagePrompt }. EXACT colors: Italian Green ${ IWP_COLORS.italianGreen }, Italian Red ${ IWP_COLORS.italianRed }, Wine Purple ${ IWP_COLORS.winePurple }. Golden hour lighting 5500 - 6000K, authentic Italian settings(vineyard, cantina, rustic table).Human element when appropriate(hands holding glass, winemaker at work).Rich warm color palette.NOT stock photography.Photorealistic, 8k quality, professional editorial style. --ar 1: 1`;
+    ? `Modern minimalist graphic design for Instagram. ${imagePrompt}. EXACT colors: Header Navy ${IWA_COLORS.header}, Level 1 Orange ${IWA_COLORS.level1}, Level 2 Navy ${IWA_COLORS.level2}, Level 3 Green ${IWA_COLORS.level3}, Champagne Gold ${IWA_COLORS.champagne}. Clean flat design, sans-serif bold uppercase typography, geometric shapes. Professional, sophisticated, minimal. --ar 1:1`
+    : `Warm editorial wine photography for Instagram. ${imagePrompt}. EXACT colors: Italian Green ${IWP_COLORS.italianGreen}, Italian Red ${IWP_COLORS.italianRed}, Wine Purple ${IWP_COLORS.winePurple}. Golden hour lighting, authentic Italian settings. Realistic, high quality, professional editorial style. --ar 1:1`;
 
   // Enrich with visual intelligence
   if (options?.brand) {
@@ -559,8 +563,7 @@ export async function generateImage(
       const intelligence = await getContentIntelligence(options.brand);
       const visualEnhancement = buildImagePromptEnhancement(intelligence);
       if (visualEnhancement) {
-        enhancedPrompt += `, ${ visualEnhancement } `;
-        console.log('[Image] Prompt enriched with visual intelligence');
+        enhancedPrompt += `, ${visualEnhancement}`;
       }
     } catch {
       // Graceful degradation
@@ -572,55 +575,53 @@ export async function generateImage(
   const response = await requestWithRetry(async () => {
     const res = await fetchWithTimeout(
       `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-image:generateContent?key=${googleApiKey}`,
-{
-  method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify({
-    contents: [{
-      parts: [{ text: `Generate a high-quality image: ${enhancedPrompt}` }],
-    }],
-    generationConfig: {
-      responseModalities: ['IMAGE', 'TEXT'],
-    },
-  }),
-    timeout: 90000,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          contents: [{
+            parts: [{ text: `Generate a high-quality image: ${enhancedPrompt}` }],
+          }],
+          generationConfig: {
+            responseModalities: ['IMAGE', 'TEXT'],
+          },
+        }),
+        timeout: 90000,
       }
     );
-return checkResponse(res);
+    return checkResponse(res);
   }, {
-  retries: 2,
+    retries: 2,
     retryDelay: 2000,
-      backoffMultiplier: 2,
+    backoffMultiplier: 2,
   });
 
-const data = await response.json();
-console.log('[Image] Gemini response keys:', Object.keys(data));
+  const data = await response.json();
 
-let imageBase64: string | undefined;
+  let imageBase64: string | undefined;
 
-if (data.candidates?.[0]?.content?.parts) {
-  for (const part of data.candidates[0].content.parts) {
-    if (part.inlineData) {
-      imageBase64 = `data:${part.inlineData.mimeType};base64,${part.inlineData.data}`;
-      break;
+  if (data.candidates?.[0]?.content?.parts) {
+    for (const part of data.candidates[0].content.parts) {
+      if (part.inlineData) {
+        imageBase64 = `data:${part.inlineData.mimeType};base64,${part.inlineData.data}`;
+        break;
+      }
     }
   }
+
+  if (!imageBase64) {
+    console.error('[Image] No image in response');
+    throw new Error('No image data received from Gemini API');
+  }
+
+  console.log('[Image] Image generated successfully');
+  return { image_url: '', image_base64: imageBase64 };
 }
 
-if (!imageBase64) {
-  console.error('[Image] No image in response:', JSON.stringify(data).substring(0, 500));
-  throw new Error('No image data received from Gemini API');
-}
-
-console.log('[Image] Image generated successfully');
-return { image_url: '', image_base64: imageBase64 };
-}
-
-// Variation suffixes to diversify the 3 image proposals
 const IMAGE_VARIATIONS = [
-  'Close-up composition, shallow depth of field f/2.8, warm golden tones, professional wine photography.',
-  'Wide angle establishing shot f/5.6, environmental context, natural window light, documentary style.',
-  'Creative artistic angle, dramatic side lighting, bold composition, editorial magazine quality.',
+  'Close-up composition, shallow depth of field, professional wine photography.',
+  'Wide angle shot, environmental context, natural light, documentary style.',
+  'Creative artistic angle, dramatic lighting, bold composition, editorial quality.',
 ];
 
 export async function generateMultipleImages(

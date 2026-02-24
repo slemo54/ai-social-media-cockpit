@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { generateTextContent, generateImage, generateMultipleImages } from '@/lib/abacus';
+import { generateTextContent, generateImage, generateMultipleImages, generateMultipleTextProposals } from '@/lib/abacus';
 import { createPost, uploadImageToStorage } from '@/lib/supabase';
-import { GenerateRequest, GenerateResponse } from '@/types';
+import { GenerateRequest, GenerateResponse, AbacusTextResponse } from '@/types';
 import { getAuthenticatedUser } from '@/lib/auth';
 
 export const maxDuration = 180;
@@ -82,10 +82,11 @@ export async function POST(request: NextRequest): Promise<NextResponse<GenerateR
 
     console.log(`[API] Generating content for ${project}: ${topic.substring(0, 50)}`);
 
-    // Step 1: Generate text content
-    let textContent;
+    // Step 1: Generate 3 text proposals in parallel
+    let textProposals: AbacusTextResponse[] = [];
     try {
-      textContent = await generateTextContent(topic, project, platform);
+      console.log('[API] Generating 3 text proposals...');
+      textProposals = await generateMultipleTextProposals(topic, project, platform, 3);
     } catch (err) {
       console.error('[API] Text generation error:', err);
       if (logEntry) {
@@ -105,14 +106,15 @@ export async function POST(request: NextRequest): Promise<NextResponse<GenerateR
       );
     }
 
-    if (!textContent) {
+    if (textProposals.length === 0) {
       return NextResponse.json(
-        { success: false, error: 'Failed to generate text content' },
+        { success: false, error: 'Failed to generate any text proposals' },
         { status: 500 }
       );
     }
 
-    console.log('[API] Text generated:', textContent.title?.substring(0, 50));
+    const primaryProposal = textProposals[0];
+    console.log('[API] Text proposals generated:', textProposals.length);
 
     // Step 2: Gestione immagine — genera 3 proposte in parallelo
     let permanentImageUrl: string | null = null;
@@ -139,7 +141,7 @@ export async function POST(request: NextRequest): Promise<NextResponse<GenerateR
       try {
         console.log('[API] Generating 3 image proposals...');
         const imageResults = await generateMultipleImages(
-          textContent.image_prompt,
+          primaryProposal.image_prompt,
           3,
           { brand: project, platform }
         );
@@ -187,7 +189,7 @@ export async function POST(request: NextRequest): Promise<NextResponse<GenerateR
     console.log('[API] Image ready:', permanentImageUrl || 'No image', `(${imageProposals.length} proposals)`);
 
     const generationTime = Date.now() - startTime;
-    const wordCount = textContent.body_copy?.split(/\s+/).length || 0;
+    const wordCount = primaryProposal.body_copy?.split(/\s+/).length || 0;
 
     // Step 4: Save to database
     let post;
@@ -198,16 +200,16 @@ export async function POST(request: NextRequest): Promise<NextResponse<GenerateR
         project,
         platform,
       });
-      
-      post = await createPost({
+
+      const postData = {
         user_id: userId,
         topic,
-        title: textContent.title,
-        body_copy: textContent.body_copy,
-        hashtags: textContent.hashtags,
-        image_prompt: textContent.image_prompt,
+        title: primaryProposal.title,
+        body_copy: primaryProposal.body_copy,
+        hashtags: primaryProposal.hashtags,
+        image_prompt: primaryProposal.image_prompt,
         image_url: permanentImageUrl,
-        status: 'draft',
+        status: 'draft' as const,
         project,
         platform,
         generation_time_ms: generationTime,
@@ -215,13 +217,15 @@ export async function POST(request: NextRequest): Promise<NextResponse<GenerateR
         ai_model: 'claude-opus-4-6',
         prompt_length: topic.length,
         template_used: template || (imageSource === 'uploaded' ? 'user-image' : 'ai-generated'),
-      }, supabase);
-      
+      };
+
+      post = await createPost(postData, supabase);
+
       console.log('[API] Post saved successfully:', post?.id);
     } catch (err) {
       console.error('[API] Database save error:', err);
       const errorMessage = err instanceof Error ? err.message : 'Unknown error';
-      
+
       // Try to update log entry, but don't fail if it doesn't work
       try {
         if (logEntry) {
@@ -238,7 +242,7 @@ export async function POST(request: NextRequest): Promise<NextResponse<GenerateR
       } catch (logErr) {
         console.error('[API] Failed to update log:', logErr);
       }
-      
+
       return NextResponse.json(
         { success: false, error: `Database save failed: ${errorMessage}` },
         { status: 500 }
@@ -266,11 +270,13 @@ export async function POST(request: NextRequest): Promise<NextResponse<GenerateR
         .eq('id', logEntry.id);
     }
 
-    // Attach image proposals to the response (not saved to DB)
+    // Attach image and text proposals to the response (text_proposals not saved to DB as separate posts, just returned)
     const responseData = {
       ...post,
       image_proposals: imageProposals.length > 1 ? imageProposals : undefined,
       selected_image_index: imageProposals.length > 1 ? 0 : undefined,
+      text_proposals: textProposals.length > 1 ? textProposals : undefined,
+      selected_text_index: textProposals.length > 1 ? 0 : undefined,
     };
 
     return NextResponse.json({ success: true, data: responseData });
