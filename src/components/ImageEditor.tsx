@@ -3,7 +3,7 @@
 import { useState, useCallback, useRef } from 'react';
 import {
   Upload, Type, Eraser, UserX, Sparkles, X, Check, RotateCcw,
-  Download, Loader2, ImageIcon
+  Download, Loader2, ImageIcon, Wand2
 } from 'lucide-react';
 import { apiClient, fileToBase64, compressImage } from '@/lib/api-client';
 import { toast } from 'sonner';
@@ -22,6 +22,13 @@ interface EditState {
   progress: number;
 }
 
+const PLACEHOLDERS: Record<EditOperation, string> = {
+  add_text: 'Esempio: "Usa font elegante, colore oro, ombra leggera"',
+  remove_text: 'Esempio: "Rimuovi solo il testo in basso, lascia il logo"',
+  remove_person: 'Esempio: "Rimuovi tutti tranne la persona al centro"',
+  enhance: 'Esempio: "Aumenta contrasto, luci più calde, look professionale"',
+};
+
 export function ImageEditor({ initialImageUrl, onImageChange, onClose }: ImageEditorProps) {
   const [imageUrl, setImageUrl] = useState<string | undefined>(initialImageUrl);
   const [imageBase64, setImageBase64] = useState<string>('');
@@ -35,6 +42,11 @@ export function ImageEditor({ initialImageUrl, onImageChange, onClose }: ImageEd
   const [textPosition, setTextPosition] = useState<'top' | 'center' | 'bottom'>('center');
   const [history, setHistory] = useState<string[]>([]);
   const [historyIndex, setHistoryIndex] = useState(-1);
+  
+  // Advanced mode state
+  const [isAdvancedMode, setIsAdvancedMode] = useState(false);
+  const [customPrompt, setCustomPrompt] = useState('');
+  const [lastOperation, setLastOperation] = useState<EditOperation | null>(null);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -96,7 +108,7 @@ export function ImageEditor({ initialImageUrl, onImageChange, onClose }: ImageEd
 
   const performEdit = useCallback(async (
     operation: EditOperation,
-    params: Record<string, any> = {}
+    baseParams: Record<string, any> = {}
   ) => {
     if (!imageBase64 && !imageUrl) {
       toast.error('Carica prima un\'immagine');
@@ -105,6 +117,8 @@ export function ImageEditor({ initialImageUrl, onImageChange, onClose }: ImageEd
 
     try {
       setEditState({ isEditing: true, operation, progress: 10 });
+      setLastOperation(operation);
+      
       let base64ToEdit = imageBase64;
       if (!base64ToEdit && imageUrl) {
         setEditState(prev => ({ ...prev, progress: 20 }));
@@ -115,6 +129,12 @@ export function ImageEditor({ initialImageUrl, onImageChange, onClose }: ImageEd
       }
 
       setEditState(prev => ({ ...prev, progress: 40 }));
+
+      // Build params with custom prompt if in advanced mode
+      const params = {
+        ...baseParams,
+        ...(isAdvancedMode && customPrompt.trim() ? { customPrompt: customPrompt.trim() } : {}),
+      };
 
       const result = await apiClient.requestWithRetry(async () => {
         const response = await apiClient.fetchWithTimeout('/api/image/edit', {
@@ -143,6 +163,12 @@ export function ImageEditor({ initialImageUrl, onImageChange, onClose }: ImageEd
         }
         saveToHistory(editedUrl);
         onImageChange?.(editedUrl);
+        
+        // Reset custom prompt after successful edit
+        if (isAdvancedMode) {
+          setCustomPrompt('');
+        }
+        
         toast.success('Immagine modificata con successo!');
       }
     } catch (error) {
@@ -151,7 +177,7 @@ export function ImageEditor({ initialImageUrl, onImageChange, onClose }: ImageEd
     } finally {
       setEditState({ isEditing: false, operation: null, progress: 0 });
     }
-  }, [imageBase64, imageUrl, onImageChange, saveToHistory]);
+  }, [imageBase64, imageUrl, onImageChange, saveToHistory, isAdvancedMode, customPrompt]);
 
   const handleUndo = useCallback(() => {
     if (historyIndex > 0) {
@@ -173,6 +199,13 @@ export function ImageEditor({ initialImageUrl, onImageChange, onClose }: ImageEd
     document.body.removeChild(link);
     toast.success('Immagine scaricata!');
   }, [imageUrl]);
+
+  const getCurrentPlaceholder = () => {
+    if (lastOperation) {
+      return PLACEHOLDERS[lastOperation];
+    }
+    return 'Descrivi come vuoi modificare l\'immagine...';
+  };
 
   const ProgressBar = () => (
     <div className="w-full bg-[#262626] rounded-full h-2 overflow-hidden">
@@ -362,6 +395,53 @@ export function ImageEditor({ initialImageUrl, onImageChange, onClose }: ImageEd
                 <span className="text-xs font-medium">Migliora Qualità</span>
               </button>
             </div>
+          </div>
+
+          {/* Advanced Mode Toggle */}
+          <div className="border-t border-[#262626] pt-4">
+            <button
+              onClick={() => {
+                setIsAdvancedMode(!isAdvancedMode);
+                if (isAdvancedMode) {
+                  setCustomPrompt('');
+                }
+              }}
+              className={`w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl transition-all border font-medium text-sm ${
+                isAdvancedMode
+                  ? 'bg-[#003366]/20 text-[#004A8F] border-[#003366]/50'
+                  : 'bg-[#1A1A1A] text-[#A3A3A3] border-[#262626] hover:border-[#333333]'
+              }`}
+            >
+              <Wand2 className="w-4 h-4" />
+              {isAdvancedMode ? 'Disattiva Modalità Avanzata' : 'Attiva Modalità Avanzata'}
+            </button>
+
+            {/* Custom Prompt Textarea */}
+            {isAdvancedMode && (
+              <div className="mt-3 animate-fade-in-up">
+                <label className="text-xs text-[#737373] mb-2 block">
+                  Prompt personalizzato (opzionale)
+                </label>
+                <textarea
+                  value={customPrompt}
+                  onChange={(e) => {
+                    if (e.target.value.length <= 400) {
+                      setCustomPrompt(e.target.value);
+                    }
+                  }}
+                  placeholder={getCurrentPlaceholder()}
+                  className="dashboard-input w-full h-24 resize-none text-sm"
+                />
+                <div className="flex justify-between items-center mt-2">
+                  <p className="text-xs text-[#525252]">
+                    {customPrompt.length}/400 caratteri
+                  </p>
+                  <p className="text-xs text-[#525252]">
+                    Clicca uno strumento AI per applicare
+                  </p>
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Change Image */}
