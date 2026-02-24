@@ -12,6 +12,7 @@ interface EditRequest {
     fontSize?: 'small' | 'medium' | 'large';
     color?: string;
     description?: string;
+    customPrompt?: string;
   };
 }
 
@@ -54,6 +55,11 @@ export async function POST(request: Request) {
         break;
       default:
         return NextResponse.json({ error: 'Invalid operation' }, { status: 400 });
+    }
+
+    // Append custom prompt if provided
+    if (params.customPrompt && params.customPrompt.trim()) {
+      editPrompt += ` Additional instructions: ${params.customPrompt.trim()}`;
     }
 
     console.log(`[ImageEdit] Starting ${operation} with Nano Banana Pro 2 (gemini-3-pro-image-preview)`);
