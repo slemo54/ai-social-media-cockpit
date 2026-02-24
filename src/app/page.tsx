@@ -90,9 +90,9 @@ export default function Home() {
           <StatCard
             label="Ultimi 7 Giorni"
             value={stats?.trends?.last7Days?.total || 0}
-            change={stats?.trends?.last7Days?.total && stats?.trends?.last30Days?.total
-              ? Math.round(((stats.trends.last7Days.total / Math.max(stats.trends.last30Days.total / 4, 1)) - 1) * 100)
-              : undefined}
+            change={stats?.trends?.last7Days?.total !== undefined && stats?.trends?.last30Days?.total ?
+              Math.round((((stats.trends.last7Days.total as number) / Math.max((stats.trends.last30Days.total as number) / 4, 1)) - 1) * 100) :
+              undefined}
             icon={TrendingUp}
             loading={loading}
             variant="level2"

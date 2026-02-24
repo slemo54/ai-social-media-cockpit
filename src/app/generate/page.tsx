@@ -31,6 +31,7 @@ export default function GeneratePage() {
         cancelGeneration,
         isCancelling,
         selectImage,
+        selectTextProposal,
     } = usePostGenerator();
 
     const [mounted, setMounted] = useState(false);
@@ -205,6 +206,7 @@ export default function GeneratePage() {
                                 onCopy={handleCopy}
                                 onDownload={downloadImage}
                                 onMarkPublished={handleMarkPublished}
+                                onSelectTextProposal={selectTextProposal}
                             />
                         )}
                     </div>
@@ -218,6 +220,7 @@ export default function GeneratePage() {
                                 onCopy={handleCopy}
                                 onDownload={downloadImage}
                                 onMarkPublished={handleMarkPublished}
+                                onSelectTextProposal={selectTextProposal}
                             />
                         </div>
                     )}
