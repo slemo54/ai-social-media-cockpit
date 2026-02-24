@@ -22,7 +22,7 @@ export function EditorSection({
 }: EditorSectionProps) {
   if (!post) {
     return (
-      <div className="dashboard-card p-6 h-full flex flex-col animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
+      <div className="glass-panel p-6 h-full flex flex-col animate-fade-in-up rounded-2xl relative overflow-hidden group" style={{ animationDelay: '0.2s' }}>
         <div className="flex items-center gap-4 mb-5 flex-shrink-0">
           <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#003366] to-[#004A8F] flex items-center justify-center shadow-lg shadow-[#003366]/20">
             <Edit3 className="w-6 h-6 text-white" />
@@ -34,8 +34,8 @@ export function EditorSection({
         </div>
         <div className="flex-1 flex items-center justify-center text-[#525252] min-h-0">
           <div className="text-center">
-            <div className="w-20 h-20 bg-[#1A1A1A] rounded-2xl flex items-center justify-center mx-auto mb-4 border border-[#262626]">
-              <Sparkles className="w-10 h-10 text-[#003366]" />
+            <div className="w-20 h-20 bg-[#1A1A1A]/50 backdrop-blur-sm rounded-2xl flex items-center justify-center mx-auto mb-4 border border-[#262626]">
+              <Sparkles className="w-10 h-10 text-[#003366] opacity-50" />
             </div>
             <p className="text-[#737373]">Genera un contenuto per iniziare ad editare</p>
           </div>
@@ -47,7 +47,7 @@ export function EditorSection({
   const fullText = `${post.title}\n\n${post.body_copy}\n\n${post.hashtags?.join(' ')}`;
 
   return (
-    <div className="dashboard-card p-6 h-full flex flex-col animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
+    <div className="glass-panel p-6 h-full flex flex-col animate-fade-in-up rounded-2xl relative overflow-hidden group" style={{ animationDelay: '0.2s' }}>
       <div className="flex items-center justify-between mb-5 flex-shrink-0">
         <div className="flex items-center gap-4">
           <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#003366] to-[#004A8F] flex items-center justify-center shadow-lg shadow-[#003366]/20">
@@ -73,16 +73,15 @@ export function EditorSection({
       <div className="space-y-4 flex-1 overflow-y-auto min-h-0 pr-1 scroll-container">
         {/* Text Proposals Selection */}
         {post?.text_proposals && post.text_proposals.length > 1 && (
-          <div className="p-3 bg-[#1A1A1A] rounded-xl border border-[#262626]">
-            <p className="text-[11px] font-semibold text-[#525252] uppercase tracking-wider mb-2">Varianti Testo (AI)</p>
-            <div className="flex gap-2">
+          <div className="p-1 bg-[#0F0F0F]/50 backdrop-blur-sm rounded-xl border border-[#262626] shadow-inner mb-4">
+            <div className="flex gap-1">
               {post.text_proposals.map((_, idx) => (
                 <button
                   key={idx}
                   onClick={() => onSelectTextProposal?.(idx)}
-                  className={`flex-1 py-2 px-3 rounded-lg text-xs font-medium transition-all ${(post.selected_text_index ?? 0) === idx
-                      ? 'bg-[#003366] text-white shadow-lg shadow-[#003366]/20'
-                      : 'bg-[#262626] text-[#737373] hover:text-[#A3A3A3] hover:bg-[#333333]'
+                  className={`flex-1 py-2 px-3 rounded-lg text-xs font-medium transition-all duration-300 ${(post.selected_text_index ?? 0) === idx
+                    ? 'bg-[#262626] text-white shadow-sm border border-[#333333]'
+                    : 'bg-transparent text-[#737373] hover:text-[#A3A3A3] hover:bg-[#1A1A1A]/50'
                     }`}
                 >
                   Variante {idx + 1}
@@ -140,7 +139,7 @@ export function EditorSection({
         </div>
 
         {/* Full Text Preview */}
-        <div className="p-4 bg-[#1A1A1A] rounded-xl border border-[#262626]">
+        <div className="p-4 bg-[#0F0F0F]/50 backdrop-blur-sm rounded-xl border border-[#262626] shadow-inner mt-4">
           <p className="text-xs font-semibold text-[#525252] uppercase tracking-wider mb-2">
             Anteprima Completa
           </p>
@@ -152,32 +151,32 @@ export function EditorSection({
       <div className="mt-5 grid grid-cols-4 gap-3 flex-shrink-0">
         <button
           onClick={onCopy}
-          className="flex flex-col items-center justify-center gap-1.5 p-3 bg-[#1A1A1A] hover:bg-[#262626] border border-[#262626] hover:border-[#333333] rounded-xl transition-all group"
+          className="flex flex-col items-center justify-center gap-1.5 p-3 bg-transparent hover:bg-[#1A1A1A] border border-[#262626] hover:border-[#333333] rounded-xl transition-all duration-300 group"
           title="Copia testo"
         >
-          <Copy className="w-5 h-5 text-[#737373] group-hover:text-[#003366] transition-colors" />
-          <span className="text-xs text-[#525252] group-hover:text-[#A3A3A3]">Copia</span>
+          <Copy className="w-5 h-5 text-[#525252] group-hover:text-[#FAFAFA] transition-colors" />
+          <span className="text-[10px] uppercase font-semibold text-[#525252] group-hover:text-[#FAFAFA]">Copia</span>
         </button>
 
         <button
           onClick={onDownload}
           disabled={!post.image_url}
-          className="flex flex-col items-center justify-center gap-1.5 p-3 bg-[#1A1A1A] hover:bg-[#262626] border border-[#262626] hover:border-[#333333] rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed group"
+          className="flex flex-col items-center justify-center gap-1.5 p-3 bg-transparent hover:bg-[#1A1A1A] border border-[#262626] hover:border-[#333333] rounded-xl transition-all duration-300 disabled:opacity-30 disabled:cursor-not-allowed group"
           title="Scarica immagine"
         >
-          <Download className="w-5 h-5 text-[#737373] group-hover:text-[#004A8F] transition-colors" />
-          <span className="text-xs text-[#525252] group-hover:text-[#A3A3A3]">Scarica</span>
+          <Download className="w-5 h-5 text-[#525252] group-hover:text-[#FAFAFA] transition-colors" />
+          <span className="text-[10px] uppercase font-semibold text-[#525252] group-hover:text-[#FAFAFA]">Scarica</span>
         </button>
 
         <button
           onClick={onMarkPublished}
           disabled={post.status === 'published'}
-          className="flex flex-col items-center justify-center gap-1.5 p-3 bg-green-500/10 hover:bg-green-500/20 border border-green-500/30 rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed group"
+          className="flex flex-col items-center justify-center gap-1.5 p-3 bg-transparent hover:bg-green-500/10 border border-[#262626] hover:border-green-500/30 rounded-xl transition-all duration-300 disabled:opacity-30 disabled:cursor-not-allowed group"
           title="Marca come pubblicato"
         >
-          <CheckCircle className="w-5 h-5 text-green-400 group-hover:text-green-300" />
-          <span className="text-xs text-green-400">
-            {post.status === 'published' ? 'Fatto' : 'Pubblica'}
+          <CheckCircle className="w-5 h-5 text-[#525252] group-hover:text-green-400 transition-colors" />
+          <span className="text-[10px] uppercase font-semibold text-[#525252] group-hover:text-green-400">
+            {post.status === 'published' ? 'Fatto' : 'Esporta'}
           </span>
         </button>
 
@@ -186,11 +185,11 @@ export function EditorSection({
             title: post.title || '',
             text: fullText,
           }).catch(() => { })}
-          className="flex flex-col items-center justify-center gap-1.5 p-3 bg-[#1A1A1A] hover:bg-[#262626] border border-[#262626] hover:border-[#333333] rounded-xl transition-all group"
+          className="flex flex-col items-center justify-center gap-1.5 p-3 bg-transparent hover:bg-[#1A1A1A] border border-[#262626] hover:border-[#333333] rounded-xl transition-all duration-300 group"
           title="Condividi"
         >
-          <Share2 className="w-5 h-5 text-[#737373] group-hover:text-[#D4AF37] transition-colors" />
-          <span className="text-xs text-[#525252] group-hover:text-[#A3A3A3]">Share</span>
+          <Share2 className="w-5 h-5 text-[#525252] group-hover:text-[#FAFAFA] transition-colors" />
+          <span className="text-[10px] uppercase font-semibold text-[#525252] group-hover:text-[#FAFAFA]">Share</span>
         </button>
       </div>
     </div>

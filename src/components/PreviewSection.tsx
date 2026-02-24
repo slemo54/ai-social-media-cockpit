@@ -43,7 +43,7 @@ function InstagramFeedPreview({ post, isLoading, onSelectImage }: { post: Post |
   const mainImage = post?.image_url;
 
   return (
-    <div className="w-full max-w-[340px] bg-[#1A1A1A] rounded-2xl border border-[#262626] shadow-xl overflow-hidden">
+    <div className="w-full max-w-[340px] bg-[#0F0F0F]/80 backdrop-blur-md rounded-2xl border border-[#262626] shadow-2xl overflow-hidden group">
       {/* Header */}
       <div className="flex items-center justify-between px-4 py-3">
         <div className="flex items-center gap-3">
@@ -129,8 +129,8 @@ function InstagramFeedPreview({ post, isLoading, onSelectImage }: { post: Post |
                 key={idx}
                 onClick={() => onSelectImage?.(idx)}
                 className={`relative aspect-square rounded-lg overflow-hidden border-2 transition-all ${idx === selectedIndex
-                    ? 'border-[#003366] shadow-lg shadow-[#003366]/30 scale-[1.02]'
-                    : 'border-transparent hover:border-[#333333]'
+                  ? 'border-[#003366] shadow-lg shadow-[#003366]/30 scale-[1.02]'
+                  : 'border-transparent hover:border-[#333333]'
                   }`}
               >
                 <img src={url} alt={`Proposal ${idx + 1}`} className="w-full h-full object-cover" />
@@ -155,48 +155,65 @@ function StoryPreview({ post, isLoading }: { post: Post | null; isLoading: boole
   return (
     <div className="w-full max-w-[200px]">
       {/* Phone Frame */}
-      <div className="relative aspect-[9/16] bg-black rounded-[32px] overflow-hidden border-2 border-[#262626] shadow-2xl">
+      <div className="relative aspect-[9/16] bg-black rounded-[36px] overflow-hidden border-4 border-[#262626] shadow-[0_20px_50px_rgba(0,0,0,0.5)] group">
+
         {/* Story image */}
         {isLoading ? (
           <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-b from-[#1A1A1A] to-[#0F0F0F]">
             <div className="w-8 h-8 border-2 border-[#003366] border-t-transparent rounded-full animate-spin" />
           </div>
         ) : mainImage ? (
-          <img src={mainImage} alt="Story" className="w-full h-full object-cover" />
+          <img src={mainImage} alt="Story" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
         ) : (
           <div className="absolute inset-0 bg-gradient-to-b from-[#1A1A1A] to-[#0F0F0F] flex items-center justify-center">
             <ImageIcon className="w-12 h-12 text-[#333333]" />
           </div>
         )}
 
+        {/* Top Gradient Overlay */}
+        <div className="absolute top-0 left-0 right-0 h-24 bg-gradient-to-b from-black/60 to-transparent pointer-events-none" />
+
         {/* Story progress bar */}
-        <div className="absolute top-3 left-3 right-3 h-0.5 bg-white/20 rounded-full overflow-hidden">
-          <div className="h-full bg-white w-1/3 rounded-full" />
+        <div className="absolute top-4 left-3 right-3 flex gap-1 z-10">
+          <div className="h-0.5 bg-white/30 rounded-full flex-1 overflow-hidden">
+            <div className="h-full bg-white w-1/3 rounded-full shadow-[0_0_5px_rgba(255,255,255,0.8)]" />
+          </div>
+          <div className="h-0.5 bg-white/30 rounded-full flex-1" />
         </div>
 
         {/* Story header */}
-        <div className="absolute top-5 left-3 right-3 flex items-center gap-2">
-          <div className={`w-8 h-8 rounded-full ${profile.avatarBg} flex items-center justify-center text-white text-[10px] font-bold ring-2 ring-white/30`}>
-            {profile.avatarLetter}
+        <div className="absolute top-7 left-3 right-3 flex items-center justify-between z-10 w-[calc(100%-24px)]">
+          <div className="flex items-center gap-2">
+            <div className={`w-8 h-8 rounded-full ${profile.avatarBg} flex items-center justify-center text-white text-[10px] font-bold ring-2 ring-white/30 shadow-lg`}>
+              {profile.avatarLetter}
+            </div>
+            <div className="flex flex-col">
+              <span className="text-white text-[11px] font-semibold drop-shadow-md">{profile.username}</span>
+              <span className="text-white/70 text-[9px] drop-shadow-sm">1h</span>
+            </div>
           </div>
-          <span className="text-white text-[11px] font-semibold drop-shadow-lg">{profile.username}</span>
-          <span className="text-white/50 text-[10px]">1h</span>
+          <MoreHorizontal className="w-4 h-4 text-white drop-shadow-md" />
         </div>
 
         {/* Story caption overlay */}
         {post?.title && (
-          <div className="absolute bottom-12 left-3 right-3">
-            <p className="text-white text-[13px] font-medium drop-shadow-lg leading-snug">
+          <div className="absolute top-1/2 left-4 right-4 -translate-y-1/2 bg-black/40 backdrop-blur-md p-3 rounded-xl border border-white/10 shadow-xl">
+            <p className="text-white text-[13px] font-medium text-center drop-shadow-lg leading-snug">
               {post.title}
             </p>
           </div>
         )}
 
-        {/* Story reply bar */}
-        <div className="absolute bottom-4 left-3 right-3">
-          <div className="bg-white/10 backdrop-blur-md rounded-full px-4 py-2 flex items-center border border-white/20">
-            <span className="text-white/50 text-[10px]">Send message</span>
+        {/* Bottom Gradient Overlay */}
+        <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-black/80 to-transparent pointer-events-none" />
+
+        {/* Story reply bar & Actions */}
+        <div className="absolute bottom-5 left-3 right-3 flex items-center gap-3 z-10">
+          <div className="flex-1 bg-transparent border border-white/40 rounded-full px-4 py-2.5 flex items-center backdrop-blur-sm">
+            <span className="text-white/80 text-[11px] font-medium">Send message</span>
           </div>
+          <Heart className="w-6 h-6 text-white drop-shadow-md shrink-0" />
+          <Send className="w-6 h-6 text-white drop-shadow-md shrink-0" />
         </div>
       </div>
     </div>
@@ -208,7 +225,7 @@ function LinkedInPreview({ post, isLoading }: { post: Post | null; isLoading: bo
   const mainImage = post?.image_url;
 
   return (
-    <div className="w-full max-w-md bg-[#1A1A1A] rounded-xl border border-[#262626] shadow-xl overflow-hidden">
+    <div className="w-full max-w-md bg-[#0F0F0F]/80 backdrop-blur-md rounded-xl border border-[#262626] shadow-xl overflow-hidden group">
       {/* Header */}
       <div className="px-4 py-3 flex items-start gap-3">
         <div className={`w-12 h-12 rounded-full ${profile.avatarBg} flex items-center justify-center text-white text-sm font-bold flex-shrink-0`}>
@@ -280,7 +297,7 @@ function LinkedInPreview({ post, isLoading }: { post: Post | null; isLoading: bo
 
 export function PreviewSection({ post, previewMode, onModeChange, isLoading, onSelectImage }: PreviewSectionProps) {
   return (
-    <div className="dashboard-card p-6 h-full flex flex-col animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
+    <div className="glass-panel p-6 h-full flex flex-col animate-fade-in-up rounded-2xl relative overflow-hidden group" style={{ animationDelay: '0.1s' }}>
       <div className="flex items-center gap-4 mb-5 flex-shrink-0">
         <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#C4A775] to-[#D4AF7A] flex items-center justify-center shadow-lg shadow-[#C4A775]/20">
           <ImageIcon className="w-6 h-6 text-[#0F0F0F]" />
@@ -300,14 +317,15 @@ export function PreviewSection({ post, previewMode, onModeChange, isLoading, onS
             <button
               key={mode}
               onClick={() => onModeChange(mode)}
-              className={`flex items-center justify-center gap-2 px-4 py-3 rounded-xl font-medium transition-all ${isActive
-                  ? 'bg-[#003366]/20 text-[#004A8F] border border-[#003366]/50'
-                  : 'bg-[#1A1A1A] text-[#737373] border border-[#262626] hover:border-[#333333] hover:text-[#A3A3A3]'
+              className={`flex items-center justify-center gap-2 px-4 py-3 rounded-xl font-medium transition-all duration-300 ${isActive
+                ? 'bg-[#262626] text-white shadow-sm border border-[#333333]'
+                : 'bg-transparent text-[#737373] border border-transparent hover:bg-[#1A1A1A]/50 hover:text-[#A3A3A3]'
                 }`}
             >
               <Icon className="w-4 h-4" />
               {label}
             </button>
+
           );
         })}
       </div>
@@ -327,7 +345,7 @@ export function PreviewSection({ post, previewMode, onModeChange, isLoading, onS
 
       {/* Image Prompt Display */}
       {post?.image_prompt && (
-        <div className="mt-4 p-4 bg-[#1A1A1A] rounded-xl border border-[#262626] flex-shrink-0">
+        <div className="mt-4 p-4 bg-[#0F0F0F]/50 backdrop-blur-sm rounded-xl border border-[#262626] shadow-inner flex-shrink-0">
           <p className="text-xs font-semibold text-[#525252] uppercase tracking-wider mb-2">
             Prompt Immagine
           </p>

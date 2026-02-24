@@ -111,27 +111,30 @@ export function InputSection({
   const iwpActive = project === 'IWP';
 
   return (
-    <div className="dashboard-card p-6 h-full flex flex-col animate-fade-in-up">
-      {/* Project Selector */}
-      <div className="flex items-center justify-center gap-2 mb-6 p-1.5 bg-[#1A1A1A] rounded-xl border border-[#262626]">
+    <div className="glass-panel p-6 h-full flex flex-col animate-fade-in-up rounded-2xl relative overflow-hidden group">
+      {/* Subtle background glow for the card itself */}
+      <div className={`absolute -top-20 -right-20 w-40 h-40 rounded-full blur-3xl opacity-20 transition-colors duration-500 pointer-events-none ${iwpActive ? 'bg-[#C8102E]' : 'bg-[#003366]'}`} />
+
+      {/* Project Selector Toggle (Floating Pill Style) */}
+      <div className="relative flex items-center justify-center p-1 bg-[#0F0F0F]/80 backdrop-blur-md rounded-full border border-[#262626] mb-6 shadow-inner mx-auto w-fit">
+        {/* Animated Background Pill */}
+        <div
+          className={`absolute left-1 top-1 bottom-1 w-[calc(50%-4px)] rounded-full transition-all duration-300 ease-spring ${iwpActive ? 'translate-x-0 bg-gradient-to-r from-[#C8102E] to-[#E53935] shadow-[0_0_15px_rgba(200,16,46,0.5)]' : 'translate-x-[calc(100%+4px)] bg-gradient-to-r from-[#003366] to-[#004A8F] shadow-[0_0_15px_rgba(0,51,102,0.5)]'}`}
+        />
+
         <button
           onClick={() => handleProjectChange('IWP')}
-          className={`flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg font-semibold text-sm transition-all ${iwpActive
-              ? 'bg-gradient-to-r from-[#C8102E] to-[#E53935] text-white shadow-lg shadow-[#C8102E]/30'
-              : 'text-[#737373] hover:text-[#A3A3A3]'
-            }`}
+          className={`relative z-10 flex items-center justify-center gap-2 px-6 py-2 rounded-full font-bold text-sm transition-colors duration-300 ${iwpActive ? 'text-white' : 'text-[#737373] hover:text-[#A3A3A3]'}`}
         >
-          <span className={`w-2 h-2 rounded-full ${iwpActive ? 'bg-white/80' : 'bg-[#C8102E]'}`} />
+          <span className={`w-2 h-2 rounded-full transition-colors ${iwpActive ? 'bg-white' : 'bg-[#C8102E]'}`} />
           IWP
         </button>
+
         <button
           onClick={() => handleProjectChange('IWA')}
-          className={`flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg font-semibold text-sm transition-all ${!iwpActive
-              ? 'bg-gradient-to-r from-[#003366] to-[#004A8F] text-white shadow-lg shadow-[#003366]/30'
-              : 'text-[#737373] hover:text-[#A3A3A3]'
-            }`}
+          className={`relative z-10 flex items-center justify-center gap-2 px-6 py-2 rounded-full font-bold text-sm transition-colors duration-300 ${!iwpActive ? 'text-white' : 'text-[#737373] hover:text-[#A3A3A3]'}`}
         >
-          <span className={`w-2 h-2 rounded-full ${!iwpActive ? 'bg-white/80' : 'bg-[#003366]'}`} />
+          <span className={`w-2 h-2 rounded-full transition-colors ${!iwpActive ? 'bg-white' : 'bg-[#003366]'}`} />
           IWA
         </button>
       </div>
@@ -139,8 +142,8 @@ export function InputSection({
       {/* Header */}
       <div className="flex items-center gap-4 mb-5">
         <div className={`w-12 h-12 rounded-xl flex items-center justify-center shadow-lg ${iwpActive
-            ? 'bg-gradient-to-br from-[#C8102E] to-[#E53935] shadow-[#C8102E]/20'
-            : 'bg-gradient-to-br from-[#003366] to-[#004A8F] shadow-[#003366]/20'
+          ? 'bg-gradient-to-br from-[#C8102E] to-[#E53935] shadow-[#C8102E]/20'
+          : 'bg-gradient-to-br from-[#003366] to-[#004A8F] shadow-[#003366]/20'
           }`}>
           <Wand2 className="w-6 h-6 text-white" />
         </div>
@@ -166,10 +169,10 @@ export function InputSection({
               onClick={() => handleTemplateClick(key)}
               disabled={isLoading || isUploading}
               className={`px-3 py-2 text-xs font-medium rounded-lg transition-all border ${selectedTemplate === key
-                  ? iwpActive
-                    ? 'bg-[#C8102E]/20 text-[#E53935] border-[#C8102E]/50'
-                    : 'bg-[#003366]/20 text-[#004A8F] border-[#003366]/50'
-                  : 'bg-[#1A1A1A] text-[#A3A3A3] border-[#262626] hover:border-[#333333] hover:text-[#FAFAFA]'
+                ? iwpActive
+                  ? 'bg-[#C8102E]/20 text-[#E53935] border-[#C8102E]/50'
+                  : 'bg-[#003366]/20 text-[#004A8F] border-[#003366]/50'
+                : 'bg-[#1A1A1A] text-[#A3A3A3] border-[#262626] hover:border-[#333333] hover:text-[#FAFAFA]'
                 }`}
               title={template.prompt}
             >
@@ -219,8 +222,8 @@ export function InputSection({
               onClick={() => fileInputRef.current?.click()}
               disabled={isUploading}
               className={`w-full flex items-center justify-center gap-3 px-4 py-8 border-2 border-dashed rounded-xl transition-all disabled:opacity-50 ${iwpActive
-                  ? 'border-[#262626] hover:border-[#C8102E]/50 text-[#525252] hover:text-[#C8102E] bg-[#1A1A1A]/50'
-                  : 'border-[#262626] hover:border-[#003366]/50 text-[#525252] hover:text-[#003366] bg-[#1A1A1A]/50'
+                ? 'border-[#262626] hover:border-[#C8102E]/50 text-[#525252] hover:text-[#C8102E] bg-[#1A1A1A]/50'
+                : 'border-[#262626] hover:border-[#003366]/50 text-[#525252] hover:text-[#003366] bg-[#1A1A1A]/50'
                 }`}
             >
               {isUploading ? (
@@ -265,20 +268,23 @@ export function InputSection({
         <button
           type="submit"
           disabled={!topic.trim() || isLoading || isUploading}
-          className={`w-full flex items-center justify-center gap-3 px-6 py-4 text-white font-semibold rounded-xl disabled:opacity-50 disabled:cursor-not-allowed transition-all ${iwpActive
-              ? 'bg-gradient-to-r from-[#C8102E] to-[#E53935] hover:shadow-lg hover:shadow-[#C8102E]/30'
-              : 'bg-gradient-to-r from-[#003366] to-[#004A8F] hover:shadow-lg hover:shadow-[#003366]/30'
-            }`}
+          className={`group w-full flex items-center justify-center gap-3 px-6 py-4 text-white font-semibold rounded-xl disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 active:scale-[0.98] ${iwpActive
+            ? 'bg-gradient-to-r from-[#C8102E] to-[#E53935] hover:shadow-[0_8px_30px_rgba(200,16,46,0.4)] hover:-translate-y-1'
+            : 'bg-gradient-to-r from-[#003366] to-[#004A8F] hover:shadow-[0_8px_30px_rgba(0,51,102,0.4)] hover:-translate-y-1'
+            } relative overflow-hidden`}
         >
+          {/* Shine effect */}
+          <div className="absolute inset-0 -translate-x-full group-hover:animate-[shimmer_1.5s_infinite] bg-gradient-to-r from-transparent via-white/20 to-transparent skew-x-12" />
+
           {isLoading ? (
             <>
-              <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-              Generazione...
+              <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+              Generazione in corso...
             </>
           ) : (
             <>
-              <Rocket className="w-5 h-5" />
-              {uploadedImage ? 'Genera con Immagine' : `Genera per ${project}`}
+              <Rocket className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+              {uploadedImage ? 'Genera con Immagine' : `Genera Contenuto ${project}`}
             </>
           )}
         </button>
@@ -286,8 +292,8 @@ export function InputSection({
 
       {/* Brand Voice Hint */}
       <div className={`mt-4 p-4 rounded-xl border flex-shrink-0 ${iwpActive
-          ? 'bg-[#C8102E]/10 border-[#C8102E]/20'
-          : 'bg-[#003366]/10 border-[#003366]/20'
+        ? 'bg-[#C8102E]/10 border-[#C8102E]/20'
+        : 'bg-[#003366]/10 border-[#003366]/20'
         }`}>
         <p className={`text-xs leading-relaxed ${iwpActive ? 'text-[#E53935]' : 'text-[#004A8F]'}`}>
           <strong>Stile {project}:</strong>{' '}

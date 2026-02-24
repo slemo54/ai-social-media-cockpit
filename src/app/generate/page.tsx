@@ -68,7 +68,12 @@ export default function GeneratePage() {
     if (!mounted) return null;
 
     return (
-        <main className="h-screen flex flex-col overflow-hidden bg-[#0F0F0F]">
+        <main className="h-screen flex flex-col overflow-hidden bg-[#0F0F0F] relative">
+            {/* Ambient Background Glows */}
+            <div className="ambient-glow bg-[--iwa-header] w-[600px] h-[600px] top-[-200px] left-[-200px] opacity-20" />
+            <div className="ambient-glow bg-[--iwa-champagne] w-[400px] h-[400px] bottom-[-100px] right-[-100px] opacity-10" style={{ animationDelay: '2s' }} />
+
+
             <Toaster
                 position="top-center"
                 richColors
@@ -83,7 +88,8 @@ export default function GeneratePage() {
             />
 
             {/* Header */}
-            <header className="flex-shrink-0 border-b border-[#262626] bg-[#141414]">
+            <header className="flex-shrink-0 border-b border-[#262626]/50 bg-[#0F0F0F]/60 backdrop-blur-xl relative z-10 transition-colors duration-500"
+                style={{ borderBottomColor: project === 'IWP' ? 'rgba(205, 33, 42, 0.2)' : 'rgba(0, 51, 102, 0.2)' }}>
                 <div className="max-w-[1800px] mx-auto px-4 sm:px-6 lg:px-8 py-4">
                     <div className="flex items-center justify-between">
                         <div className="flex items-center gap-4">
@@ -129,7 +135,7 @@ export default function GeneratePage() {
             </header>
 
             {/* Main Content */}
-            <div className="flex-1 overflow-hidden max-w-[1800px] mx-auto w-full px-4 sm:px-6 lg:px-8 py-5">
+            <div className="flex-1 overflow-hidden max-w-[1800px] mx-auto w-full px-4 sm:px-6 lg:px-8 py-6 relative z-10">
                 {error && (
                     <div className="mb-4 p-4 bg-red-500/10 border border-red-500/30 rounded-xl flex items-center justify-between">
                         <p className="text-red-400 text-sm">{error}</p>
