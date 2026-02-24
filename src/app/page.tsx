@@ -1,243 +1,152 @@
 'use client';
 
-import { InputSection } from '@/components/InputSection';
-import { PreviewSection } from '@/components/PreviewSection';
-import { EditorSection } from '@/components/EditorSection';
-import { ImageEditor } from '@/components/ImageEditor';
-import { usePostGenerator } from '@/hooks/usePostGenerator';
-import { Toaster, toast } from 'sonner';
-import { useCallback, useEffect, useState } from 'react';
-import { Wine, LayoutDashboard, X, Image as ImageIcon, Sparkles } from 'lucide-react';
+import { useDashboardStats } from '@/hooks/useDashboardStats';
+import { useRecentPosts } from '@/hooks/useRecentPosts';
+import { StatCard } from '@/components/dashboard/StatCard';
+import { ActivityChart } from '@/components/dashboard/ActivityChart';
+import { TemplateStats } from '@/components/dashboard/TemplateStats';
+import { QuickActions } from '@/components/dashboard/QuickActions';
+import { RecentPostsList } from '@/components/dashboard/RecentPostsList';
+import { Wine, BarChart3, FileText, CheckCircle2, Clock, Sparkles, TrendingUp, RefreshCw } from 'lucide-react';
 import Link from 'next/link';
-import { useSearchParams } from 'next/navigation';
+import { useState, useCallback } from 'react';
 
 export default function Home() {
-  const searchParams = useSearchParams();
-  const template = searchParams.get('template');
+  const { stats, loading: statsLoading, refresh: refreshStats } = useDashboardStats();
+  const { posts, loading: postsLoading, refresh: refreshPosts } = useRecentPosts();
+  const [refreshing, setRefreshing] = useState(false);
 
-  const {
-    post,
-    isLoading,
-    error,
-    previewMode,
-    project,
-    generatePost,
-    updatePost,
-    setPreviewMode,
-    setProject,
-    markAsPublished,
-    copyToClipboard,
-    downloadImage,
-    cancelGeneration,
-    isCancelling,
-    selectImage,
-  } = usePostGenerator();
+  const handleRefresh = useCallback(async () => {
+    setRefreshing(true);
+    await Promise.all([refreshStats(), refreshPosts()]);
+    setRefreshing(false);
+  }, [refreshStats, refreshPosts]);
 
-  const [mounted, setMounted] = useState(false);
-  const [showImageEditor, setShowImageEditor] = useState(false);
-  const [uploadedImage, setUploadedImage] = useState<string | undefined>(undefined);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  const handleGenerate = useCallback(async (topic: string, selectedProject: 'IWP' | 'IWA', imageUrl?: string) => {
-    await generatePost(topic, selectedProject, imageUrl);
-  }, [generatePost]);
-
-  const handleImageUpload = useCallback((imageUrl: string) => {
-    setUploadedImage(imageUrl);
-  }, []);
-
-  const handleCopy = useCallback(() => {
-    copyToClipboard();
-  }, [copyToClipboard]);
-
-  const handleMarkPublished = useCallback(async () => {
-    await markAsPublished();
-  }, [markAsPublished]);
-
-  const handleImageChange = useCallback((newUrl: string) => {
-    setUploadedImage(newUrl);
-    if (post) {
-      updatePost({ image_url: newUrl });
-    }
-  }, [post, updatePost]);
-
-  if (!mounted) return null;
+  const loading = statsLoading || postsLoading;
 
   return (
-    <main className="h-screen flex flex-col overflow-hidden bg-[#0F0F0F]">
-      <Toaster
-        position="top-center"
-        richColors
-        toastOptions={{
-          style: {
-            background: '#1A1A1A',
-            border: '1px solid #262626',
-            color: '#FAFAFA',
-            boxShadow: '0 8px 30px rgba(0,0,0,0.5)',
-          },
-        }}
-      />
-
+    <main className="min-h-screen bg-[#0F0F0F]">
       {/* Header */}
-      <header className="flex-shrink-0 border-b border-[#262626] bg-[#141414]">
-        <div className="max-w-[1800px] mx-auto px-4 sm:px-6 lg:px-8 py-4">
+      <header className="sticky top-0 z-50 border-b border-[#262626] bg-[#141414]/95 backdrop-blur-md">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
-              <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-[#5C2D91] via-[#7B4FB0] to-[#D4AF37] flex items-center justify-center shadow-lg shadow-[#5C2D91]/20">
+              <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-[#003366] via-[#004A8F] to-[#C4A775] flex items-center justify-center shadow-lg shadow-[#003366]/20">
                 <Wine className="w-5 h-5 text-white" />
               </div>
               <div>
-                <h1 className="text-xl font-bold text-[#FAFAFA]">
-                  AI Social Cockpit
-                </h1>
-                <p className="text-xs text-[#737373]">
-                  IWP × IWA Content Studio
-                </p>
+                <h1 className="text-xl font-bold text-[#FAFAFA]">AI Social Cockpit</h1>
+                <p className="text-xs text-[#737373]">Dashboard — IWP × IWA</p>
               </div>
             </div>
-            
+
             <div className="flex items-center gap-3">
               <button
-                onClick={() => setShowImageEditor(!showImageEditor)}
-                className={`hidden sm:flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition-all ${
-                  showImageEditor
-                    ? 'bg-[#5C2D91]/20 text-[#7B4FB0] border border-[#5C2D91]/50'
-                    : 'bg-[#1A1A1A] hover:bg-[#262626] border border-[#262626] text-[#A3A3A3] hover:text-[#FAFAFA]'
-                }`}
+                onClick={handleRefresh}
+                disabled={refreshing}
+                className="flex items-center gap-2 px-4 py-2 bg-[#1A1A1A] hover:bg-[#262626] border border-[#262626] rounded-xl text-[#A3A3A3] hover:text-[#FAFAFA] text-sm font-medium transition-all disabled:opacity-50"
               >
-                <ImageIcon className="w-4 h-4" />
-                {showImageEditor ? 'Chiudi Editor' : 'Editor Immagine'}
+                <RefreshCw className={`w-4 h-4 ${refreshing ? 'animate-spin' : ''}`} />
+                <span className="hidden sm:inline">Aggiorna</span>
               </button>
-              
+
               <Link
-                href="/dashboard"
-                className="hidden sm:flex items-center gap-2 px-4 py-2 bg-[#1A1A1A] hover:bg-[#262626] border border-[#262626] rounded-xl text-[#A3A3A3] hover:text-[#FAFAFA] text-sm font-medium transition-all"
+                href="/generate"
+                className="flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-[#003366] to-[#004A8F] text-white text-sm font-semibold rounded-xl hover:shadow-lg hover:shadow-[#003366]/30 transition-all"
               >
-                <LayoutDashboard className="w-4 h-4" />
-                Dashboard
+                <Sparkles className="w-4 h-4" />
+                Nuovo Contenuto
               </Link>
-              
-              <span className="px-3 py-1.5 bg-[#5C2D91]/20 text-[#7B4FB0] text-xs font-semibold rounded-full border border-[#5C2D91]/30">
-                Human-in-the-Loop
-              </span>
             </div>
           </div>
         </div>
       </header>
 
-      {/* Main Content */}
-      <div className="flex-1 overflow-hidden max-w-[1800px] mx-auto w-full px-4 sm:px-6 lg:px-8 py-5">
-        {error && (
-          <div className="mb-4 p-4 bg-red-500/10 border border-red-500/30 rounded-xl flex items-center justify-between">
-            <p className="text-red-400 text-sm">{error}</p>
-            {isLoading && (
-              <button
-                onClick={cancelGeneration}
-                className="px-4 py-2 bg-red-500/20 hover:bg-red-500/30 text-red-400 text-sm font-medium rounded-lg transition-colors"
-              >
-                Annulla
-              </button>
-            )}
-          </div>
-        )}
+      {/* Content */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+        {/* Stats Grid */}
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+          <StatCard
+            label="Totale Post"
+            value={stats?.overview?.total || 0}
+            icon={FileText}
+            loading={loading}
+            variant="header"
+          />
+          <StatCard
+            label="Pubblicati"
+            value={stats?.overview?.published || 0}
+            icon={CheckCircle2}
+            loading={loading}
+            variant="level3"
+          />
+          <StatCard
+            label="Bozze"
+            value={stats?.overview?.draft || 0}
+            icon={Clock}
+            loading={loading}
+            variant="champagne"
+          />
+          <StatCard
+            label="Ultimi 7 Giorni"
+            value={stats?.trends?.last7Days?.total || 0}
+            change={stats?.trends?.last7Days?.total && stats?.trends?.last30Days?.total
+              ? Math.round(((stats.trends.last7Days.total / Math.max(stats.trends.last30Days.total / 4, 1)) - 1) * 100)
+              : undefined}
+            icon={TrendingUp}
+            loading={loading}
+            variant="level2"
+          />
+        </div>
 
-        {/* Loading Progress */}
-        {isLoading && !error && (
-          <div className="mb-4 p-4 bg-[#5C2D91]/10 border border-[#5C2D91]/30 rounded-xl">
-            <div className="flex items-center justify-between mb-3">
-              <p className="text-[#7B4FB0] text-sm font-medium flex items-center gap-2">
-                <span className="w-2 h-2 bg-[#5C2D91] rounded-full animate-pulse" />
-                Generazione in corso...
-              </p>
-              <button
-                onClick={cancelGeneration}
-                disabled={isCancelling}
-                className="flex items-center gap-1.5 px-3 py-1.5 bg-[#262626] hover:bg-[#333333] text-[#A3A3A3] text-xs font-medium rounded-lg transition-colors disabled:opacity-50"
-              >
-                <X className="w-3 h-3" />
-                Annulla
-              </button>
+        {/* Quick Actions Banner */}
+        <div className="bg-gradient-to-br from-[#003366] to-[#004A8F] rounded-2xl p-6 text-white shadow-lg shadow-[#003366]/20">
+          <div className="flex items-center gap-3 mb-3">
+            <div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center">
+              <Sparkles className="w-5 h-5" />
             </div>
-            <div className="w-full bg-[#262626] rounded-full h-2 overflow-hidden">
-              <div className="bg-gradient-to-r from-[#5C2D91] via-[#7B4FB0] to-[#D4AF37] h-full rounded-full animate-pulse w-2/3" />
+            <div>
+              <h3 className="font-bold text-lg">Crea Contenuto</h3>
+              <p className="text-white/70 text-sm">Scegli un template per iniziare</p>
             </div>
           </div>
-        )}
+          <QuickActions />
+        </div>
 
-        <div className={`grid gap-5 h-full ${showImageEditor ? 'grid-cols-1 lg:grid-cols-4' : 'grid-cols-1 lg:grid-cols-3'}`}>
-          {/* Column 1: Input */}
-          <div className="h-full min-h-0">
-            <InputSection
-              onGenerate={handleGenerate}
-              isLoading={isLoading}
-              project={project}
-              onProjectChange={setProject}
-              initialTemplate={template || undefined}
-              onImageUpload={handleImageUpload}
+        {/* Two Column Layout */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* Left Column: Activity + Templates */}
+          <div className="space-y-6">
+            <ActivityChart
+              data={stats?.activity || []}
+              loading={loading}
+            />
+            <TemplateStats
+              templates={stats?.templates || []}
+              loading={loading}
             />
           </div>
 
-          {/* Column 2: Preview */}
-          <div className="h-full min-h-0">
-            <PreviewSection
-              post={post}
-              previewMode={previewMode}
-              onModeChange={setPreviewMode}
-              isLoading={isLoading}
-              onSelectImage={selectImage}
-            />
+          {/* Right Column: Recent Posts */}
+          <div className="lg:col-span-2">
+            <RecentPostsList posts={posts} loading={postsLoading} />
           </div>
-
-          {/* Column 3: Editor or Image Editor */}
-          <div className="h-full min-h-0">
-            {showImageEditor ? (
-              <ImageEditor
-                initialImageUrl={uploadedImage || post?.image_url || undefined}
-                onImageChange={handleImageChange}
-                onClose={() => setShowImageEditor(false)}
-              />
-            ) : (
-              <EditorSection
-                post={post}
-                onUpdate={updatePost}
-                onCopy={handleCopy}
-                onDownload={downloadImage}
-                onMarkPublished={handleMarkPublished}
-              />
-            )}
-          </div>
-
-          {/* Column 4: Editor (when Image Editor is shown) */}
-          {showImageEditor && (
-            <div className="h-full min-h-0">
-              <EditorSection
-                post={post}
-                onUpdate={updatePost}
-                onCopy={handleCopy}
-                onDownload={downloadImage}
-                onMarkPublished={handleMarkPublished}
-              />
-            </div>
-          )}
         </div>
       </div>
 
       {/* Footer */}
-      <footer className="flex-shrink-0 border-t border-[#262626] bg-[#141414]">
-        <div className="max-w-[1800px] mx-auto px-4 sm:px-6 lg:px-8 py-3">
+      <footer className="border-t border-[#262626] bg-[#141414]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
           <div className="flex items-center justify-between">
             <p className="text-xs text-[#525252]">
               by Anselmo Acquah — powered by Abacus API
             </p>
             <div className="flex items-center gap-4">
-              <span className="text-[#525252] text-xs">IWP o IWA</span>
+              <span className="text-[#525252] text-xs">IWP × IWA</span>
               <div className="flex items-center gap-2">
                 <span className="w-2 h-2 rounded-full bg-[#C8102E]"></span>
-                <span className="w-2 h-2 rounded-full bg-[#5C2D91]"></span>
-                <span className="w-2 h-2 rounded-full bg-[#D4AF37]"></span>
+                <span className="w-2 h-2 rounded-full bg-[#003366]"></span>
+                <span className="w-2 h-2 rounded-full bg-[#C4A775]"></span>
               </div>
             </div>
           </div>

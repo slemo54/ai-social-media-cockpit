@@ -32,7 +32,7 @@ export function ActivityChart({ data, loading }: ActivityChartProps) {
             <div key={day.date} className="flex-1 flex flex-col items-center gap-2">
               <div className="relative w-full flex items-end justify-center">
                 <div
-                  className="w-full max-w-12 bg-gradient-to-t from-[#5C2D91] to-[#7B4FB0] rounded-t-lg transition-all duration-500 hover:from-[#D4AF37] hover:to-[#E8C547]"
+                  className="w-full max-w-12 bg-gradient-to-t from-[#003366] to-[#004A8F] rounded-t-lg transition-all duration-500 hover:from-[#C4A775] hover:to-[#D4AF7A]"
                   style={{ height: `${Math.max(height, 4)}%` }}
                 >
                   {day.count > 0 && (

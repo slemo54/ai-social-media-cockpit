@@ -128,11 +128,10 @@ function InstagramFeedPreview({ post, isLoading, onSelectImage }: { post: Post |
               <button
                 key={idx}
                 onClick={() => onSelectImage?.(idx)}
-                className={`relative aspect-square rounded-lg overflow-hidden border-2 transition-all ${
-                  idx === selectedIndex
+                className={`relative aspect-square rounded-lg overflow-hidden border-2 transition-all ${idx === selectedIndex
                     ? 'border-[#003366] shadow-lg shadow-[#003366]/30 scale-[1.02]'
                     : 'border-transparent hover:border-[#333333]'
-                }`}
+                  }`}
               >
                 <img src={url} alt={`Proposal ${idx + 1}`} className="w-full h-full object-cover" />
                 {idx === selectedIndex && (
@@ -160,7 +159,7 @@ function StoryPreview({ post, isLoading }: { post: Post | null; isLoading: boole
         {/* Story image */}
         {isLoading ? (
           <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-b from-[#1A1A1A] to-[#0F0F0F]">
-            <div className="w-8 h-8 border-2 border-[#5C2D91] border-t-transparent rounded-full animate-spin" />
+            <div className="w-8 h-8 border-2 border-[#003366] border-t-transparent rounded-full animate-spin" />
           </div>
         ) : mainImage ? (
           <img src={mainImage} alt="Story" className="w-full h-full object-cover" />
@@ -301,11 +300,10 @@ export function PreviewSection({ post, previewMode, onModeChange, isLoading, onS
             <button
               key={mode}
               onClick={() => onModeChange(mode)}
-              className={`flex items-center justify-center gap-2 px-4 py-3 rounded-xl font-medium transition-all ${
-                isActive
+              className={`flex items-center justify-center gap-2 px-4 py-3 rounded-xl font-medium transition-all ${isActive
                   ? 'bg-[#003366]/20 text-[#004A8F] border border-[#003366]/50'
                   : 'bg-[#1A1A1A] text-[#737373] border border-[#262626] hover:border-[#333333] hover:text-[#A3A3A3]'
-              }`}
+                }`}
             >
               <Icon className="w-4 h-4" />
               {label}
