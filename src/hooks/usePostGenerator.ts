@@ -12,6 +12,7 @@ interface UsePostGeneratorReturn {
   previewMode: PreviewMode;
   project: Project;
   generatePost: (topic: string, projectOverride?: Project, imageUrl?: string) => Promise<void>;
+  loadPost: (id: string) => Promise<void>;
   updatePost: (updates: Partial<Post>) => void;
   setPreviewMode: (mode: PreviewMode) => void;
   setProject: (project: Project) => void;
@@ -103,6 +104,31 @@ export function usePostGenerator(): UsePostGeneratorReturn {
       abortControllerRef.current = null;
     }
   }, [project]);
+
+  const loadPost = useCallback(async (id: string) => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      const response = await apiClient.fetchWithTimeout(`/api/posts/${id}`, {
+        method: 'GET',
+      });
+      const result = await apiClient.checkResponse(response);
+      const data = await result.json();
+
+      if (data.success && data.data) {
+        setPost(data.data);
+        setProject(data.data.project as Project);
+      } else {
+        throw new Error(data.error || 'Post non trovato');
+      }
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : 'Errore nel caricamento del generato';
+      setError(errorMessage);
+      toast.error(`Errore: ${errorMessage}`);
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
 
   const updatePost = useCallback((updates: Partial<Post>) => {
     setPost((prev) => (prev ? { ...prev, ...updates } : null));
@@ -196,6 +222,7 @@ export function usePostGenerator(): UsePostGeneratorReturn {
     previewMode,
     project,
     generatePost,
+    loadPost,
     updatePost,
     setPreviewMode,
     setProject,

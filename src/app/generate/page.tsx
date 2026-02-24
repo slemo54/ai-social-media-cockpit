@@ -14,6 +14,7 @@ import { useSearchParams } from 'next/navigation';
 export default function GeneratePage() {
     const searchParams = useSearchParams();
     const template = searchParams.get('template');
+    const editId = searchParams.get('edit');
 
     const {
         post,
@@ -32,6 +33,7 @@ export default function GeneratePage() {
         isCancelling,
         selectImage,
         selectTextProposal,
+        loadPost,
     } = usePostGenerator();
 
     const [mounted, setMounted] = useState(false);
@@ -40,7 +42,10 @@ export default function GeneratePage() {
 
     useEffect(() => {
         setMounted(true);
-    }, []);
+        if (editId) {
+            loadPost(editId);
+        }
+    }, [editId, loadPost]);
 
     const handleGenerate = useCallback(async (topic: string, selectedProject: 'IWP' | 'IWA', imageUrl?: string) => {
         await generatePost(topic, selectedProject, imageUrl);
