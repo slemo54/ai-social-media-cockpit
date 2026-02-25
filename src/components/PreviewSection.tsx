@@ -1,6 +1,8 @@
 /* eslint-disable @next/next/no-img-element */
 import { ImageIcon, Smartphone, Monitor, Square, Heart, MessageCircle, Send, Bookmark, MoreHorizontal } from 'lucide-react';
 import { Post, PreviewMode } from '@/types';
+import { htmlToPlainText } from '@/lib/utils';
+
 
 interface PreviewSectionProps {
   post: Post | null;
@@ -41,6 +43,7 @@ function InstagramFeedPreview({ post, isLoading, onSelectImage }: { post: Post |
   const hasProposals = proposals && proposals.length > 1;
   const selectedIndex = post?.selected_image_index ?? 0;
   const mainImage = post?.image_url;
+  const plainBody = htmlToPlainText(post?.body_copy || '');
 
   return (
     <div className="w-full max-w-[340px] bg-[#0F0F0F]/80 backdrop-blur-md rounded-2xl border border-[#262626] shadow-2xl overflow-hidden group">
@@ -98,12 +101,12 @@ function InstagramFeedPreview({ post, isLoading, onSelectImage }: { post: Post |
         {/* Caption */}
         {post && (
           <div className="mb-2">
-            <p className="text-[13px] text-[#FAFAFA] leading-snug">
+            <p className="text-[13px] text-[#FAFAFA] leading-snug max-h-40 overflow-y-auto scroll-container pr-1 whitespace-pre-line">
               <span className="font-semibold">{profile.username}</span>{' '}
               {post.title && <span className="font-medium">{post.title} </span>}
-              {post.body_copy && (
+              {plainBody && (
                 <span className="text-[#A3A3A3]">
-                  {post.body_copy.length > 120 ? post.body_copy.substring(0, 120) + '...' : post.body_copy}
+                  {plainBody}
                 </span>
               )}
             </p>
@@ -223,6 +226,7 @@ function StoryPreview({ post, isLoading }: { post: Post | null; isLoading: boole
 function LinkedInPreview({ post, isLoading }: { post: Post | null; isLoading: boolean }) {
   const profile = getProfileInfo(post);
   const mainImage = post?.image_url;
+  const plainBody = htmlToPlainText(post?.body_copy || '');
 
   return (
     <div className="w-full max-w-md bg-[#0F0F0F]/80 backdrop-blur-md rounded-xl border border-[#262626] shadow-xl overflow-hidden group">
@@ -242,12 +246,12 @@ function LinkedInPreview({ post, isLoading }: { post: Post | null; isLoading: bo
       {/* Caption */}
       {post && (
         <div className="px-4 pb-3">
-          <p className="text-[13px] text-[#FAFAFA] leading-relaxed">
+          <p className="text-[13px] text-[#FAFAFA] leading-relaxed max-h-48 overflow-y-auto scroll-container pr-1 whitespace-pre-line">
             {post.title && <span className="font-medium">{post.title}</span>}
-            {post.body_copy && (
+            {plainBody && (
               <>
                 <br />
-                {post.body_copy.length > 200 ? post.body_copy.substring(0, 200) + '... more' : post.body_copy}
+                {plainBody}
               </>
             )}
           </p>

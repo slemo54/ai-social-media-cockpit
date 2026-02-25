@@ -2,6 +2,9 @@
 
 import { Copy, Download, CheckCircle, Edit3, Hash, Type, Sparkles, Share2 } from 'lucide-react';
 import { Post } from '@/types';
+import { RichTextEditor } from './RichTextEditor';
+import { htmlToPlainText } from '@/lib/utils';
+
 
 interface EditorSectionProps {
   post: Post | null;
@@ -44,7 +47,9 @@ export function EditorSection({
     );
   }
 
-  const fullText = `${post.title}\n\n${post.body_copy}\n\n${post.hashtags?.join(' ')}`;
+  const plainBody = htmlToPlainText(post.body_copy || '');
+  const fullText = `${post.title}\n\n${plainBody}\n\n${post.hashtags?.join(' ')}`;
+
 
   return (
     <div className="glass-panel p-6 h-full flex flex-col animate-fade-in-up rounded-2xl relative overflow-hidden group" style={{ animationDelay: '0.2s' }}>
@@ -111,10 +116,9 @@ export function EditorSection({
           <label className="text-sm font-semibold text-[#A3A3A3] mb-2 block">
             Testo del Post
           </label>
-          <textarea
+          <RichTextEditor
             value={post.body_copy || ''}
-            onChange={(e) => onUpdate({ body_copy: e.target.value })}
-            className="dashboard-input w-full h-36 resize-none"
+            onChange={(val) => onUpdate({ body_copy: val })}
             placeholder="Inserisci il testo del post..."
           />
         </div>
