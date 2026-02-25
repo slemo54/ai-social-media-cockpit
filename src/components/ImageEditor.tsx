@@ -1,9 +1,9 @@
 'use client';
 
-import { useState, useCallback, useRef } from 'react';
+import { useState, useCallback, useRef, useEffect } from 'react';
 import {
-  Upload, Type, Eraser, UserX, Sparkles, X, Check, RotateCcw,
-  Download, Loader2, ImageIcon, Wand2
+  Upload, Type, Eraser, UserX, Sparkles, X, Check, RotateCcw, Redo,
+  Download, Loader2, ImageIcon, Wand2, Layers
 } from 'lucide-react';
 import { apiClient, fileToBase64, compressImage } from '@/lib/api-client';
 import { toast } from 'sonner';
@@ -29,6 +29,20 @@ const PLACEHOLDERS: Record<EditOperation, string> = {
   enhance: 'Esempio: "Aumenta contrasto, luci più calde, look professionale"',
 };
 
+// Template images for course launch
+const TEMPLATE_IMAGES = [
+  '/templates/course-launch/template.jpeg',
+  '/templates/course-launch/download (1).jpeg',
+  '/templates/course-launch/download (2).jpeg',
+  '/templates/course-launch/download (3).jpeg',
+  '/templates/course-launch/download (4).jpeg',
+  '/templates/course-launch/download (5).jpeg',
+  '/templates/course-launch/download (6).jpeg',
+  '/templates/course-launch/download (7).jpeg',
+  '/templates/course-launch/download (8).jpeg',
+  '/templates/course-launch/download (9).jpeg',
+];
+
 export function ImageEditor({ initialImageUrl, onImageChange, onClose }: ImageEditorProps) {
   const [imageUrl, setImageUrl] = useState<string | undefined>(initialImageUrl);
   const [imageBase64, setImageBase64] = useState<string>('');
@@ -47,6 +61,10 @@ export function ImageEditor({ initialImageUrl, onImageChange, onClose }: ImageEd
   const [isAdvancedMode, setIsAdvancedMode] = useState(false);
   const [customPrompt, setCustomPrompt] = useState('');
   const [lastOperation, setLastOperation] = useState<EditOperation | null>(null);
+  
+  // Template gallery state
+  const [showTemplates, setShowTemplates] = useState(false);
+  const [isAutoRemovingText, setIsAutoRemovingText] = useState(false);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -103,6 +121,66 @@ export function ImageEditor({ initialImageUrl, onImageChange, onClose }: ImageEd
       toast.error('Errore nel caricamento dell\'immagine');
     } finally {
       setEditState({ isEditing: false, operation: null, progress: 0 });
+    }
+  }, [onImageChange, saveToHistory]);
+
+  const loadTemplate = useCallback(async (templateUrl: string) => {
+    try {
+      setIsAutoRemovingText(true);
+      setEditState({ isEditing: true, operation: 'remove_text', progress: 10 });
+      
+      // Fetch template image
+      const response = await fetch(templateUrl);
+      const blob = await response.blob();
+      const file = new File([blob], 'template.jpg', { type: blob.type });
+      const base64 = await fileToBase64(file);
+      
+      setImageUrl(templateUrl);
+      setImageBase64(base64);
+      saveToHistory(templateUrl);
+      onImageChange?.(templateUrl);
+      
+      setEditState(prev => ({ ...prev, progress: 30 }));
+      
+      // Automatically remove text from template
+      const result = await apiClient.requestWithRetry(async () => {
+        const editResponse = await apiClient.fetchWithTimeout('/api/image/edit', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            imageBase64: base64,
+            operation: 'remove_text',
+            params: {
+              customPrompt: 'Remove all text, logos, watermarks, and writing from this image. Keep only the visual content clean.'
+            },
+          }),
+          timeout: 120000,
+        });
+        return apiClient.checkResponse(editResponse);
+      }, { retries: 2, timeout: 120000 });
+
+      setEditState(prev => ({ ...prev, progress: 80 }));
+      const data = await result.json();
+
+      if (data.success) {
+        const cleanedUrl = data.imageBase64
+          ? `data:image/jpeg;base64,${data.imageBase64}`
+          : data.imageUrl;
+        setImageUrl(cleanedUrl);
+        if (data.imageBase64) {
+          setImageBase64(data.imageBase64);
+        }
+        saveToHistory(cleanedUrl);
+        onImageChange?.(cleanedUrl);
+        toast.success('Template caricato e testo rimosso! Ora puoi aggiungere il tuo testo.');
+      }
+    } catch (error) {
+      console.error('Template load error:', error);
+      toast.error('Errore nel caricamento del template');
+    } finally {
+      setEditState({ isEditing: false, operation: null, progress: 0 });
+      setIsAutoRemovingText(false);
+      setShowTemplates(false);
     }
   }, [onImageChange, saveToHistory]);
 
@@ -189,6 +267,34 @@ export function ImageEditor({ initialImageUrl, onImageChange, onClose }: ImageEd
     }
   }, [history, historyIndex, onImageChange]);
 
+  const handleRedo = useCallback(() => {
+    if (historyIndex < history.length - 1) {
+      const newIndex = historyIndex + 1;
+      setHistoryIndex(newIndex);
+      const nextUrl = history[newIndex];
+      setImageUrl(nextUrl);
+      onImageChange?.(nextUrl);
+    }
+  }, [history, historyIndex, onImageChange]);
+
+  // Keyboard shortcuts for undo/redo
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.ctrlKey || e.metaKey) {
+        if (e.key === 'z' && !e.shiftKey) {
+          e.preventDefault();
+          handleUndo();
+        } else if ((e.key === 'y') || (e.key === 'z' && e.shiftKey)) {
+          e.preventDefault();
+          handleRedo();
+        }
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [handleUndo, handleRedo]);
+
   const handleDownload = useCallback(() => {
     if (!imageUrl) return;
     const link = document.createElement('a');
@@ -232,14 +338,22 @@ export function ImageEditor({ initialImageUrl, onImageChange, onClose }: ImageEd
             <p className="text-xs text-[#737373]">Modifica con AI</p>
           </div>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1">
           <button
             onClick={handleUndo}
             disabled={historyIndex <= 0 || editState.isEditing}
             className="p-2 text-[#737373] hover:text-[#FAFAFA] hover:bg-[#1A1A1A] rounded-lg transition-all disabled:opacity-30"
-            title="Annulla"
+            title="Annulla (Ctrl+Z)"
           >
             <RotateCcw className="w-4 h-4" />
+          </button>
+          <button
+            onClick={handleRedo}
+            disabled={historyIndex >= history.length - 1 || editState.isEditing}
+            className="p-2 text-[#737373] hover:text-[#FAFAFA] hover:bg-[#1A1A1A] rounded-lg transition-all disabled:opacity-30"
+            title="Ripristina (Ctrl+Y)"
+          >
+            <Redo className="w-4 h-4" />
           </button>
           <button
             onClick={handleDownload}
@@ -274,19 +388,20 @@ export function ImageEditor({ initialImageUrl, onImageChange, onClose }: ImageEd
               <ImageIcon className="w-10 h-10 text-[#003366] opacity-50" />
             </div>
             <p className="text-[#737373]">Nessuna immagine caricata</p>
-            <p className="text-xs text-[#525252] mt-1">Carica un'immagine per iniziare</p>
+            <p className="text-xs text-[#525252] mt-1">Carica un'immagine o scegli un template</p>
           </div>
         )}
 
-        {editState.isEditing && (
+        {(editState.isEditing || isAutoRemovingText) && (
           <div className="absolute inset-0 bg-[#0F0F0F]/90 backdrop-blur-sm flex flex-col items-center justify-center gap-4">
             <Loader2 className="w-10 h-10 text-[#004A8F] animate-spin" />
             <p className="text-[#A3A3A3] text-sm">
-              {editState.operation === 'add_text' && 'Aggiungendo testo...'}
-              {editState.operation === 'remove_text' && 'Rimuovendo testo...'}
-              {editState.operation === 'remove_person' && 'Rimuovendo persone...'}
-              {editState.operation === 'enhance' && 'Migliorando qualità...'}
-              {!editState.operation && 'Elaborando...'}
+              {isAutoRemovingText && 'Rimuovendo testo dal template...'}
+              {!isAutoRemovingText && editState.operation === 'add_text' && 'Aggiungendo testo...'}
+              {!isAutoRemovingText && editState.operation === 'remove_text' && 'Rimuovendo testo...'}
+              {!isAutoRemovingText && editState.operation === 'remove_person' && 'Rimuovendo persone...'}
+              {!isAutoRemovingText && editState.operation === 'enhance' && 'Migliorando qualità...'}
+              {!isAutoRemovingText && !editState.operation && 'Elaborando...'}
             </p>
             <div className="w-48">
               <ProgressBar />
@@ -295,9 +410,9 @@ export function ImageEditor({ initialImageUrl, onImageChange, onClose }: ImageEd
         )}
       </div>
 
-      {/* Upload Button */}
+      {/* Upload & Template Buttons */}
       {!imageUrl && (
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-3">
           <input
             ref={fileInputRef}
             type="file"
@@ -313,14 +428,61 @@ export function ImageEditor({ initialImageUrl, onImageChange, onClose }: ImageEd
             <Upload className="w-5 h-5" />
             Carica Immagine
           </button>
+          
+          <button
+            onClick={() => setShowTemplates(!showTemplates)}
+            className={`flex items-center justify-center gap-2 px-4 py-3 rounded-xl transition-all font-medium border ${
+              showTemplates
+                ? 'bg-[#003366]/20 text-[#004A8F] border-[#003366]/50'
+                : 'bg-[#1A1A1A] text-[#A3A3A3] border-[#262626] hover:border-[#333333]'
+            }`}
+          >
+            <Layers className="w-5 h-5" />
+            {showTemplates ? 'Nascondi Template' : 'Scegli Template IWA'}
+          </button>
+          
           <p className="text-xs text-[#525252] text-center">
             JPG, PNG, WebP • Max 10MB
           </p>
         </div>
       )}
 
+      {/* Template Gallery */}
+      {showTemplates && !imageUrl && (
+        <div className="border-t border-[#262626] pt-4 animate-fade-in-up">
+          <h4 className="text-sm font-medium text-[#A3A3A3] mb-3 flex items-center gap-2">
+            <Layers className="w-4 h-4 text-[#004A8F]" />
+            Template Course Launch
+          </h4>
+          <p className="text-xs text-[#737373] mb-3">
+            Clicca un template per caricarlo. Il testo verrà rimosso automaticamente.
+          </p>
+          <div className="grid grid-cols-3 gap-2 max-h-48 overflow-y-auto scroll-container">
+            {TEMPLATE_IMAGES.map((template, idx) => (
+              <button
+                key={idx}
+                onClick={() => loadTemplate(template)}
+                disabled={isAutoRemovingText}
+                className="relative aspect-square rounded-lg overflow-hidden border border-[#262626] hover:border-[#003366] transition-all disabled:opacity-50 group"
+              >
+                <img
+                  src={template}
+                  alt={`Template ${idx + 1}`}
+                  className="w-full h-full object-cover"
+                />
+                <div className="absolute inset-0 bg-[#003366]/0 group-hover:bg-[#003366]/30 transition-all flex items-center justify-center">
+                  <span className="text-white text-xs font-medium opacity-0 group-hover:opacity-100 transition-opacity">
+                    Usa
+                  </span>
+                </div>
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+
       {/* Editing Tools */}
-      {imageUrl && !editState.isEditing && (
+      {imageUrl && !editState.isEditing && !isAutoRemovingText && (
         <div className="space-y-4">
           {/* Add Text */}
           <div className="border-t border-[#262626] pt-4">
