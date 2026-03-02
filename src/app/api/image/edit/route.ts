@@ -12,6 +12,7 @@ interface EditRequest {
     fontSize?: 'small' | 'medium' | 'large';
     color?: string;
     description?: string;
+    customPrompt?: string;
   };
 }
 
@@ -56,6 +57,11 @@ export async function POST(request: Request) {
         return NextResponse.json({ error: 'Invalid operation' }, { status: 400 });
     }
 
+    // Append custom prompt if provided
+    if (params.customPrompt && params.customPrompt.trim()) {
+      editPrompt += ` Additional instructions: ${params.customPrompt.trim()}`;
+    }
+
     console.log(`[ImageEdit] Starting ${operation} with Nano Banana Pro 2 (gemini-3-pro-image-preview)`);
 
     // Extract raw base64 data (strip data URL prefix if present)
@@ -73,7 +79,7 @@ export async function POST(request: Request) {
     const timeoutId = setTimeout(() => controller.abort(), 90000);
 
     const response = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp:generateContent?key=${googleApiKey}`,
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp-image-generation:generateContent?key=${googleApiKey}`,
       {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },

@@ -9,6 +9,8 @@ export interface Post {
   image_url: string | null;
   image_proposals?: string[];
   selected_image_index?: number;
+  text_proposals?: AbacusTextResponse[];
+  selected_text_index?: number;
   status: 'draft' | 'published';
   feedback_score: number | null;
   project?: 'IWP' | 'IWA';
@@ -43,6 +45,10 @@ export interface AbacusTextResponse {
   body_copy: string;
   hashtags: string[];
   image_prompt: string;
+}
+
+export interface MultiTextResponse {
+  proposals: AbacusTextResponse[];
 }
 
 export interface AbacusImageResponse {
