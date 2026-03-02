@@ -15,9 +15,15 @@
 # debug
 npm-debug.log*
 
-# env files
-.env*.local
-.env
+# env files - NEVER commit these
+.env*
+.env.local
+.env.vercel
+.env.production
+
+# mcp configs (may contain project refs)
+mcp.json
+.kimi/
 
 # vercel
 .vercel
