@@ -1,13 +1,13 @@
 'use client';
 
 import { useState, useRef, useCallback } from 'react';
-import { 
-  Upload, Image as ImageIcon, Type, Palette, 
+import {
+  Upload, Image as ImageIcon, Type, Palette,
   Wand2, Download, RotateCcw, Check,
   Loader2
 } from 'lucide-react';
 
-import type { Template } from '@/types/template';
+import type { Template, TextLayerConfig } from '@/types/template';
 
 interface TemplateEditorProps {
   template: Template;
@@ -60,8 +60,8 @@ export default function TemplateEditor({ template }: TemplateEditorProps) {
   }, [state.aiOptions]);
 
   const processImageWithAI = async (file: File) => {
-    setState(prev => ({ 
-      ...prev, 
+    setState(prev => ({
+      ...prev,
       isProcessing: true,
       processingStep: 'Analisi immagine...'
     }));
@@ -69,11 +69,11 @@ export default function TemplateEditor({ template }: TemplateEditorProps) {
     try {
       const formData = new FormData();
       formData.append('image', file);
-      
+
       const operations: string[] = [];
       if (state.aiOptions.removeBackground) operations.push('bg-remove');
       if (state.aiOptions.styleTransfer) operations.push('style-transfer');
-      
+
       formData.append('operations', JSON.stringify(operations));
       formData.append('templateContext', template.name);
 
@@ -87,7 +87,7 @@ export default function TemplateEditor({ template }: TemplateEditorProps) {
       if (!response.ok) throw new Error('Processing failed');
 
       const data = await response.json();
-      
+
       if (data.image) {
         setState(prev => ({
           ...prev,
@@ -106,14 +106,12 @@ export default function TemplateEditor({ template }: TemplateEditorProps) {
     }
   };
 
-  const aspectRatio = template.dimensions.height / template.dimensions.width;
-  
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
       {/* Canvas Preview */}
       <div className="lg:col-span-2 space-y-4">
         <div className="bg-gray-100 rounded-xl p-8 flex items-center justify-center min-h-[500px]">
-          <div 
+          <div
             className="relative bg-white shadow-2xl overflow-hidden"
             style={{
               width: '100%',
@@ -123,7 +121,7 @@ export default function TemplateEditor({ template }: TemplateEditorProps) {
           >
             {/* Template Background */}
             {template.base_assets?.background ? (
-              <img 
+              <img
                 src={template.base_assets.background}
                 alt="Template background"
                 className="absolute inset-0 w-full h-full object-cover"
@@ -131,7 +129,7 @@ export default function TemplateEditor({ template }: TemplateEditorProps) {
             ) : (
               <div className="absolute inset-0 bg-gradient-to-br from-purple-50 to-pink-50" />
             )}
-            
+
             {/* Demo Figure Placeholder / User Image */}
             <div className="absolute inset-0 flex items-center justify-center p-12">
               {state.uploadedImage ? (
@@ -169,7 +167,7 @@ export default function TemplateEditor({ template }: TemplateEditorProps) {
 
             {/* Text Layers Preview */}
             {template.layers?.filter(l => l.type === 'text').map(layer => {
-              const textConfig = layer.config as import('@/types/template').TextLayerConfig | undefined;
+              const textConfig = layer.config as TextLayerConfig | undefined;
               return (
                 <div
                   key={layer.id}
@@ -206,15 +204,16 @@ export default function TemplateEditor({ template }: TemplateEditorProps) {
             onChange={handleFileUpload}
             className="hidden"
           />
-          
+
           <button
             disabled={!state.uploadedImage}
+            onClick={() => setState(prev => ({ ...prev, uploadedImage: null }))}
             className="flex items-center justify-center gap-2 px-4 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <RotateCcw className="w-4 h-4" />
             Reset
           </button>
-          
+
           <button
             disabled={!state.uploadedImage}
             className="flex items-center justify-center gap-2 px-4 py-3 bg-gray-900 text-white rounded-lg hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed"
@@ -233,7 +232,7 @@ export default function TemplateEditor({ template }: TemplateEditorProps) {
             <Wand2 className="w-4 h-4 text-purple-600" />
             Opzioni AI
           </h3>
-          
+
           <div className="space-y-3">
             <label className="flex items-center gap-3 cursor-pointer">
               <input
@@ -247,7 +246,7 @@ export default function TemplateEditor({ template }: TemplateEditorProps) {
               />
               <span className="text-sm text-gray-700">Rimuovi sfondo (OpenAI)</span>
             </label>
-            
+
             <label className="flex items-center gap-3 cursor-pointer">
               <input
                 type="checkbox"
@@ -260,7 +259,7 @@ export default function TemplateEditor({ template }: TemplateEditorProps) {
               />
               <span className="text-sm text-gray-700">Stile professionale (OpenAI)</span>
             </label>
-            
+
             <label className="flex items-center gap-3 cursor-pointer">
               <input
                 type="checkbox"
@@ -277,7 +276,10 @@ export default function TemplateEditor({ template }: TemplateEditorProps) {
 
           {state.uploadedImage && (
             <button
-              onClick={() => processImageWithAI(dataURLtoFile(state.uploadedImage!, 'photo.jpg'))}
+              onClick={() => {
+                const file = dataURLtoFile(state.uploadedImage!, 'photo.jpg');
+                if (file) processImageWithAI(file);
+              }}
               disabled={state.isProcessing}
               className="mt-4 w-full py-2 px-4 bg-purple-100 text-purple-700 rounded-lg hover:bg-purple-200 transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
             >
@@ -302,10 +304,10 @@ export default function TemplateEditor({ template }: TemplateEditorProps) {
             <Type className="w-4 h-4 text-blue-600" />
             Testo
           </h3>
-          
+
           <div className="space-y-4">
             {template.layers?.filter(l => l.type === 'text' && l.editable).map(layer => {
-              const textConfig = layer.config as import('@/types/template').TextLayerConfig | undefined;
+              const textConfig = layer.config as TextLayerConfig | undefined;
               return (
                 <div key={layer.id}>
                   <label className="block text-xs font-medium text-gray-500 mb-1">
@@ -323,8 +325,8 @@ export default function TemplateEditor({ template }: TemplateEditorProps) {
                   />
                 </div>
               );
-            })}`
-            
+            })}
+
             {(!template.layers || template.layers.filter(l => l.type === 'text').length === 0) && (
               <p className="text-sm text-gray-400">Nessun elemento testo modificabile</p>
             )}
@@ -337,7 +339,7 @@ export default function TemplateEditor({ template }: TemplateEditorProps) {
             <Palette className="w-4 h-4 text-pink-600" />
             Colori
           </h3>
-          
+
           <div className="flex gap-2">
             {['#8B2635', '#F4A261', '#2A9D8F', '#264653', '#E76F51'].map(color => (
               <button
@@ -353,22 +355,40 @@ export default function TemplateEditor({ template }: TemplateEditorProps) {
         {/* Info */}
         <div className="bg-gray-50 rounded-xl p-4 text-sm text-gray-600">
           <p className="font-medium text-gray-900 mb-1">{template.name}</p>
-          <p>Dimensioni: {template.dimensions.width}×{template.dimensions.height}px</p>
+          <p>Dimensioni: {template.dimensions.width}x{template.dimensions.height}px</p>
         </div>
       </div>
     </div>
   );
 }
 
-// Utility per convertire data URL in File
-function dataURLtoFile(dataurl: string, filename: string): File {
-  const arr = dataurl.split(',');
-  const mime = arr[0].match(/:(.*?);/)?.[1] || 'image/jpeg';
-  const bstr = atob(arr[1]);
-  let n = bstr.length;
-  const u8arr = new Uint8Array(n);
-  while (n--) {
-    u8arr[n] = bstr.charCodeAt(n);
+/**
+ * Utility per convertire data URL in File
+ * Returns null if conversion fails
+ */
+function dataURLtoFile(dataurl: string, filename: string): File | null {
+  try {
+    if (!dataurl || !dataurl.startsWith('data:')) {
+      console.error('dataURLtoFile: invalid data URL');
+      return null;
+    }
+
+    const arr = dataurl.split(',');
+    if (arr.length !== 2 || !arr[1]) {
+      console.error('dataURLtoFile: malformed data URL');
+      return null;
+    }
+
+    const mime = arr[0].match(/:(.*?);/)?.[1] || 'image/jpeg';
+    const bstr = atob(arr[1]);
+    let n = bstr.length;
+    const u8arr = new Uint8Array(n);
+    while (n--) {
+      u8arr[n] = bstr.charCodeAt(n);
+    }
+    return new File([u8arr], filename, { type: mime });
+  } catch (error) {
+    console.error('dataURLtoFile: conversion failed', error);
+    return null;
   }
-  return new File([u8arr], filename, { type: mime });
 }

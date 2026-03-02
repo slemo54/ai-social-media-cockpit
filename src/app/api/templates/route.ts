@@ -6,9 +6,14 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
-const supabase = createClient(supabaseUrl, supabaseKey);
+import type { Template } from '@/types/template';
+
+function getSupabaseClient() {
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  if (!url || !key) return null;
+  return createClient(url, key);
+}
 
 /**
  * GET /api/templates
@@ -17,70 +22,83 @@ const supabase = createClient(supabaseUrl, supabaseKey);
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
-    
-    // Filtri
+
     const category = searchParams.get('category');
     const type = searchParams.get('type');
     const search = searchParams.get('search');
-    
-    // Costruisci query
+
+    const supabase = getSupabaseClient();
+
+    // If Supabase is not configured, return static templates
+    if (!supabase) {
+      return NextResponse.json({
+        templates: getStaticTemplates(category, type, search),
+        source: 'static'
+      });
+    }
+
     let query = supabase
       .from('templates')
       .select('*')
       .eq('is_active', true)
       .order('created_at', { ascending: false });
-    
+
     if (category) {
       query = query.eq('category', category.toUpperCase());
     }
-    
+
     if (type) {
       query = query.eq('type', type);
     }
-    
+
     if (search) {
       query = query.ilike('name', `%${search}%`);
     }
-    
+
     const { data: templates, error } = await query;
-    
+
     if (error) {
-      console.error('[Templates API] Error:', error);
-      return NextResponse.json(
-        { error: 'Failed to fetch templates' },
-        { status: 500 }
-      );
+      console.error('[Templates API] Database error:', error.message);
+      // Fallback to static on DB error
+      return NextResponse.json({
+        templates: getStaticTemplates(category, type, search),
+        source: 'static',
+        warning: 'Database unavailable, using static templates'
+      });
     }
-    
-    // Fallback: se il DB non è disponibile, ritorna dati statici
+
     if (!templates || templates.length === 0) {
       return NextResponse.json({
-        templates: getStaticTemplates(),
+        templates: getStaticTemplates(category, type, search),
         source: 'static'
       });
     }
-    
+
     return NextResponse.json({
       templates,
       count: templates.length,
       source: 'database'
     });
-    
+
   } catch (error) {
     console.error('[Templates API] Error:', error);
-    // Fallback a dati statici
     return NextResponse.json({
       templates: getStaticTemplates(),
-      source: 'static'
+      source: 'static',
+      warning: 'Error occurred, using static templates'
     });
   }
 }
 
 /**
- * Dati statici di fallback
+ * Dati statici di fallback con filtro opzionale
  */
-function getStaticTemplates() {
-  return [
+function getStaticTemplates(
+  category?: string | null,
+  type?: string | null,
+  search?: string | null
+): Template[] {
+  const all: Template[] = [
     {
       template_id: 'iwp-ambassador-circle',
       name: "Ambassador's Corner",
@@ -132,9 +150,15 @@ function getStaticTemplates() {
       type: 'quote',
       dimensions: { width: 1080, height: 1350, format: 'portrait' },
       base_assets: {
-        background: '/templates/bases/thm-line-art-toast-base.png',
-        demoFigure: null
+        background: '/templates/bases/thm-line-art-toast-base.png'
       }
     }
   ];
+
+  return all.filter(t => {
+    if (category && t.category !== category.toUpperCase()) return false;
+    if (type && t.type !== type) return false;
+    if (search && !t.name.toLowerCase().includes(search.toLowerCase())) return false;
+    return true;
+  });
 }

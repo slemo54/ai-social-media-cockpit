@@ -18,9 +18,14 @@ npm-debug.log*
 # env files
 .env*.local
 .env
+.env.vercel
 
 # vercel
 .vercel
+
+# MCP config (may contain project refs)
+mcp.json
+.kimi/
 
 # misc
 wine2digital-pm/
