@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 600" width="400" height="600">
+  <defs>
+    <style>
+      .silhouette { fill: #1a1a1a; }
+      .outline { fill: none; stroke: #333333; stroke-width: 2; stroke-dasharray: 5,5; }
+    </style>
+  </defs>
+  <rect width="100%" height="100%" fill="transparent"/>
+  <path class="silhouette" d="M200,72 
+               m-48,0 
+               a48,56.00000000000001 0 1,0 96,0 
+               a48,56.00000000000001 0 1,0 -96,0
+               M181.6,168.00000000000003
+               L184,210
+               L216,210
+               L218.4,168.00000000000003
+               M48,210
+               Q32,300 96,450
+               L164,552
+               L236,552
+               L304,450
+               Q368,300 352,210
+               Z"/>
+  <text x="50%" y="95%" text-anchor="middle" font-family="system-ui" font-size="14" fill="#666666">
+    Upload your photo here
+  </text>
+</svg>
