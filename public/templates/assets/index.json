@@ -1,0 +1,70 @@
+{
+  "generatedAt": "2026-03-02T16:50:40.083Z",
+  "assets": [
+    {
+      "id": "demo-figure-portrait",
+      "type": "portrait",
+      "dimensions": {
+        "width": 400,
+        "height": 600
+      },
+      "description": "Figura intera stilizzata per template verticali",
+      "files": {
+        "png": "demo-figure-portrait.png",
+        "svg": "demo-figure-portrait.svg"
+      }
+    },
+    {
+      "id": "demo-figure-bust",
+      "type": "bust",
+      "dimensions": {
+        "width": 400,
+        "height": 400
+      },
+      "description": "Busto/ritratto per template square",
+      "files": {
+        "png": "demo-figure-bust.png",
+        "svg": "demo-figure-bust.svg"
+      }
+    },
+    {
+      "id": "demo-figure-circle",
+      "type": "circle",
+      "dimensions": {
+        "width": 500,
+        "height": 500
+      },
+      "description": "Figura circolare per template podcast",
+      "files": {
+        "png": "demo-figure-circle.png",
+        "svg": "demo-figure-circle.svg"
+      }
+    },
+    {
+      "id": "demo-figure-duo",
+      "type": "duo",
+      "dimensions": {
+        "width": 800,
+        "height": 500
+      },
+      "description": "Due figure per template masterclass",
+      "files": {
+        "png": "demo-figure-duo.png",
+        "svg": "demo-figure-duo.svg"
+      }
+    },
+    {
+      "id": "demo-figure-square",
+      "type": "square",
+      "dimensions": {
+        "width": 500,
+        "height": 500
+      },
+      "description": "Figura quadrata generica",
+      "files": {
+        "png": "demo-figure-square.png",
+        "svg": "demo-figure-square.svg"
+      }
+    }
+  ]
+}
