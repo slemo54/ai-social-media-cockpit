@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "supabase": {
+      "type": "http",
+      "url": "https://mcp.supabase.com/mcp?project_ref=jfshmatwctjcqosahubm",
+      "description": "Supabase MCP for AI Social Cockpit - Manage templates, posts, and user data"
+    }
+  }
+}
