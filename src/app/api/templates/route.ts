@@ -44,16 +44,9 @@ export async function GET(request: NextRequest) {
     
     const { data: templates, error } = await query;
     
-    if (error) {
-      console.error('[Templates API] Error:', error);
-      return NextResponse.json(
-        { error: 'Failed to fetch templates' },
-        { status: 500 }
-      );
-    }
-    
-    // Fallback: se il DB non è disponibile, ritorna dati statici
-    if (!templates || templates.length === 0) {
+    // Fallback: se il DB ha errore o è vuoto, ritorna dati statici
+    if (error || !templates || templates.length === 0) {
+      if (error) console.warn('[Templates API] DB error, using static fallback:', error.message);
       return NextResponse.json({
         templates: getStaticTemplates(),
         source: 'static'
@@ -77,64 +70,130 @@ export async function GET(request: NextRequest) {
 }
 
 /**
- * Dati statici di fallback
+ * Dati statici di fallback — 5 template reali IWP basati su immagini episodi
+ * Immagini base in public/templates/bases/ (generate con DALL-E 2 inpainting da AVIF reali)
+ * photoZone: coordinate della zona foto nell'immagine originale 1001x999px
  */
 function getStaticTemplates() {
+  const textLayers = (nameY: number, titleY: number) => [
+    {
+      id: 'guest-name',
+      type: 'text',
+      name: 'Nome Ospite',
+      zIndex: 10,
+      editable: true,
+      config: {
+        defaultText: 'NOME OSPITE',
+        fontFamily: 'serif',
+        fontSize: 36,
+        color: '#FFFFFF',
+        alignment: 'center',
+        position: { x: 500, y: nameY },
+      },
+    },
+    {
+      id: 'guest-title',
+      type: 'text',
+      name: 'Titolo / Azienda',
+      zIndex: 10,
+      editable: true,
+      config: {
+        defaultText: 'Titolo e Azienda',
+        fontFamily: 'sans-serif',
+        fontSize: 18,
+        color: '#FFFFFF',
+        alignment: 'center',
+        position: { x: 500, y: titleY },
+      },
+    },
+  ];
+
   return [
     {
-      template_id: 'iwp-ambassador-circle',
-      name: "Ambassador's Corner",
+      template_id: 'iwp-masterclass',
+      name: 'Masterclass US Wine Market',
       category: 'IWP',
       type: 'podcast',
-      dimensions: { width: 1080, height: 1080, format: 'square' },
-      base_assets: {
-        background: '/templates/bases/iwp-ambassador-circle-base.png',
-        demoFigure: '/templates/assets/demo-figure-circle.png'
-      }
+      dimensions: { width: 1001, height: 999, format: 'square' },
+      photoZone: { type: 'circle', centerX: 500, centerY: 390, radius: 228 },
+      base_assets: { background: '/templates/bases/iwp-masterclass-base.png' },
+      base_image_url: '/templates/bases/iwp-masterclass-base.png',
+      layers: textLayers(720, 760),
     },
     {
-      template_id: 'iwp-masterclass-duo',
-      name: 'Masterclass Duo',
+      template_id: 'iwp-wine-food-travel',
+      name: 'Wine Food & Travel',
       category: 'IWP',
-      type: 'event',
-      dimensions: { width: 1080, height: 1080, format: 'square' },
-      base_assets: {
-        background: '/templates/bases/iwp-masterclass-duo-base.png',
-        demoFigure: '/templates/assets/demo-figure-duo.png'
-      }
+      type: 'podcast',
+      dimensions: { width: 1001, height: 999, format: 'square' },
+      photoZone: { type: 'circle', centerX: 500, centerY: 385, radius: 220 },
+      base_assets: { background: '/templates/bases/iwp-wine-food-travel-base.png' },
+      base_image_url: '/templates/bases/iwp-wine-food-travel-base.png',
+      layers: textLayers(720, 760),
     },
     {
-      template_id: 'iwa-wset-level1',
-      name: 'WSET Level 1',
-      category: 'IWA',
-      type: 'course',
-      dimensions: { width: 1080, height: 1350, format: 'portrait' },
-      base_assets: {
-        background: '/templates/bases/iwa-wset-level1-base.png',
-        demoFigure: '/templates/assets/demo-figure-portrait.png'
-      }
+      template_id: 'iwp-on-the-road',
+      name: 'On The Road Edition',
+      category: 'IWP',
+      type: 'podcast',
+      dimensions: { width: 1001, height: 999, format: 'square' },
+      photoZone: { type: 'circle', centerX: 500, centerY: 390, radius: 228 },
+      base_assets: { background: '/templates/bases/iwp-on-the-road-base.png' },
+      base_image_url: '/templates/bases/iwp-on-the-road-base.png',
+      layers: textLayers(720, 760),
     },
     {
-      template_id: 'thm-minimal-bordeaux',
-      name: 'Minimal Bordeaux',
-      category: 'UNIVERSAL',
-      type: 'portrait',
-      dimensions: { width: 1080, height: 1350, format: 'portrait' },
-      base_assets: {
-        background: '/templates/bases/thm-minimal-bordeaux-base.png',
-        demoFigure: '/templates/assets/demo-figure-portrait.png'
-      }
+      template_id: 'iwp-open-bar-stevie',
+      name: '#OpenBarStevie',
+      category: 'IWP',
+      type: 'podcast',
+      dimensions: { width: 1001, height: 999, format: 'square' },
+      photoZone: { type: 'circle', centerX: 500, centerY: 385, radius: 218 },
+      base_assets: { background: '/templates/bases/iwp-open-bar-stevie-base.png' },
+      base_image_url: '/templates/bases/iwp-open-bar-stevie-base.png',
+      layers: textLayers(720, 760),
     },
     {
-      template_id: 'thm-line-art-toast',
-      name: 'Line Art Toast',
-      category: 'UNIVERSAL',
-      type: 'quote',
-      dimensions: { width: 1080, height: 1350, format: 'portrait' },
-      base_assets: {
-        background: '/templates/bases/thm-line-art-toast-base.png',
-        demoFigure: null
-      }
-    }
+      template_id: 'iwp-wine2wine',
+      name: 'wine2wine Vinitaly Business Forum',
+      category: 'IWP',
+      type: 'podcast',
+      dimensions: { width: 1001, height: 999, format: 'square' },
+      photoZone: { type: 'rect', x: 0, y: 150, width: 1001, height: 590 },
+      base_assets: { background: '/templates/bases/iwp-wine2wine-base.png' },
+      base_image_url: '/templates/bases/iwp-wine2wine-base.png',
+      layers: [
+        {
+          id: 'speaker-name',
+          type: 'text',
+          name: 'Nome Speaker',
+          zIndex: 10,
+          editable: true,
+          config: {
+            defaultText: 'NOME SPEAKER',
+            fontFamily: 'serif',
+            fontSize: 32,
+            color: '#FFFFFF',
+            alignment: 'center',
+            position: { x: 500, y: 790 },
+          },
+        },
+        {
+          id: 'speaker-title',
+          type: 'text',
+          name: 'Titolo / Azienda',
+          zIndex: 10,
+          editable: true,
+          config: {
+            defaultText: 'Titolo e Azienda',
+            fontFamily: 'sans-serif',
+            fontSize: 16,
+            color: '#FFFFFF',
+            alignment: 'center',
+            position: { x: 500, y: 825 },
+          },
+        },
+      ],
+    },
   ];
 }
