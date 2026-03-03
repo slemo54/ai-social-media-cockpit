@@ -28,3 +28,6 @@ wine2digital-pm/
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Kimi MCP config (contains sensitive project refs)
+.kimi/mcp.json
