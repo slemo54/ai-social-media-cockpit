@@ -174,7 +174,7 @@ async function compositeWithGemini(imageBuffer: Buffer, templateContext: string)
   }
   
   const model = genAI.getGenerativeModel({
-    model: 'gemini-2.0-flash-exp-image-generation'
+    model: 'gemini-2.5-flash-image'
   });
   
   const base64Image = imageBuffer.toString('base64');

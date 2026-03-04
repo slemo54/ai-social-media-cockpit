@@ -2,6 +2,19 @@
  * Types per il sistema Template Thumio-style
  */
 
+export interface PhotoZone {
+  type: 'circle' | 'rectangle' | 'rect';
+  // For circle: centerX, centerY, radius
+  centerX?: number;
+  centerY?: number;
+  radius?: number;
+  // For rectangle: x, y, width, height
+  x?: number;
+  y?: number;
+  width?: number;
+  height?: number;
+}
+
 export interface Template {
   template_id: string;
   name: string;
@@ -12,12 +25,14 @@ export interface Template {
     height: number;
     format?: string;
   };
+  photoZone?: PhotoZone;
   layers?: TemplateLayer[];
   base_assets?: {
     background?: string;
     demoFigure?: string;
     fonts?: string[];
   };
+  base_image_url?: string;
   ai_prompts?: {
     gemini?: string;
     openAI?: string;

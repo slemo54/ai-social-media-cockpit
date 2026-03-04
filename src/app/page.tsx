@@ -7,7 +7,7 @@ import { ActivityChart } from '@/components/dashboard/ActivityChart';
 import { TemplateStats } from '@/components/dashboard/TemplateStats';
 import { QuickActions } from '@/components/dashboard/QuickActions';
 import { RecentPostsList } from '@/components/dashboard/RecentPostsList';
-import { Wine, BarChart3, FileText, CheckCircle2, Clock, Sparkles, TrendingUp, RefreshCw } from 'lucide-react';
+import { Wine, BarChart3, FileText, CheckCircle2, Clock, Sparkles, TrendingUp, RefreshCw, ImageIcon } from 'lucide-react';
 import Link from 'next/link';
 import { useState, useCallback } from 'react';
 
@@ -112,6 +112,27 @@ export default function Home() {
           </div>
           <QuickActions />
         </div>
+
+        {/* Template Studio Banner */}
+        <Link
+          href="/templates"
+          className="block bg-[#141414] border border-[#262626] rounded-2xl p-6 hover:border-[#7B2D4E]/50 hover:shadow-lg hover:shadow-[#7B2D4E]/10 transition-all group"
+        >
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <div className="w-12 h-12 bg-gradient-to-br from-[#7B2D4E] to-[#C8956C] rounded-xl flex items-center justify-center group-hover:scale-105 transition-transform">
+                <ImageIcon className="w-6 h-6 text-white" />
+              </div>
+              <div>
+                <h3 className="font-bold text-[#FAFAFA] text-lg">Template Studio</h3>
+                <p className="text-sm text-[#737373]">Crea grafiche professionali con i template IWP — upload foto, compositing istantaneo, AI opzionale</p>
+              </div>
+            </div>
+            <div className="hidden sm:block text-[#7B2D4E] group-hover:translate-x-1 transition-transform">
+              <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
+            </div>
+          </div>
+        </Link>
 
         {/* Two Column Layout */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
