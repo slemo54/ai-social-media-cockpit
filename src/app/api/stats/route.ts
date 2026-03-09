@@ -17,35 +17,29 @@ export async function GET() {
   }
 
   try {
-    // Get cached stats (may not exist for anonymous users)
-    let cachedStats = null;
-    try {
-      const { data } = await supabase
-        .from('user_stats')
-        .select('*')
-        .eq('user_id', userId)
-        .maybeSingle();
-      cachedStats = data;
-    } catch {
-      // Table may not exist, ignore
-    }
-
     const now = new Date();
     const thirtyDaysAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
     const sevenDaysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
 
-    // Get all posts (not filtered by user_id for anonymous mode)
-    let recentPosts: any[] = [];
-    try {
-      const { data } = await supabase
+    // Run both queries concurrently to save time
+    const [cachedStatsResult, recentPostsResult] = await Promise.allSettled([
+      // Get cached stats (may not exist for anonymous users)
+      supabase
+        .from('user_stats')
+        .select('*')
+        .eq('user_id', userId)
+        .maybeSingle(),
+
+      // Get all posts (not filtered by user_id for anonymous mode)
+      supabase
         .from('posts')
         .select('status, created_at, word_count, template_used, user_id')
         .gte('created_at', thirtyDaysAgo.toISOString())
-        .order('created_at', { ascending: false });
-      recentPosts = data || [];
-    } catch {
-      // Table may not exist, return empty
-    }
+        .order('created_at', { ascending: false })
+    ]);
+
+    const cachedStats = cachedStatsResult.status === 'fulfilled' ? cachedStatsResult.value.data : null;
+    const recentPosts = recentPostsResult.status === 'fulfilled' ? (recentPostsResult.value.data || []) : [];
 
     const last30Days = recentPosts;
     const last7Days = last30Days.filter((p: any) => new Date(p.created_at) >= sevenDaysAgo);
