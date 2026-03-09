@@ -170,7 +170,6 @@ class ApiClient {
 
         if (attempt < (opts.retries || 0)) {
           const delay = (opts.retryDelay || 1000) * Math.pow(opts.backoffMultiplier || 2, attempt);
-          console.log(`[ApiClient] Retry ${attempt + 1}/${opts.retries} after ${delay}ms`);
           await new Promise(resolve => setTimeout(resolve, delay));
         }
       }
