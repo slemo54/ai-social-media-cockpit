@@ -1,0 +1,15 @@
+{
+  "template_id": "iwp-on-the-road",
+  "name": "On The Road Edition",
+  "source_avif": "1ec3e6ec08896c3d4a7ad4e811164336.avif",
+  "dimensions": {
+    "width": 1001,
+    "height": 999
+  },
+  "photoZone": {
+    "centerX": 500,
+    "centerY": 390,
+    "radius": 228
+  },
+  "base_image_path": "/templates/bases/iwp-on-the-road-base.png"
+}

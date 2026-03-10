@@ -1,0 +1,15 @@
+{
+  "template_id": "iwp-wine-food-travel",
+  "name": "Wine Food & Travel",
+  "source_avif": "6b5de91634f6d4a7cf8dd8c0f5710c19.avif",
+  "dimensions": {
+    "width": 1001,
+    "height": 999
+  },
+  "photoZone": {
+    "centerX": 500,
+    "centerY": 385,
+    "radius": 220
+  },
+  "base_image_path": "/templates/bases/iwp-wine-food-travel-base.png"
+}

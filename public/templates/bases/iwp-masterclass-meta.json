@@ -1,0 +1,15 @@
+{
+  "template_id": "iwp-masterclass",
+  "name": "Masterclass US Wine Market",
+  "source_avif": "1a4fd2c120f3426d2349825be80514b9.avif",
+  "dimensions": {
+    "width": 1001,
+    "height": 999
+  },
+  "photoZone": {
+    "centerX": 500,
+    "centerY": 390,
+    "radius": 228
+  },
+  "base_image_path": "/templates/bases/iwp-masterclass-base.png"
+}
