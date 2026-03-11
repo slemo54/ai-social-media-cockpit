@@ -198,6 +198,7 @@ export function InputSection({
             <button
               onClick={clearImage}
               className="absolute top-3 right-3 p-2 bg-black/60 hover:bg-black/80 text-white rounded-lg transition-colors backdrop-blur-sm"
+              aria-label="Remove uploaded image"
             >
               <X className="w-4 h-4" />
             </button>

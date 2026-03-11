@@ -58,7 +58,7 @@ function InstagramFeedPreview({ post, isLoading, onSelectImage }: { post: Post |
             <p className="text-[11px] text-[#737373]">Sponsored</p>
           </div>
         </div>
-        <MoreHorizontal className="w-5 h-5 text-[#737373]" />
+        <MoreHorizontal className="w-5 h-5 text-[#737373]" aria-label="More options" />
       </div>
 
       {/* Image */}
@@ -86,11 +86,11 @@ function InstagramFeedPreview({ post, isLoading, onSelectImage }: { post: Post |
       <div className="px-4 pt-3 pb-1">
         <div className="flex items-center justify-between mb-3">
           <div className="flex items-center gap-4">
-            <Heart className="w-6 h-6 text-[#FAFAFA] cursor-pointer hover:text-[#CD212A] transition-colors" />
-            <MessageCircle className="w-6 h-6 text-[#FAFAFA] cursor-pointer hover:text-[#003366] transition-colors" />
-            <Send className="w-6 h-6 text-[#FAFAFA] cursor-pointer hover:text-[#C4A775] transition-colors" />
+            <Heart className="w-6 h-6 text-[#FAFAFA] cursor-pointer hover:text-[#CD212A] transition-colors" aria-label="Like post" />
+            <MessageCircle className="w-6 h-6 text-[#FAFAFA] cursor-pointer hover:text-[#003366] transition-colors" aria-label="Comment on post" />
+            <Send className="w-6 h-6 text-[#FAFAFA] cursor-pointer hover:text-[#C4A775] transition-colors" aria-label="Share post" />
           </div>
-          <Bookmark className="w-6 h-6 text-[#FAFAFA] cursor-pointer hover:text-[#D4AF37] transition-colors" />
+          <Bookmark className="w-6 h-6 text-[#FAFAFA] cursor-pointer hover:text-[#D4AF37] transition-colors" aria-label="Save post" />
         </div>
 
         {/* Likes */}
@@ -195,7 +195,7 @@ function StoryPreview({ post, isLoading }: { post: Post | null; isLoading: boole
               <span className="text-white/70 text-[9px] drop-shadow-sm">1h</span>
             </div>
           </div>
-          <MoreHorizontal className="w-4 h-4 text-white drop-shadow-md" />
+          <MoreHorizontal className="w-4 h-4 text-white drop-shadow-md" aria-label="More options" />
         </div>
 
         {/* Story caption overlay */}
@@ -215,8 +215,8 @@ function StoryPreview({ post, isLoading }: { post: Post | null; isLoading: boole
           <div className="flex-1 bg-transparent border border-white/40 rounded-full px-4 py-2.5 flex items-center backdrop-blur-sm">
             <span className="text-white/80 text-[11px] font-medium">Send message</span>
           </div>
-          <Heart className="w-6 h-6 text-white drop-shadow-md shrink-0" />
-          <Send className="w-6 h-6 text-white drop-shadow-md shrink-0" />
+          <Heart className="w-6 h-6 text-white drop-shadow-md shrink-0" aria-label="Like story" />
+          <Send className="w-6 h-6 text-white drop-shadow-md shrink-0" aria-label="Share story" />
         </div>
       </div>
     </div>
@@ -240,7 +240,7 @@ function LinkedInPreview({ post, isLoading }: { post: Post | null; isLoading: bo
           <p className="text-[11px] text-[#737373] leading-snug">Wine Education & Events</p>
           <p className="text-[11px] text-[#525252]">1h • 🌐</p>
         </div>
-        <MoreHorizontal className="w-5 h-5 text-[#737373] flex-shrink-0" />
+        <MoreHorizontal className="w-5 h-5 text-[#737373] flex-shrink-0" aria-label="More options" />
       </div>
 
       {/* Caption */}
